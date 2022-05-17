@@ -1,7 +1,12 @@
 // Add any additional repositories for your dependencies here
 
 repositories {
-    jcenter()
+    maven {
+        name = "GTNH"
+        url = "http://jenkins.usrv.eu:8081/nexus/content/groups/public/"
+    }
+
+jcenter()
     maven { // EnderIO & EnderCore
         name = 'tterrag Repo'
         url = "http://maven.tterrag.com"
