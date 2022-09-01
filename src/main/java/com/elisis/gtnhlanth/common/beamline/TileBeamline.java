@@ -55,13 +55,11 @@ public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline 
 
 	@Override
 	public void loadNBTData(NBTTagCompound arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public IMetaTileEntity newMetaEntity(IGregTechTileEntity arg0) {
-		// TODO Auto-generated method stub
 		return new TileBeamline(mName);
 	}
 
@@ -105,7 +103,7 @@ public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline 
 			TileEntity next = this.getBaseMetaTileEntity().getTileEntityAtSide(b);
 			if (next instanceof IConnectsToBeamline && next != source) {
 				
-				if (((IConnectsToBeamline) next).isInputFacing(GT_Utility.getOppositeSide(b))) {
+				if (((IConnectsToBeamline) next).isDataInputFacing(GT_Utility.getOppositeSide(b))) {
 					return (IConnectsToBeamline) next;
 				}
 			
@@ -121,7 +119,7 @@ public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline 
 					
 					}
 					
-					if (((IConnectsToBeamline) meta).isInputFacing(GT_Utility.getOppositeSide(b))) {
+					if (((IConnectsToBeamline) meta).isDataInputFacing(GT_Utility.getOppositeSide(b))) {
 						
 						return (IConnectsToBeamline) meta;
 						
@@ -141,9 +139,8 @@ public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline 
 	}
 	
 	@Override
-	public boolean isInputFacing(byte side) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean isDataInputFacing(byte side) {
+		return true;
 	}
 
 }
