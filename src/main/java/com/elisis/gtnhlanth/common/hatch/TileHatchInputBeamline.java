@@ -64,6 +64,11 @@ public class TileHatchInputBeamline extends TileHatchBeamlineConnector<BeamLineP
         return null;
     }
 	
+	@Override
+    public String[] getDescription() {
+        return null;
+    }
+	
 	public void setContents(BeamLinePacket in) {
         if (in == null) {
             this.q = null;

@@ -88,6 +88,11 @@ public class TileHatchOutputBeamline extends TileHatchBeamlineConnector<BeamLine
     public boolean isOutputFacing(byte side) {
         return side == this.getBaseMetaTileEntity().getFrontFacing();
     }
+	
+	@Override
+    public String[] getDescription() {
+        return null;
+    }
 
 	@Override
 	public IMetaTileEntity newMetaEntity(IGregTechTileEntity arg0) {

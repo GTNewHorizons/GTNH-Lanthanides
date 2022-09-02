@@ -1,6 +1,8 @@
 package com.elisis.gtnhlanth.common.beamline;
 
-public interface IConnectsToBeamline {
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+
+public interface IConnectsToBeamline extends IMetaTileEntity {
 	
 	boolean canConnect(byte side);
 	
