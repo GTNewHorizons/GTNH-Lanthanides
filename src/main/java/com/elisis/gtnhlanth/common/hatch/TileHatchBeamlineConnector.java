@@ -4,13 +4,9 @@ import static com.github.technus.tectech.util.CommonValues.MOVE_AT;
 import static gregtech.api.enums.Dyes.MACHINE_METAL;
 import static net.minecraft.util.StatCollector.translateToLocalFormatted;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
-
 import com.elisis.gtnhlanth.common.beamline.IConnectsToBeamline;
 import com.github.technus.tectech.mechanics.dataTransport.DataPacket;
-import com.github.technus.tectech.util.CommonValues;
 import com.github.technus.tectech.util.TT_Utility;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.Dyes;
@@ -26,12 +22,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fluids.FluidStack;
+import org.apache.commons.lang3.reflect.FieldUtils;
 
 public abstract class TileHatchBeamlineConnector<T extends DataPacket> extends GT_MetaTileEntity_Hatch
-	implements IConnectsToBeamline {
-	
-	
-	public static Textures.BlockIcons.CustomIcon EM_D_SIDES;
+        implements IConnectsToBeamline {
+
+    public static Textures.BlockIcons.CustomIcon EM_D_SIDES;
     public static Textures.BlockIcons.CustomIcon EM_D_ACTIVE;
     public static Textures.BlockIcons.CustomIcon EM_D_CONN;
 
@@ -41,14 +37,12 @@ public abstract class TileHatchBeamlineConnector<T extends DataPacket> extends G
 
     public short id = -1;
 
-    protected TileHatchBeamlineConnector(
-            int aID, String aName, String aNameRegional, int aTier, String descr) {
+    protected TileHatchBeamlineConnector(int aID, String aName, String aNameRegional, int aTier, String descr) {
         super(aID, aName, aNameRegional, aTier, 0, descr);
         TT_Utility.setTier(aTier, this);
     }
 
-    protected TileHatchBeamlineConnector(
-            String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
+    protected TileHatchBeamlineConnector(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, 0, aDescription, aTextures);
     }
 
@@ -199,5 +193,4 @@ public abstract class TileHatchBeamlineConnector<T extends DataPacket> extends G
             EnumChatFormatting.AQUA + "Must be painted to work"
         };
     }
-
 }
