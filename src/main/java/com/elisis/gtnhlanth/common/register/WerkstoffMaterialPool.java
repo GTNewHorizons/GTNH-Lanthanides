@@ -11,8 +11,8 @@ import java.util.Arrays;
 @SuppressWarnings({"unchecked"})
 public class WerkstoffMaterialPool implements Runnable {
 
-	//Current highest ID = 11_499
-	
+    // Current highest ID = 11_499
+
     private static final int offsetID = 11_000;
     private static final int offsetID2 = 11_100;
     private static final int offsetID3 = 11_300;
@@ -1026,7 +1026,6 @@ public class WerkstoffMaterialPool implements Runnable {
             offsetID3 + 16,
             TextureSet.SET_FLUID);
 
-    
     // Beamline fuckery
     public static final Werkstoff Permalloy = new Werkstoff(
             new short[] {195, 230, 225},
@@ -1041,7 +1040,7 @@ public class WerkstoffMaterialPool implements Runnable {
                     .enforceUnification(),
             offsetID4,
             TextureSet.SET_DULL);
-    
+
     public static final Werkstoff MuMetal = new Werkstoff(
             new short[] {210, 230, 225},
             "Mu-metal",
@@ -1055,8 +1054,7 @@ public class WerkstoffMaterialPool implements Runnable {
                     .enforceUnification(),
             offsetID4 + 1,
             TextureSet.SET_DULL);
-    
-    
+
     public static void runInit() {
 
         addSubTags();

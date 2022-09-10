@@ -2,9 +2,6 @@ package com.elisis.gtnhlanth.common.beamline;
 
 import static gregtech.api.enums.Dyes.MACHINE_METAL;
 
-import com.github.technus.tectech.TecTech;
-
-import cpw.mods.fml.common.network.handshake.NetworkDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.GT_Mod;
@@ -28,39 +25,37 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline {
 
-	private static Textures.BlockIcons.CustomIcon pipe;
-	
-	private byte connectionCount = 0;
-	
-	private boolean active;
-	
-	public TileBeamline(int id, String name, String nameRegional) {
-		super(id, name, nameRegional, 0);
-	}
-	
-	public TileBeamline(String name) {
-		super(name, 0);
-	}
+    private static Textures.BlockIcons.CustomIcon pipe;
 
-	@Override
-	public boolean allowPullStack(IGregTechTileEntity arg0, int arg1, byte arg2, ItemStack arg3) {
-		return false;
-	}
+    private byte connectionCount = 0;
 
-	@Override
-	public boolean allowPutStack(IGregTechTileEntity arg0, int arg1, byte arg2, ItemStack arg3) {
-		return false;
-	}
-	
-	
-	@Override
+    private boolean active;
+
+    public TileBeamline(int id, String name, String nameRegional) {
+        super(id, name, nameRegional, 0);
+    }
+
+    public TileBeamline(String name) {
+        super(name, 0);
+    }
+
+    @Override
+    public boolean allowPullStack(IGregTechTileEntity arg0, int arg1, byte arg2, ItemStack arg3) {
+        return false;
+    }
+
+    @Override
+    public boolean allowPutStack(IGregTechTileEntity arg0, int arg1, byte arg2, ItemStack arg3) {
+        return false;
+    }
+
+    @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if (aBaseMetaTileEntity.isServerSide()) {
             if ((aTick & 31) == 31) {
                 mConnections = 0;
                 connectionCount = 0;
-             
-                
+
                 for (byte b0 = 0, b1; b0 < 6; b0++) {
                     b1 = GT_Utility.getOppositeSide(b0);
                     TileEntity tTileEntity = aBaseMetaTileEntity.getTileEntityAtSide(b0);
@@ -85,108 +80,97 @@ public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline 
         }
     }
 
-	@Override
-	public String[] getDescription() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String[] getDescription() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public byte getTileEntityBaseType() {
-		return 7;
-	}
+    @Override
+    public byte getTileEntityBaseType() {
+        return 7;
+    }
 
-	@Override
-	public void loadNBTData(NBTTagCompound arg0) {
-		
-	}
-	
+    @Override
+    public void loadNBTData(NBTTagCompound arg0) {}
 
+    @Override
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity arg0) {
+        return new TileBeamline(mName);
+    }
 
-	@Override
-	public IMetaTileEntity newMetaEntity(IGregTechTileEntity arg0) {
-		return new TileBeamline(mName);
-	}
+    @Override
+    public void saveNBTData(NBTTagCompound arg0) {}
 
-	@Override
-	public void saveNBTData(NBTTagCompound arg0) {
-		
-	}
-
-	@Override
-	public float getThickNess() {
-		if (GT_Mod.instance.isClientSide() && GT_Client.hideValue == 1) {
+    @Override
+    public float getThickNess() {
+        if (GT_Mod.instance.isClientSide() && GT_Client.hideValue == 1) {
             return 0.0625F;
         }
         return 0.5f;
-	}
+    }
 
-	@Override
-	public boolean renderInside(byte arg0) {
-		return false;
-	}
+    @Override
+    public boolean renderInside(byte arg0) {
+        return false;
+    }
 
-	@Override
-	public boolean canConnect(byte side) {
-		return true;
-	}
+    @Override
+    public boolean canConnect(byte side) {
+        return true;
+    }
 
-	//Largely taken from Tec's DataPipe
-	
-	@Override
-	public IConnectsToBeamline getNext(IConnectsToBeamline source) {
-		if (connectionCount != 2) {
-			return null;
-		}
-		
-		for (byte b = 0; b < 6; b++) {
-			
-			if ((mConnections & 1 << b) == 0) {
-				continue;
-			}
-		
-			TileEntity next = this.getBaseMetaTileEntity().getTileEntityAtSide(b);
-			if (next instanceof IConnectsToBeamline && next != source) {
-				
-				if (((IConnectsToBeamline) next).isDataInputFacing(GT_Utility.getOppositeSide(b))) {
-					return (IConnectsToBeamline) next;
-				}
-			
-			} else if (next instanceof IGregTechTileEntity) {
-				
-				IMetaTileEntity meta = ((IGregTechTileEntity) next).getMetaTileEntity();
-				if (meta instanceof IConnectsToBeamline && meta != source) {
-					
-					if (meta instanceof TileBeamline && (((TileBeamline) meta).connectionCount == 2)) {
-						
-						((TileBeamline) meta).markUsed();
-						return (IConnectsToBeamline) meta;
-					
-					}
-					
-					if (((IConnectsToBeamline) meta).isDataInputFacing(GT_Utility.getOppositeSide(b))) {
-						
-						return (IConnectsToBeamline) meta;
-						
-					}
-					
-				}
-			
-			}
-		
-		}
-		
-		return null;
-	}
-	
-	@Override
+    // Largely taken from Tec's DataPipe
+
+    @Override
+    public IConnectsToBeamline getNext(IConnectsToBeamline source) {
+        if (connectionCount != 2) {
+            return null;
+        }
+
+        for (byte b = 0; b < 6; b++) {
+
+            if ((mConnections & 1 << b) == 0) {
+                continue;
+            }
+
+            TileEntity next = this.getBaseMetaTileEntity().getTileEntityAtSide(b);
+            if (next instanceof IConnectsToBeamline && next != source) {
+
+                if (((IConnectsToBeamline) next).isDataInputFacing(GT_Utility.getOppositeSide(b))) {
+                    return (IConnectsToBeamline) next;
+                }
+
+            } else if (next instanceof IGregTechTileEntity) {
+
+                IMetaTileEntity meta = ((IGregTechTileEntity) next).getMetaTileEntity();
+                if (meta instanceof IConnectsToBeamline && meta != source) {
+
+                    if (meta instanceof TileBeamline && (((TileBeamline) meta).connectionCount == 2)) {
+
+                        ((TileBeamline) meta).markUsed();
+                        return (IConnectsToBeamline) meta;
+                    }
+
+                    if (((IConnectsToBeamline) meta).isDataInputFacing(GT_Utility.getOppositeSide(b))) {
+
+                        return (IConnectsToBeamline) meta;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister aBlockIconRegister) {
         pipe = new Textures.BlockIcons.CustomIcon("iconsets/pipe");
         super.registerIcons(aBlockIconRegister);
     }
-	
-	@Override
+
+    @Override
     public ITexture[] getTexture(
             IGregTechTileEntity aBaseMetaTileEntity,
             byte aSide,
@@ -196,21 +180,20 @@ public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline 
             boolean aRedstone) {
         return new ITexture[] {
             new GT_RenderedTexture(pipe),
-            new GT_RenderedTexture(
-                    pipe, Dyes.getModulation(aColorIndex, MACHINE_METAL.getRGBA()))
+            new GT_RenderedTexture(pipe, Dyes.getModulation(aColorIndex, MACHINE_METAL.getRGBA()))
         };
     }
 
-	public void markUsed() {
-		this.active = true;
-	}
-	
-	@Override
-	public boolean isDataInputFacing(byte side) {
-		return true;
-	}
-	
-	@Override
+    public void markUsed() {
+        this.active = true;
+    }
+
+    @Override
+    public boolean isDataInputFacing(byte side) {
+        return true;
+    }
+
+    @Override
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World aWorld, int aX, int aY, int aZ) {
         float tSpace = (1f - 0.375f) / 2;
         float tSide0 = tSpace;
@@ -268,5 +251,4 @@ public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline 
         return AxisAlignedBB.getBoundingBox(
                 aX + tSide4, aY + tSide0, aZ + tSide2, aX + tSide5, aY + tSide1, aZ + tSide3);
     }
-
 }
