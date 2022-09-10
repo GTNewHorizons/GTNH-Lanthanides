@@ -51,7 +51,8 @@ public class GTNHLanthanides {
     public static void preInit(FMLPreInitializationEvent e) {
         WerkstoffAdderRegistry.addWerkstoffAdder(new WerkstoffMaterialPool());
         WerkstoffAdderRegistry.addWerkstoffAdder(new BotWerkstoffMaterialPool());
-        LanthItemList.register();
+        LanthItemList.registerTypical();
+        LanthItemList.registerGTMTE();
         GregTech_API.sAfterGTPostload.add(new ZPMRubberChanges());
         proxy.preInit(e);
     }
