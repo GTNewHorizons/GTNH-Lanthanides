@@ -10,11 +10,11 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 public class Casing extends Block {
-	
-	@SideOnly(Side.CLIENT)
+
+    @SideOnly(Side.CLIENT)
     protected IIcon[] texture;
-    
-	private String name;
+
+    private String name;
 
     public Casing(String name) {
         super(Material.iron);
@@ -27,46 +27,41 @@ public class Casing extends Block {
         this.name = name;
         GregTech_API.registerMachineBlock(this, -1);
     }
-    
+
     @Override
     public int damageDropped(int meta) {
         return meta;
     }
-    
+
     @Override
     public String getHarvestTool(int aMeta) {
         return "wrench";
     }
-    
+
     @Override
     public int getHarvestLevel(int aMeta) {
         return 2;
     }
-    
+
     @Override
     public float getBlockHardness(World aWorld, int aX, int aY, int aZ) {
         return Blocks.iron_block.getBlockHardness(aWorld, aX, aY, aZ);
     }
-    
+
     @Override
     public void breakBlock(World aWorld, int aX, int aY, int aZ, Block aBlock, int aMetaData) {
         GregTech_API.causeMachineUpdate(aWorld, aX, aY, aZ);
         super.breakBlock(aWorld, aX, aY, aZ, aBlock, aMetaData);
     }
-    
+
     @Override
     public void onBlockAdded(World aWorld, int aX, int aY, int aZ) {
         super.onBlockAdded(aWorld, aX, aY, aZ);
         GregTech_API.causeMachineUpdate(aWorld, aX, aY, aZ);
     }
-    
+
     @Override
     public String getUnlocalizedName() {
-    	return "casing." + this.name;
+        return "casing." + this.name;
     }
-    
-    
-    
-    
-
 }

@@ -11,8 +11,8 @@ import java.util.Arrays;
 @SuppressWarnings({"unchecked"})
 public class WerkstoffMaterialPool implements Runnable {
 
-	//Current highest ID = 11_499
-	
+    // Current highest ID = 11_499
+
     private static final int offsetID = 11_000;
     private static final int offsetID2 = 11_100;
     private static final int offsetID3 = 11_300;
@@ -51,9 +51,7 @@ public class WerkstoffMaterialPool implements Runnable {
             subscriptNumbers("??Hf??"),
             new Werkstoff.Stats(),
             Werkstoff.Types.COMPOUND,
-            new Werkstoff.GenerationFeatures()
-                    .disable()
-                    .onlyDust(),
+            new Werkstoff.GenerationFeatures().disable().onlyDust(),
             offsetID + 1,
             TextureSet.SET_DULL);
 
@@ -63,9 +61,7 @@ public class WerkstoffMaterialPool implements Runnable {
             subscriptNumbers("HfO2"),
             new Werkstoff.Stats(),
             Werkstoff.Types.COMPOUND,
-            new Werkstoff.GenerationFeatures()
-                    .disable()
-                    .onlyDust(),
+            new Werkstoff.GenerationFeatures().disable().onlyDust(),
             offsetID + 2,
             TextureSet.SET_DULL);
 
@@ -115,11 +111,8 @@ public class WerkstoffMaterialPool implements Runnable {
             subscriptNumbers("Zr"),
             new Werkstoff.Stats().setBlastFurnace(true),
             Werkstoff.Types.ELEMENT,
-            new Werkstoff.GenerationFeatures()
-                    .disable()
-                    .onlyDust()
-                    .addMetalItems(),
-                    //.enforceUnification(),
+            new Werkstoff.GenerationFeatures().disable().onlyDust().addMetalItems(),
+            // .enforceUnification(),
             offsetID + 7,
             TextureSet.SET_METALLIC);
 
@@ -982,15 +975,9 @@ public class WerkstoffMaterialPool implements Runnable {
     public static final Werkstoff PTMEGElastomer = new Werkstoff(
             new short[] {248, 248, 255},
             "PTMEG Elastomer",
-            new Werkstoff.Stats()
-            	.setMeltingPoint(600)
-            	.setMeltingVoltage(64),
+            new Werkstoff.Stats().setMeltingPoint(600).setMeltingVoltage(64),
             Werkstoff.Types.COMPOUND,
-            new Werkstoff.GenerationFeatures()
-            	.disable()
-            	.onlyDust()
-            	.addMolten()
-            	.addMetalItems(),
+            new Werkstoff.GenerationFeatures().disable().onlyDust().addMolten().addMetalItems(),
             offsetID3 + 12,
             TextureSet.SET_DULL);
 
@@ -1032,28 +1019,25 @@ public class WerkstoffMaterialPool implements Runnable {
             offsetID3 + 16,
             TextureSet.SET_FLUID);
 
-    
     // Beamline fuckery
     public static final Werkstoff Permalloy = new Werkstoff(
             new short[] {195, 230, 225},
             "Permalloy",
             subscriptNumbers("?NiFe?"),
-            new Werkstoff.Stats()
-            	.setCentrifuge(true),
+            new Werkstoff.Stats().setCentrifuge(true),
             Werkstoff.Types.MIXTURE,
             new Werkstoff.GenerationFeatures()
                     .disable()
                     .onlyDust()
                     .addMetalItems()
-                    .addMixerRecipes()                  
+                    .addMixerRecipes()
                     .enforceUnification(),
             offsetID4,
             TextureSet.SET_DULL,
             new Pair<>(Materials.Nickel, 4),
             new Pair<>(Materials.Iron, 1),
-            new Pair<>(Materials.Molybdenum, 1)
-    	);
-    
+            new Pair<>(Materials.Molybdenum, 1));
+
     public static final Werkstoff MuMetal = new Werkstoff(
             new short[] {210, 230, 225},
             "Mu-metal",
@@ -1068,8 +1052,7 @@ public class WerkstoffMaterialPool implements Runnable {
                     .enforceUnification(),
             offsetID4 + 1,
             TextureSet.SET_METALLIC);
-    
-    
+
     public static void runInit() {
         addSubTags();
     }
