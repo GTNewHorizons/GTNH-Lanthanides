@@ -49,12 +49,16 @@ public class GTNHLanthanides {
 
     @EventHandler
     public static void preInit(FMLPreInitializationEvent e) {
-        WerkstoffAdderRegistry.addWerkstoffAdder(new WerkstoffMaterialPool());
+        
+    	WerkstoffAdderRegistry.addWerkstoffAdder(new WerkstoffMaterialPool());
         WerkstoffAdderRegistry.addWerkstoffAdder(new BotWerkstoffMaterialPool());
+        
         LanthItemList.registerTypical();
         LanthItemList.registerGTMTE();
+        
         GregTech_API.sAfterGTPostload.add(new ZPMRubberChanges());
         proxy.preInit(e);
+    
     }
 
     @EventHandler
@@ -66,31 +70,37 @@ public class GTNHLanthanides {
 
     @EventHandler
     public static void postInit(FMLPostInitializationEvent e) {
-        RecipeLoader.loadGeneral();
+        
+    	RecipeLoader.loadGeneral();
         RecipeLoader.loadLanthanideRecipes();
         RecipeLoader.addRandomChemCrafting();
+        RecipeLoader.loadAccelerator();
+        
         BotRecipes.addGTRecipe();
         BotRecipes.addFuels();
+        
         // RecipeLoader.loadZylonRecipes();
         proxy.postInit(e);
         // GT_Log.out.print(FluidRegistry.getFluid("Sodium Tungstate").getName());
 
         GT_Log.out.print(Arrays.toString(Werkstoff.werkstoffNameHashMap.keySet().toArray()));
         GT_Log.out.print(Arrays.toString(Werkstoff.werkstoffHashMap.keySet().toArray()));
-
+        
+        /*
         GT_Log.out.print("HMMM "
                 + Arrays.toString(OreDictionary.getOreIDs(
                         WerkstoffMaterialPool.DephosphatedSamariumConcentrate.get(OrePrefixes.dust, 1))));
+    */
     }
 
     @EventHandler
     public static void onModLoadingComplete(FMLLoadCompleteEvent e) {
-        GT_Log.out.print("AAAAAAAAAAAAAA");
+        //GT_Log.out.print("AAAAAAAAAAAAAA");
         //
-        GT_Log.out.print("We are done loading");
+        //GT_Log.out.print("We are done loading");
         BotRecipes.removeRecipes();
 
-        GT_Log.out.print("blah blah " + WerkstoffMaterialPool.PTMEGElastomer.hasGenerationFeature(OrePrefixes.ingot));
+        //GT_Log.out.print("blah blah " + WerkstoffMaterialPool.PTMEGElastomer.hasGenerationFeature(OrePrefixes.ingot));
     }
 
     // This is horrifying and I'm sorry

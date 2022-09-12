@@ -9,6 +9,7 @@ import com.elisis.gtnhlanth.common.tileentity.DissolutionTank;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public final class LanthItemList {
@@ -22,8 +23,23 @@ public final class LanthItemList {
     public static ItemStack LUV_BEAMLINE_OUTPUT_HATCH;
     
     
+    public static Item CAPILLARY_EXCHANGE = new Item().setUnlocalizedName("capillary_exchange");
     
-    public static final Block SHIELDED_ACCELERATOR_CASING = new Casing("shielded_accelerator");;
+    
+    public static final Block SHIELDED_ACCELERATOR_CASING = new Casing("shielded_accelerator");
+    public static final Block SHIELDED_ACCELERATOR_GLASS = new Casing("shielded_accelerator_glass") {
+    	
+    	@Override
+    	public boolean isOpaqueCube() {
+    		return false;
+    	}
+    
+    };
+    
+    public static final Block ELECTRODE_CASING = new Casing("electrode");
+    
+    public static final Block COOLANT_DELIVERY_CASING = new Casing("coolant_delivery");
+    
 
     public static void registerGTMTE() {
 
@@ -38,7 +54,14 @@ public final class LanthItemList {
     }
     
     public static void registerTypical() {
+    	
+    	GameRegistry.registerItem(CAPILLARY_EXCHANGE, CAPILLARY_EXCHANGE.getUnlocalizedName());
+    	
     	GameRegistry.registerBlock(SHIELDED_ACCELERATOR_CASING, SHIELDED_ACCELERATOR_CASING.getUnlocalizedName());
+    	
+    	GameRegistry.registerBlock(ELECTRODE_CASING, ELECTRODE_CASING.getUnlocalizedName());
+    	
+    	GameRegistry.registerBlock(COOLANT_DELIVERY_CASING, COOLANT_DELIVERY_CASING.getUnlocalizedName());
     	
     	
     }
