@@ -1051,7 +1051,6 @@ public class WerkstoffMaterialPool implements Runnable {
                     .addMultipleIngotMetalWorkingItems()
                     .enforceUnification(),
             offsetID4 + 1,
-
             TextureSet.SET_METALLIC);
 
     public static void runInit() {
