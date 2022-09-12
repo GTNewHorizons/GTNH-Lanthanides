@@ -36,6 +36,10 @@ public final class LanthItemList {
 
     public static final Block COOLANT_DELIVERY_CASING = new Casing("coolant_delivery");
 
+    public static final Block SHIELDED_ACCELERATOR_CASING = new Casing("shielded_accelerator");
+    ;
+
+
     public static void registerGTMTE() {
 
         DIGESTER = new Digester(10500, "Digester", "Digester").getStackForm(1L);
@@ -59,5 +63,8 @@ public final class LanthItemList {
         GameRegistry.registerBlock(ELECTRODE_CASING, ELECTRODE_CASING.getUnlocalizedName());
 
         GameRegistry.registerBlock(COOLANT_DELIVERY_CASING, COOLANT_DELIVERY_CASING.getUnlocalizedName());
+
+        GameRegistry.registerBlock(SHIELDED_ACCELERATOR_CASING, SHIELDED_ACCELERATOR_CASING.getUnlocalizedName());
+
     }
 }
