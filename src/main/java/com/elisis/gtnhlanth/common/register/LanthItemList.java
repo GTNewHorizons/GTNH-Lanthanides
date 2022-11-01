@@ -7,7 +7,6 @@ import com.elisis.gtnhlanth.common.hatch.TileHatchOutputBeamline;
 import com.elisis.gtnhlanth.common.tileentity.Digester;
 import com.elisis.gtnhlanth.common.tileentity.DissolutionTank;
 import com.elisis.gtnhlanth.common.tileentity.LINAC;
-
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -17,7 +16,7 @@ public final class LanthItemList {
 
     public static ItemStack DIGESTER;
     public static ItemStack DISSOLUTION_TANK;
-    
+
     public static ItemStack LINAC;
 
     public static ItemStack BEAMLINE_PIPE;
@@ -52,7 +51,7 @@ public final class LanthItemList {
         LUV_BEAMLINE_OUTPUT_HATCH = new TileHatchOutputBeamline(
                         10504, "LuV Beamline Output Hatch", "LuV Beamline Output Hatch", 6)
                 .getStackForm(1L);
-        
+
         LINAC = new LINAC(10505, "Linear Accelerator", "Linear Accelerator").getStackForm(1L);
     }
 
@@ -65,7 +64,7 @@ public final class LanthItemList {
         GameRegistry.registerBlock(ELECTRODE_CASING, ELECTRODE_CASING.getUnlocalizedName());
 
         GameRegistry.registerBlock(COOLANT_DELIVERY_CASING, COOLANT_DELIVERY_CASING.getUnlocalizedName());
-        
+
         GameRegistry.registerBlock(SHIELDED_ACCELERATOR_GLASS, SHIELDED_ACCELERATOR_GLASS.getUnlocalizedName());
     }
 }
