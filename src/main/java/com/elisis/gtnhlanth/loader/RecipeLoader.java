@@ -24,6 +24,7 @@ import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gtPlusPlus.xmod.gregtech.loaders.RecipeGen_MultisUsingFluidInsteadOfCells;
+import gregtech.api.util.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -883,7 +884,7 @@ public class RecipeLoader {
                 null,
                 WerkstoffMaterialPool.SodiumFluorosilicate.getFluidOrGas(320),
                 WerkstoffMaterialPool.ConditionedBastnasiteMud.getFluidOrGas(1320),
-                null,
+                Materials.Empty.getCells(1),
                 800,
                 120);
 
@@ -998,7 +999,7 @@ public class RecipeLoader {
                 null,
                 Materials.Acetone.getFluid(1000),
                 WerkstoffMaterialPool.SaturatedBastnasiteRarerEarthOxides.getFluidOrGas(1000),
-                null,
+                Materials.Empty.getCells(1),
                 700,
                 480);
 
@@ -1206,7 +1207,7 @@ public class RecipeLoader {
         // Toluene Diisocyanate
         GT_Values.RA.addChemicalRecipe(
                 WerkstoffMaterialPool.Diaminotoluene.get(OrePrefixes.cell, 1),
-                null,
+                Materials.Empty.getCells(3),
                 BotWerkstoffMaterialPool.Phosgene.getFluidOrGas(2000),
                 WerkstoffMaterialPool.TolueneDiisocyanate.getFluidOrGas(1000),
                 Materials.HydrochloricAcid.getCells(4),
@@ -1644,21 +1645,6 @@ public class RecipeLoader {
         GT_Log.out.print("Electrolyzer done!\n");
 
         if (Loader.isModLoaded("miscutils")) {
-            // Blame alk. She made some shit in it, NEI will break down if anyone modify the hash list directly.
-            // For Multi Centrifuge
-            GTPP_Recipe.GTPP_Recipe_Map.sMultiblockCentrifugeRecipes_GT.mRecipeList.clear();
-            RecipeGen_MultisUsingFluidInsteadOfCells.generateRecipesNotUsingCells(
-                    GT_Recipe.GT_Recipe_Map.sCentrifugeRecipes,
-                    GTPP_Recipe.GTPP_Recipe_Map.sMultiblockCentrifugeRecipes_GT);
-            GTPP_Recipe.GTPP_Recipe_Map.sMultiblockCentrifugeRecipes_GT.reInit();
-
-            // For Multi Electrolyzer
-            GTPP_Recipe.GTPP_Recipe_Map.sMultiblockElectrolyzerRecipes_GT.mRecipeList.clear();
-            RecipeGen_MultisUsingFluidInsteadOfCells.generateRecipesNotUsingCells(
-                    GT_Recipe.GT_Recipe_Map.sElectrolyzerRecipes,
-                    GTPP_Recipe.GTPP_Recipe_Map.sMultiblockElectrolyzerRecipes_GT);
-            GTPP_Recipe.GTPP_Recipe_Map.sMultiblockElectrolyzerRecipes_GT.reInit();
-
             // For Simple Washer
             for (GT_Recipe recipe : GTPP_Recipe.GTPP_Recipe_Map.sSimpleWasherRecipes.mRecipeList) {
                 ItemStack input = recipe.mInputs[0];
