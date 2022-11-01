@@ -1,26 +1,38 @@
 package com.elisis.gtnhlanth.loader;
 
+import static com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader.blockCasingAdvanced;
 import static gregtech.common.items.GT_MetaGenerated_Item_01.registerCauldronCleaningFor;
 
-import com.elisis.gtnhlanth.Tags;
-import com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool;
-import com.elisis.gtnhlanth.common.register.LanthItemList;
-import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
-import com.github.bartimaeusnek.bartworks.system.material.GT_Enhancement.PlatinumSludgeOverHaul;
-import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
-import cpw.mods.fml.common.Loader;
-import goodgenerator.items.MyMaterial;
-import gregtech.api.enums.GT_Values;
-import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.OrePrefixes;
-import gregtech.api.util.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashSet;
+
+import org.apache.commons.lang3.reflect.FieldUtils;
+
+import com.dreammaster.gthandler.CustomItemList;
+import com.elisis.gtnhlanth.Tags;
+import com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool;
+import com.elisis.gtnhlanth.common.register.LanthItemList;
+import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
+import com.github.bartimaeusnek.bartworks.system.material.BW_GT_MaterialReference;
+import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
+import com.github.bartimaeusnek.bartworks.system.material.GT_Enhancement.PlatinumSludgeOverHaul;
+
+import cpw.mods.fml.common.Loader;
+import goodgenerator.items.MyMaterial;
+import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.util.GTPP_Recipe;
+import gregtech.api.util.GT_Log;
+import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Utility;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
@@ -30,11 +42,103 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import org.apache.commons.lang3.reflect.FieldUtils;
 
 public class RecipeLoader {
 
     private static final Materials[] BLACKLIST = null;
+
+    public static void loadAccelerator() {
+
+        /*
+        //Permalloy
+        GT_Values.RA.addMixerRecipe(
+        		GT_Utility.getIntegratedCircuit(4),
+        		Materials.Nickel.getDust(4),
+        		Materials.Iron.getDust(1),
+        		Materials.Molybdenum.getDust(1),
+        		null,
+        		null,
+        		WerkstoffMaterialPool.Permalloy.get(OrePrefixes.dust, 6),
+        		1920,
+        		200
+        		);
+        */
+        // Mu-metal
+        GT_Values.RA.addBlastRecipe(
+                GT_Utility.getIntegratedCircuit(2),
+                WerkstoffMaterialPool.Permalloy.get(OrePrefixes.dust, 9),
+                Materials.Copper.getDust(1),
+                Materials.Chrome.getDust(1),
+                null,
+                null,
+                WerkstoffMaterialPool.MuMetal.get(OrePrefixes.ingot, 9),
+                null,
+                null,
+                null,
+                400,
+                1920,
+                4500);
+
+        // Shielded Accelerator Casing -- Maybe assline recipe
+        GT_Values.RA.addAssemblerRecipe(
+                new ItemStack[] {
+                    ItemList.Casing_RadiationProof.get(1L),
+                    WerkstoffMaterialPool.MuMetal.get(OrePrefixes.plateDense, 6),
+                    GT_Utility.getIntegratedCircuit(6)
+                },
+                Materials.SolderingAlloy.getMolten(144),
+                new ItemStack(LanthItemList.SHIELDED_ACCELERATOR_CASING, 1),
+                800,
+                7980);
+
+        // Accelerator Electrode Casing
+        GT_Values.RA.addAssemblerRecipe(
+                new ItemStack[] {
+                    BW_GT_MaterialReference.Silver.get(blockCasingAdvanced, 1),
+                    GT_OreDictUnificator.get(OrePrefixes.wireGt02, Materials.Silver, 12),
+                    GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Gold, 6),
+                    GT_Utility.getIntegratedCircuit(6)
+                },
+                Materials.SolderingAlloy.getMolten(288),
+                new ItemStack(LanthItemList.ELECTRODE_CASING, 1),
+                800,
+                7680);
+
+        GT_Values.RA.addAssemblylineRecipe(
+                ItemList.Casing_Pipe_TungstenSteel.get(1L),
+                72000,
+                new ItemStack[] {
+                    GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Aluminium, 1),
+                    Materials.Copper.getPlates(6),
+                    GT_OreDictUnificator.get(OrePrefixes.pipeLarge, Materials.Naquadah, 2),
+                    ItemList.Electric_Pump_LuV.get(3L),
+                    new ItemStack(LanthItemList.CAPILLARY_EXCHANGE, 1),
+                    new ItemStack(LanthItemList.CAPILLARY_EXCHANGE, 1),
+                    new ItemStack(LanthItemList.CAPILLARY_EXCHANGE, 1),
+                    CustomItemList.MicaInsulatorSheet.get(2),
+                    CustomItemList.MicaInsulatorSheet.get(2),
+                    CustomItemList.MicaInsulatorSheet.get(2),
+                    GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Tungsten, 1)
+                },
+                new FluidStack[] {Materials.SolderingAlloy.getMolten(288), Materials.Lubricant.getFluid(1152)},
+                new ItemStack(LanthItemList.COOLANT_DELIVERY_CASING),
+                1000,
+                7680);
+        
+        GT_Values.RA.addAssemblerRecipe(
+        		new ItemStack[] {
+        				GT_OreDictUnificator.get(OrePrefixes.pipeTiny, Materials.TungstenSteel, 8),
+        				GT_OreDictUnificator.get(OrePrefixes.plateDouble, Materials.Copper, 2),
+        				Materials.Titanium.getPlates(6),
+        				CustomItemList.MicaInsulatorFoil.get(4),
+        				ItemList.Electric_Pump_LuV.get(1),
+        				Materials.Silver.getDust(2)
+        		},
+        		Materials.Silicone.getMolten(288L),
+        		new ItemStack(LanthItemList.CAPILLARY_EXCHANGE, 1),
+        		400,
+        		7680);
+    }
 
     public static void loadGeneral() {
 
@@ -65,7 +169,8 @@ public class RecipeLoader {
                 GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Magnesium, 2),
                 WerkstoffMaterialPool.ZirconiumTetrachlorideSolution.getFluidOrGas(1000),
                 null, // No fluid output
-                WerkstoffMaterialPool.Zirconium.get(OrePrefixes.ingotHot, 1),
+                // WerkstoffMaterialPool.Zirconium.get(OrePrefixes.ingotHot, 1),
+                WerkstoffLoader.Zirconium.get(OrePrefixes.ingotHot, 1),
                 GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Magnesiumchloride, 6),
                 600,
                 1920,
