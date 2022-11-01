@@ -147,17 +147,17 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 		
 		int length = 8; //Base piece length
 		
-		if (!checkPiece(STRUCTURE_PIECE_BASE, 2, 0, 0)) return false;
+		if (!checkPiece(STRUCTURE_PIECE_BASE, 3, 0, 0)) return false;
 		
 		while (length < 128) {
 			
-			if (!checkPiece(STRUCTURE_PIECE_BASE, 2, length, 0)) return false;
+			if (!checkPiece(STRUCTURE_PIECE_BASE, 3, 0, length)) return false;
 			
 			length += 2;
 			
 		}
 		
-		if (!checkPiece(STRUCTURE_PIECE_END, 2, length, 0)) return false;
+		if (!checkPiece(STRUCTURE_PIECE_END, 2, 0, length)) return false;
 		
 		length += 8;
 		
@@ -179,6 +179,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 		tt.addMachineType("Particle Accelerator")
 			.addInfo("Controller block for the LINAC")
 			.addInfo("Extendable, with a minimum length of 18 blocks")
+			.toolTipFinisher("GTNH: Lanthanides");
 			;
 		return tt;
 	}
@@ -275,17 +276,17 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 	@Override
 	public void construct(ItemStack stackSize, boolean hintsOnly) {
 		
-		buildPiece(STRUCTURE_PIECE_BASE, stackSize, hintsOnly, 2, 0, 0);
+		buildPiece(STRUCTURE_PIECE_BASE, stackSize, hintsOnly, 3, 0, 3);
 		
-		int lLength = this.length - 16;
+		int lLength = Math.max(stackSize.stackSize - 16, 2);
 		
-		for (int i = 1; i < lLength - 1; i += 2) {
+		for (int i = 9; i < lLength - 1; i += 2) {
 			
-			buildPiece(STRUCTURE_PIECE_LAYER, stackSize, hintsOnly, 2, i, 0);
+			buildPiece(STRUCTURE_PIECE_LAYER, stackSize, hintsOnly, 3, 0, i);
 			
 		}
 		
-		buildPiece(STRUCTURE_PIECE_END, stackSize, hintsOnly, 2, lLength, 0);
+		buildPiece(STRUCTURE_PIECE_END, stackSize, hintsOnly, 3, 0, lLength);
 
 		
 	}
@@ -299,31 +300,26 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 
 	@Override
 	public IStructureDefinition<LINAC> getStructureDefinition() {
-		// TODO Auto-generated method stub
-		return null;
+        return STRUCTURE_DEFINITION;
 	}
 
 	@Override
 	public boolean isCorrectMachinePart(ItemStack aStack) {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public int getMaxEfficiency(ItemStack aStack) {
-		// TODO Auto-generated method stub
-		return 0;
+		return 10000;
 	}
 
 	@Override
 	public int getDamageToComponent(ItemStack aStack) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public boolean explodesOnComponentBreak(ItemStack aStack) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
