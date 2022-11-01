@@ -84,7 +84,7 @@ public class RecipeLoader {
                     WerkstoffMaterialPool.MuMetal.get(OrePrefixes.plateDense, 6),
                     GT_Utility.getIntegratedCircuit(6)
                 },
-                Materials.SolderingAlloy.getFluid(144),
+                Materials.SolderingAlloy.getMolten(144),
                 new ItemStack(LanthItemList.SHIELDED_ACCELERATOR_CASING, 1),
                 800,
                 7980);
@@ -97,7 +97,7 @@ public class RecipeLoader {
                     GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Gold, 6),
                     GT_Utility.getIntegratedCircuit(6)
                 },
-                Materials.SolderingAlloy.getFluid(288),
+                Materials.SolderingAlloy.getMolten(288),
                 new ItemStack(LanthItemList.ELECTRODE_CASING, 1),
                 800,
                 7680);
@@ -122,6 +122,20 @@ public class RecipeLoader {
                 new ItemStack(LanthItemList.COOLANT_DELIVERY_CASING),
                 1000,
                 7680);
+        
+        GT_Values.RA.addAssemblerRecipe(
+        		new ItemStack[] {
+        				GT_OreDictUnificator.get(OrePrefixes.pipeTiny, Materials.TungstenSteel, 8),
+        				GT_OreDictUnificator.get(OrePrefixes.plateDouble, Materials.Copper, 2),
+        				Materials.Titanium.getPlates(6),
+        				CustomItemList.MicaInsulatorFoil.get(4),
+        				ItemList.Electric_Pump_LuV.get(1),
+        				Materials.Silver.getDust(2)
+        		},
+        		Materials.Silicone.getMolten(288L),
+        		new ItemStack(LanthItemList.CAPILLARY_EXCHANGE, 1),
+        		400,
+        		7680);
     }
 
     public static void loadGeneral() {

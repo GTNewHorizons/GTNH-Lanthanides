@@ -18,7 +18,7 @@ public class BeamLinePacket extends DataPacket<BeamInformation> {
         /*
         NBTTagCompound compound = nbt.getCompoundTag("beamline");
         */
-        return new BeamInformation(nbt.getFloat("energy"), nbt.getInteger("rate"), nbt.getInteger("particleId"));
+        return new BeamInformation(nbt.getFloat("energy"), nbt.getInteger("rate"), nbt.getInteger("particleId"), nbt.getInteger("focus"));
     }
 
     @Override
@@ -29,6 +29,7 @@ public class BeamLinePacket extends DataPacket<BeamInformation> {
         compound.setFloat("energy", content.getEnergy());
         compound.setInteger("rate", content.getRate());
         compound.setInteger("particleId", content.getParticleId());
+        compound.setFloat("focus", content.getFocus());
 
         return compound;
     }
