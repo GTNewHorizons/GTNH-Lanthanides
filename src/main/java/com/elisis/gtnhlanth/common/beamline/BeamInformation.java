@@ -7,7 +7,7 @@ public class BeamInformation {
 
     private Particle particle;
     private int particleId;
-    
+
     private float focus;
 
     public BeamInformation(float energy, int rate, int particleId, float focus) {
@@ -33,8 +33,8 @@ public class BeamInformation {
     public int getParticleId() {
         return this.particleId;
     }
-    
+
     public float getFocus() {
-    	return this.focus;
+        return this.focus;
     }
 }
