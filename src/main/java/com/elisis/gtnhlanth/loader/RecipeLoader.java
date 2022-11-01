@@ -3,14 +3,24 @@ package com.elisis.gtnhlanth.loader;
 import static com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader.blockCasingAdvanced;
 import static gregtech.common.items.GT_MetaGenerated_Item_01.registerCauldronCleaningFor;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.HashSet;
+
+import org.apache.commons.lang3.reflect.FieldUtils;
+
 import com.dreammaster.gthandler.CustomItemList;
 import com.elisis.gtnhlanth.Tags;
 import com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool;
 import com.elisis.gtnhlanth.common.register.LanthItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 import com.github.bartimaeusnek.bartworks.system.material.BW_GT_MaterialReference;
-import com.github.bartimaeusnek.bartworks.system.material.GT_Enhancement.PlatinumSludgeOverHaul;
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
+import com.github.bartimaeusnek.bartworks.system.material.GT_Enhancement.PlatinumSludgeOverHaul;
+
 import cpw.mods.fml.common.Loader;
 import goodgenerator.items.MyMaterial;
 import gregtech.api.enums.GT_Values;
@@ -23,14 +33,6 @@ import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
-import gtPlusPlus.xmod.gregtech.loaders.RecipeGen_MultisUsingFluidInsteadOfCells;
-import gregtech.api.util.*;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.HashSet;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
@@ -40,7 +42,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import org.apache.commons.lang3.reflect.FieldUtils;
 
 public class RecipeLoader {
 
