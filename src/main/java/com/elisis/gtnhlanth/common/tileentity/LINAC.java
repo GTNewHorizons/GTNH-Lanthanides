@@ -4,6 +4,7 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAdder;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
 import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
 import java.util.ArrayList;
@@ -57,7 +58,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 	
 	static {
 		STRUCTURE_DEFINITION = StructureDefinition.<LINAC>builder() 
-				.addShape(STRUCTURE_PIECE_BASE, transpose(new String[][] {
+				.addShape(STRUCTURE_PIECE_BASE, new String[][] {
 					{"ggggggg", "gbbbbbg", "gbbbbbg", "gbbibbg", "gbbbbbg", "gbbbbbg", "ggg~ggg"},
 					{"ggggggg", "gcccccg", "gcccccg", "gcc-ccg", "gcccccg", "gcccccg", "ggggggg"},
 					{"ccccccc", "cvvvvvc", "kvvvvvk", "kvv-vvk", "kvvvvvk", "cvvvvvc", "jcccccj"},
@@ -66,12 +67,12 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 					{"cckkkcc", "cdddddc", "kdyyydk", "kdy-ydk", "kdyyydk", "cdddddc", "jcccccj"},
 					{"cckkkcc", "cdvvvdc", "kvvvvvk", "kdv-vdk", "kvvvvvk", "cdvvvdc", "jcccccj"},
 					{"cckhkcc", "cdddddc", "kdyyydk", "kdy-ydk", "kdyyydk", "cdddddc", "jcccccj"},
-				}))
-				.addShape(STRUCTURE_PIECE_LAYER, transpose(new String[][] {
+				})
+				.addShape(STRUCTURE_PIECE_LAYER, new String[][] {
 					{"cckkkcc", "cdvvvdc", "kvvvvvk", "kdv-vdk", "kvvvvvk", "cdvvvdc", "ccccccc"},
 					{"cckkkcc", "cdddddc", "kdyyydk", "kdy-ydk", "kdyyydk", "cdddddc", "ccccccc"}
-				}))
-				.addShape(STRUCTURE_PIECE_END, transpose(new String[][] {
+				})
+				.addShape(STRUCTURE_PIECE_END, new String[][] {
 					{"cckhkcc", "cdddddc", "kdyyydk", "kdy-ydk", "kdyyydk", "cdddddc", "ccccccc"},
 					{"cckkkcc", "cdvvvdc", "kvvvvvk", "kdv-vdk", "kvvvvvk", "cdvvvdc", "ccccccc"},
 					{"cckkkcc", "cdddddc", "kdyyydk", "kdy-ydk", "kdyyydk", "cdddddc", "ccccccc"},
@@ -82,7 +83,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 					{"ccccccc", "cbbbbbc", "cbbbbbc", "cbbobbc", "cbbbbbc", "cbbbbbc", "ccccccc"}
 					
 					
-				}))
+				})
 				.addElement('c', ofBlock(LanthItemList.SHIELDED_ACCELERATOR_CASING, 0))
 				.addElement('g', ofBlock(GregTech_API.sBlockCasings3, 10))
 				.addElement('b', ofBlockAdder(LINAC::addGlass, ItemRegistry.bw_glasses[0], 1))
@@ -103,7 +104,10 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 				)
 				.addElement('j', ofChain(
 								ofHatchAdder(LINAC::addMaintenanceToMachineList, CASING_INDEX, 1),
-								ofHatchAdder(LINAC::addEnergyInputToMachineList, CASING_INDEX, 1)
+								ofHatchAdder(LINAC::addEnergyInputToMachineList, CASING_INDEX, 1),	
+								ofBlock(LanthItemList.SHIELDED_ACCELERATOR_CASING, 0)
+										
+								
 						
 								
 						
@@ -276,17 +280,17 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 	@Override
 	public void construct(ItemStack stackSize, boolean hintsOnly) {
 		
-		buildPiece(STRUCTURE_PIECE_BASE, stackSize, hintsOnly, 3, 0, 3);
+		buildPiece(STRUCTURE_PIECE_BASE, stackSize, hintsOnly, 3, 6, 0);
 		
-		int lLength = Math.max(stackSize.stackSize - 16, 2);
+		int lLength = Math.max(stackSize.stackSize - 16, 2); // !!
 		
-		for (int i = 9; i < lLength - 1; i += 2) {
+		for (int i = -8; i > -lLength - 1; i -= 2) {
 			
-			buildPiece(STRUCTURE_PIECE_LAYER, stackSize, hintsOnly, 3, 0, i);
+			buildPiece(STRUCTURE_PIECE_LAYER, stackSize, hintsOnly, 3, 6, i);
 			
 		}
 		
-		buildPiece(STRUCTURE_PIECE_END, stackSize, hintsOnly, 3, 0, lLength);
+		buildPiece(STRUCTURE_PIECE_END, stackSize, hintsOnly, 3, 6, -(lLength + 2));
 
 		
 	}
