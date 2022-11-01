@@ -18,11 +18,9 @@ import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GT_Log;
 import java.util.Arrays;
 import java.util.logging.Logger;
-import net.minecraftforge.oredict.OreDictionary;
 
 @Mod(
         modid = Tags.MODID,
@@ -47,9 +45,13 @@ public class GTNHLanthanides {
 
     @EventHandler
     public static void preInit(FMLPreInitializationEvent e) {
+
         WerkstoffAdderRegistry.addWerkstoffAdder(new WerkstoffMaterialPool());
         WerkstoffAdderRegistry.addWerkstoffAdder(new BotWerkstoffMaterialPool());
-        LanthItemList.register();
+
+        LanthItemList.registerTypical();
+        LanthItemList.registerGTMTE();
+
         GregTech_API.sAfterGTPostload.add(new ZPMRubberChanges());
         proxy.preInit(e);
     }
@@ -63,11 +65,15 @@ public class GTNHLanthanides {
 
     @EventHandler
     public static void postInit(FMLPostInitializationEvent e) {
+
         RecipeLoader.loadGeneral();
         RecipeLoader.loadLanthanideRecipes();
         RecipeLoader.addRandomChemCrafting();
+        RecipeLoader.loadAccelerator();
+
         BotRecipes.addGTRecipe();
         BotRecipes.addFuels();
+
         // RecipeLoader.loadZylonRecipes();
         proxy.postInit(e);
         // GT_Log.out.print(FluidRegistry.getFluid("Sodium Tungstate").getName());
@@ -75,19 +81,22 @@ public class GTNHLanthanides {
         GT_Log.out.print(Arrays.toString(Werkstoff.werkstoffNameHashMap.keySet().toArray()));
         GT_Log.out.print(Arrays.toString(Werkstoff.werkstoffHashMap.keySet().toArray()));
 
-        GT_Log.out.print("HMMM "
-                + Arrays.toString(OreDictionary.getOreIDs(
-                        WerkstoffMaterialPool.DephosphatedSamariumConcentrate.get(OrePrefixes.dust, 1))));
+        /*
+            GT_Log.out.print("HMMM "
+                    + Arrays.toString(OreDictionary.getOreIDs(
+                            WerkstoffMaterialPool.DephosphatedSamariumConcentrate.get(OrePrefixes.dust, 1))));
+        */
     }
 
     @EventHandler
     public static void onModLoadingComplete(FMLLoadCompleteEvent e) {
-        GT_Log.out.print("AAAAAAAAAAAAAA");
+        // GT_Log.out.print("AAAAAAAAAAAAAA");
         //
-        GT_Log.out.print("We are done loading");
+        // GT_Log.out.print("We are done loading");
         BotRecipes.removeRecipes();
         RecipeLoader.removeCeriumSources();
 
-        GT_Log.out.print("blah blah " + WerkstoffMaterialPool.PTMEGElastomer.hasGenerationFeature(OrePrefixes.ingot));
+        // GT_Log.out.print("blah blah " +
+        // WerkstoffMaterialPool.PTMEGElastomer.hasGenerationFeature(OrePrefixes.ingot));
     }
 }

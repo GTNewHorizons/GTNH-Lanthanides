@@ -11,9 +11,12 @@ import java.util.Arrays;
 @SuppressWarnings({"unchecked"})
 public class WerkstoffMaterialPool implements Runnable {
 
+    // Current highest ID = 11_499
+
     private static final int offsetID = 11_000;
     private static final int offsetID2 = 11_100;
     private static final int offsetID3 = 11_300;
+    private static final int offsetID4 = 11_400;
 
     /*
     * public static final Werkstoff __ = new Werkstoff(
@@ -40,7 +43,7 @@ public class WerkstoffMaterialPool implements Runnable {
                     .addMetalItems()
                     .enforceUnification(), // Perhaps use hafnia liquid in elemental hafnium synthesis
             offsetID,
-            TextureSet.SET_DULL);
+            TextureSet.SET_METALLIC);
 
     public static final Werkstoff LowPurityHafnium = new Werkstoff(
             new short[] {240, 223, 208},
@@ -48,9 +51,7 @@ public class WerkstoffMaterialPool implements Runnable {
             subscriptNumbers("??Hf??"),
             new Werkstoff.Stats(),
             Werkstoff.Types.COMPOUND,
-            new Werkstoff.GenerationFeatures()
-                    .disable()
-                    .onlyDust(), // Perhaps use hafnia liquid in elemental hafnium synthesis
+            new Werkstoff.GenerationFeatures().disable().onlyDust(),
             offsetID + 1,
             TextureSet.SET_DULL);
 
@@ -60,9 +61,7 @@ public class WerkstoffMaterialPool implements Runnable {
             subscriptNumbers("HfO2"),
             new Werkstoff.Stats(),
             Werkstoff.Types.COMPOUND,
-            new Werkstoff.GenerationFeatures()
-                    .disable()
-                    .onlyDust(), // Perhaps use hafnia liquid in elemental hafnium synthesis
+            new Werkstoff.GenerationFeatures().disable().onlyDust(),
             offsetID + 2,
             TextureSet.SET_DULL);
 
@@ -111,14 +110,11 @@ public class WerkstoffMaterialPool implements Runnable {
             "Zirconium",
             subscriptNumbers("Zr"),
             new Werkstoff.Stats().setBlastFurnace(true),
-            Werkstoff.Types.COMPOUND,
-            new Werkstoff.GenerationFeatures()
-                    .disable()
-                    .onlyDust()
-                    .addMetalItems()
-                    .enforceUnification(),
+            Werkstoff.Types.ELEMENT,
+            new Werkstoff.GenerationFeatures().disable().onlyDust().addMetalItems(),
+            // .enforceUnification(),
             offsetID + 7,
-            TextureSet.SET_DULL);
+            TextureSet.SET_METALLIC);
 
     public static final Werkstoff Zirconia = new Werkstoff(
             new short[] {177, 152, 101},
@@ -128,7 +124,7 @@ public class WerkstoffMaterialPool implements Runnable {
             Werkstoff.Types.COMPOUND,
             new Werkstoff.GenerationFeatures().disable().onlyDust(),
             offsetID + 8,
-            TextureSet.SET_DULL);
+            TextureSet.SET_SHINY);
 
     public static final Werkstoff ZirconiumTetrachloride = new Werkstoff(
             new short[] {179, 164, 151},
@@ -1023,8 +1019,41 @@ public class WerkstoffMaterialPool implements Runnable {
             offsetID3 + 16,
             TextureSet.SET_FLUID);
 
-    public static void runInit() {
+    // Beamline fuckery
+    public static final Werkstoff Permalloy = new Werkstoff(
+            new short[] {195, 230, 225},
+            "Permalloy",
+            subscriptNumbers("?NiFe?"),
+            new Werkstoff.Stats().setCentrifuge(true),
+            Werkstoff.Types.MIXTURE,
+            new Werkstoff.GenerationFeatures()
+                    .disable()
+                    .onlyDust()
+                    .addMetalItems()
+                    .addMixerRecipes()
+                    .enforceUnification(),
+            offsetID4,
+            TextureSet.SET_DULL,
+            new Pair<>(Materials.Nickel, 4),
+            new Pair<>(Materials.Iron, 1),
+            new Pair<>(Materials.Molybdenum, 1));
 
+    public static final Werkstoff MuMetal = new Werkstoff(
+            new short[] {210, 230, 225},
+            "Mu-metal",
+            subscriptNumbers("?NiFeCuCrMo?"),
+            new Werkstoff.Stats().setBlastFurnace(true),
+            Werkstoff.Types.MIXTURE,
+            new Werkstoff.GenerationFeatures()
+                    .disable()
+                    .onlyDust()
+                    .addMetalItems()
+                    .addMultipleIngotMetalWorkingItems()
+                    .enforceUnification(),
+            offsetID4 + 1,
+            TextureSet.SET_METALLIC);
+
+    public static void runInit() {
         addSubTags();
     }
 
