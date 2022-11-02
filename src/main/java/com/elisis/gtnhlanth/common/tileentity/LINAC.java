@@ -19,6 +19,8 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMultiBlockBase;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
+import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,8 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
     protected static final String STRUCTURE_PIECE_BASE = "base";
     protected static final String STRUCTURE_PIECE_LAYER = "layer";
     protected static final String STRUCTURE_PIECE_END = "end";
+
+    private boolean onEndInnerLayer = false;
 
     private ArrayList<TileHatchInputBeamline> mInputBeamline = new ArrayList<>();
     private ArrayList<TileHatchOutputBeamline> mOutputBeamline = new ArrayList<>();
@@ -88,7 +92,8 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
                 .addElement(
                         'h',
                         ofChain(
-                                ofHatchAdder(LINAC::addInputHatchToMachineList, CASING_INDEX, 1),
+                                ofHatchAdder(
+                                        GT_MetaTileEntity_MultiBlockBase::addInputHatchToMachineList, CASING_INDEX, 1),
                                 ofHatchAdder(LINAC::addOutputHatchToMachineList, CASING_INDEX, 1)))
                 .addElement(
                         'j',
@@ -112,38 +117,6 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 
     public LINAC(String name) {
         super(name);
-    }
-
-    @Override
-    public boolean checkMachine(IGregTechTileEntity mte, ItemStack stack) {
-
-        mInputBeamline.clear();
-        mOutputBeamline.clear();
-
-        this.outputEnergy = 0;
-        this.outputRate = 0;
-        this.outputParticle = 0;
-        this.outputFocus = 0;
-
-        int length = 8; // Base piece length
-
-        if (!checkPiece(STRUCTURE_PIECE_BASE, 3, 0, 0)) return false;
-
-        while (length < 128) {
-
-            if (!checkPiece(STRUCTURE_PIECE_BASE, 3, 0, length)) return false;
-
-            length += 2;
-        }
-
-        if (!checkPiece(STRUCTURE_PIECE_END, 2, 0, length)) return false;
-
-        length += 8;
-
-        return this.mInputBeamline.size() == 1
-                && this.mOutputBeamline.size() == 1
-                && this.mMaintenanceHatches.size() == 1
-                && this.mEnergyHatches.size() <= 2;
     }
 
     @Override
@@ -243,13 +216,59 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
     }
 
     @Override
+    public boolean checkMachine(IGregTechTileEntity mte, ItemStack stack) {
+
+        mInputBeamline.clear();
+        mOutputBeamline.clear();
+
+        this.outputEnergy = 0;
+        this.outputRate = 0;
+        this.outputParticle = 0;
+        this.outputFocus = 0;
+
+        this.onEndInnerLayer = false;
+
+        int length = 8; // Base piece length
+
+        if (!checkPiece(STRUCTURE_PIECE_BASE, 3, 6, 0)) return false;
+
+        while (length < 128) {
+
+            if (!checkPiece(STRUCTURE_PIECE_LAYER, 3, 6, -length)) {
+                if (!checkPiece(STRUCTURE_PIECE_END, 3, 6, -length)) {
+                    return false;
+                }
+                break;
+            }
+            ;
+
+            length += 2;
+        }
+
+        // if (!checkPiece(STRUCTURE_PIECE_END, 3, 6, -length)) return false;
+
+        length += 8;
+
+        return this.mInputBeamline.size() == 1
+                && this.mOutputBeamline.size() == 1
+                && this.mMaintenanceHatches.size() == 1
+                && this.mEnergyHatches.size() <= 2;
+    }
+
+    @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
 
         buildPiece(STRUCTURE_PIECE_BASE, stackSize, hintsOnly, 3, 6, 0);
 
-        int lLength = Math.max(stackSize.stackSize - 16, 2); // !!
+        int lLength = Math.max(stackSize.stackSize - 16, 8); // !!
+
+        if (!(lLength % 2 == 0)) {
+            lLength++; // Otherwise you get gaps at the end
+        }
 
         for (int i = -8; i > -lLength - 1; i -= 2) {
+
+            GT_Log.out.print("Building inner piece! i = " + i);
 
             buildPiece(STRUCTURE_PIECE_LAYER, stackSize, hintsOnly, 3, 6, i);
         }
@@ -272,6 +291,11 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
     @Override
     public IStructureDefinition<LINAC> getStructureDefinition() {
         return STRUCTURE_DEFINITION;
+    }
+
+    public boolean addInputHatchToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        this.onEndInnerLayer = true;
+        return super.addInputHatchToMachineList(aTileEntity, aBaseCasingIndex);
     }
 
     @Override
