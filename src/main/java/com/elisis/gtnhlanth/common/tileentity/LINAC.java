@@ -3,9 +3,15 @@ package com.elisis.gtnhlanth.common.tileentity;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAdder;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
+import static gregtech.api.enums.GT_Values.VN;
 import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
 import com.elisis.gtnhlanth.common.beamline.BeamInformation;
+import com.elisis.gtnhlanth.common.beamline.BeamLinePacket;
+import com.elisis.gtnhlanth.common.beamline.Particle;
 import com.elisis.gtnhlanth.common.hatch.TileHatchInputBeamline;
 import com.elisis.gtnhlanth.common.hatch.TileHatchOutputBeamline;
 import com.elisis.gtnhlanth.common.register.LanthItemList;
@@ -13,20 +19,23 @@ import com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMultiBlockBase;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
 
 public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> implements IConstructable {
@@ -168,47 +177,245 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
     @Override
     public boolean checkRecipe(ItemStack itemStack) {
 
-        List<FluidStack> tFluidInputs = this.getStoredFluids();
+    	GT_Log.out.print("Hatches " + mInputHatches.size());
+    	
+    	GT_Log.out.print("AAAAA in checkRecipe");
+    	
+    	float tempFactor = 0;
+    	float machineFocus = 0;	
+    	float inputFocus = 0;
+    	outputFocus = 0;
+    	
+    	float voltageFactor = 0;
+    	float inputEnergy = 0;
+    	float machineEnergy = 0;
+    	outputEnergy = 0;
+    	
+    	int particleId = 0;
+    	outputParticle = 0;
+    	
+    	int inputRate = 0;
+    	outputRate = 0;
+    			
+    	
+        ArrayList<FluidStack> tFluidInputs = this.getStoredFluids();
+        if (tFluidInputs.size() == 0) {
+        	return false;
+        }
+        
+        int aaa = 0;
+        for (FluidStack input : tFluidInputs) {
+        	GT_Log.out.print(aaa + "fluid " + input.getLocalizedName());
+        	aaa++;
+        }
+        
         FluidStack primFluid = tFluidInputs.get(0);
 
         final int fluidConsumed = 1000 * length;
 
         this.mEfficiency = (10000 - (this.getIdealStatus() - this.getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
+        
+        particleId = this.getInputInformation().getParticleId();
+        Particle inputParticle = Particle.values()[particleId];
+        
+        //GT_Log.out.print("Particle ID = " + particleId + " " + inputParticle.canAccelerate());
+        
+        if (!inputParticle.canAccelerate()) {
+        	return false;
+        }
+        
+        mMaxProgresstime = 20;
+        mEUt = (int) -getMaxInputVoltage();
+        
+        
 
-        float tempRatio = calculateTemperatureRatio(primFluid.getFluid().getTemperature());
-
+        GT_Log.out.print("Can accelerate");
+        
+        outputParticle = particleId;
+        
+        
+        tempFactor = calculateTemperatureFactor(primFluid.getFluid().getTemperature());
+        machineFocus = Math.max(((-10) * this.length * tempFactor) + 100, 5); //Absolute maximum of 100, minimum of 5
+        
+        inputFocus = this.getInputInformation().getFocus();
+        
+        outputFocus = (inputFocus > machineFocus) ? ((inputFocus + machineFocus) / 2) : inputFocus * (machineFocus / 100);
+ 
+        
+        long voltage = this.getMaxInputVoltage();
+        voltageFactor = calculateVoltageFactor(voltage);
+        
+        machineEnergy = Math.max(-((60) / this.length) * voltageFactor + 60_000, 2000);
+        
+        inputEnergy = this.getInputInformation().getEnergy();
+        outputEnergy = Math.min(inputEnergy + machineEnergy, 60_000); //TODO more complex calculation than just addition
+        
+        
+        inputRate = this.getInputInformation().getRate();
+        outputRate = inputRate; //Cannot increase rate with this multiblock
+        
+        
+        
         if (primFluid.amount < fluidConsumed || primFluid.getFluid().getTemperature() > 200) {
 
             stopMachine();
             return false;
         }
 
+        GT_Log.out.print("Fluid ok");
+        
         primFluid.amount -= fluidConsumed;
 
-        FluidStack fluidOutput =
-                Materials.getGtMaterialFromFluid(primFluid.getFluid()).getGas(fluidConsumed);
+        FluidStack fluidOutput = null;
+        /*
+        Materials fluidMat = Materials.getGtMaterialFromFluid(primFluid.getFluid());
+        
+        if (fluidMat.equals(Materials.LiquidNitrogen)) {
+        	fluidOutput = Materials.Nitrogen.getGas(fluidConsumed);
+        } else 
+        	if (fluidMat.equals(Materials.LiquidOxygen)) {
+        		fluidOutput = Materials.Oxygen.getGas(fluidConsumed);
+        	}
+        */
+        /*
+        String fluidName = primFluid.getUnlocalizedName();
+        
+        if (fluidName.equals(Materials.LiquidNitrogen.getFluid(1).getUnlocalizedName())) {
+        	fluidOutput = Materials.Nitrogen.getGas(fluidConsumed);
+        }*/
+        
+        GT_Log.out.print(primFluid.getLocalizedName());
+        
+        if (primFluid.isFluidEqual(Materials.LiquidNitrogen.getGas(1L))) {
+        	GT_Log.out.print("Fluid equal blah blah");
+        	
+        	fluidOutput = Materials.Nitrogen.getGas(fluidConsumed);
+        }
+        
+        
+        
 
         if (Objects.isNull(fluidOutput)) return false;
 
+        GT_Log.out.print("Fluid out ok");
+        
         this.addFluidOutputs(new FluidStack[] {fluidOutput});
+        
+        
+        outputAfterRecipe();
+        
+        
+        
+        
         return true;
     }
+    
+    private void outputAfterRecipe() {
+    	
+    	if (!mOutputBeamline.isEmpty()) {
+            
+            BeamLinePacket packet = new BeamLinePacket(new BeamInformation(outputEnergy, outputRate, outputParticle, outputFocus));
+            
+            for (TileHatchOutputBeamline o : mOutputBeamline) {
+            	
+            	o.q = packet;
+            	
+            }
+    	}
+    }
+    
+    @Override
+    public String[] getInfoData() {
+        int mPollutionReduction = 0;
+        for (GT_MetaTileEntity_Hatch_Muffler tHatch : mMufflerHatches) {
+            if (isValidMetaTileEntity(tHatch)) {
+                mPollutionReduction = Math.max(tHatch.calculatePollutionReduction(100), mPollutionReduction);
+            }
+        }
 
-    private BeamInformation getInputInformation() {
+        long storedEnergy = 0;
+        long maxEnergy = 0;
+        for (GT_MetaTileEntity_Hatch_Energy tHatch : mEnergyHatches) {
+            if (isValidMetaTileEntity(tHatch)) {
+                storedEnergy += tHatch.getBaseMetaTileEntity().getStoredEU();
+                maxEnergy += tHatch.getBaseMetaTileEntity().getEUCapacity();
+            }
+        }
+
+        return new String[] {
+            /* 1*/ StatCollector.translateToLocal("GT5U.multiblock.Progress") + ": " + EnumChatFormatting.GREEN
+                    + GT_Utility.formatNumbers(mProgresstime / 20) + EnumChatFormatting.RESET + " s / "
+                    + EnumChatFormatting.YELLOW
+                    + GT_Utility.formatNumbers(mMaxProgresstime / 20) + EnumChatFormatting.RESET + " s",
+            /* 2*/ StatCollector.translateToLocal("GT5U.multiblock.energy") + ": " + EnumChatFormatting.GREEN
+                    + GT_Utility.formatNumbers(storedEnergy) + EnumChatFormatting.RESET + " EU / "
+                    + EnumChatFormatting.YELLOW
+                    + GT_Utility.formatNumbers(maxEnergy) + EnumChatFormatting.RESET + " EU",
+            /* 3*/ StatCollector.translateToLocal("GT5U.multiblock.usage") + ": " + EnumChatFormatting.RED
+                    + GT_Utility.formatNumbers(getActualEnergyUsage()) + EnumChatFormatting.RESET + " EU/t",
+            /* 4*/ StatCollector.translateToLocal("GT5U.multiblock.mei") + ": " + EnumChatFormatting.YELLOW
+                    + GT_Utility.formatNumbers(getMaxInputVoltage()) + EnumChatFormatting.RESET + " EU/t(*2A) "
+                    + StatCollector.translateToLocal("GT5U.machines.tier")
+                    + ": " + EnumChatFormatting.YELLOW
+                    + VN[GT_Utility.getTier(getMaxInputVoltage())] + EnumChatFormatting.RESET,
+            /* 5*/ StatCollector.translateToLocal("GT5U.multiblock.problems") + ": " + EnumChatFormatting.RED
+                    + (getIdealStatus() - getRepairStatus()) + EnumChatFormatting.RESET + " "
+                    + StatCollector.translateToLocal("GT5U.multiblock.efficiency")
+                    + ": " + EnumChatFormatting.YELLOW
+                    + Float.toString(mEfficiency / 100.0F) + EnumChatFormatting.RESET + " %",
+            /* 6*/ StatCollector.translateToLocal("GT5U.multiblock.pollution") + ": " + EnumChatFormatting.GREEN
+                    + mPollutionReduction + EnumChatFormatting.RESET + " %",
+                    
+            /* 7*/ EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.in_pre") + ": " + EnumChatFormatting.RESET,
+            		StatCollector.translateToLocal("beamline.particle") + ": " + EnumChatFormatting.GOLD
+            		+ Particle.values()[this.getInputInformation().getParticleId()].getLocalisedName() + " " + EnumChatFormatting.RESET,
+            		StatCollector.translateToLocal("beamline.energy") + ": " + EnumChatFormatting.DARK_RED 
+            		+ this.getInputInformation().getEnergy() + EnumChatFormatting.RESET + " keV",
+            		StatCollector.translateToLocal("beamline.focus") + ": " + EnumChatFormatting.BLUE
+            		+ this.getInputInformation().getFocus() + " " + EnumChatFormatting.RESET,
+            		StatCollector.translateToLocal("beamline.amount") + ": " + EnumChatFormatting.LIGHT_PURPLE
+            		+ this.getInputInformation().getRate(),
+            		
+            	   EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.out_pre") + ": " + EnumChatFormatting.RESET,
+            	   	StatCollector.translateToLocal("beamline.particle") + ": " + EnumChatFormatting.GOLD
+            	   	+ Particle.values()[this.outputParticle].getLocalisedName() + " " + EnumChatFormatting.RESET,
+            	   	StatCollector.translateToLocal("beamline.energy") + ": " + EnumChatFormatting.DARK_RED
+            	   	+ this.outputEnergy + EnumChatFormatting.RESET + " keV",
+            	   	StatCollector.translateToLocal("beamline.focus") + ": " + EnumChatFormatting.BLUE
+            	   	+ this.outputFocus + " " + EnumChatFormatting.RESET,
+            	   	StatCollector.translateToLocal("beamline.amount") + ": " + EnumChatFormatting.LIGHT_PURPLE
+            		+ this.outputRate,
+            	   	
+                    
+        };
+    }
+
+    
+
+	private BeamInformation getInputInformation() {
 
         for (TileHatchInputBeamline in : this.mInputBeamline) {
 
-            if (in.q == null) return null;
+            //if (in.q == null) return null;
+        	if (in.q == null) return new BeamInformation(10000, 10, 0, 90); //TODO temporary for testing purposes
 
             return in.q.getContent();
         }
         return null;
     }
 
-    private static float calculateTemperatureRatio(int fluidTemp) {
+    private static float calculateTemperatureFactor(int fluidTemp) {
 
-        return 1; // TODO
+        float factor = (float) Math.pow(1.1, -(0.4 * fluidTemp - 50));
+        return factor;
+    }
+    
+    private float calculateVoltageFactor(long voltage) {
+		
+    	float factor = (float) Math.pow(1.00009, -(voltage - 125000));
+		return factor;
+	
     }
 
     private boolean addGlass(Block block, int meta) {
@@ -228,7 +435,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 
         this.onEndInnerLayer = false;
 
-        int length = 8; // Base piece length
+        length = 8; // Base piece length
 
         if (!checkPiece(STRUCTURE_PIECE_BASE, 3, 6, 0)) return false;
 
