@@ -2,7 +2,7 @@ package com.elisis.gtnhlanth.common.beamline;
 
 public class BeamInformation {
 
-    private float energy;
+    private float energy; // in keV
     private int rate;
 
     private Particle particle;
