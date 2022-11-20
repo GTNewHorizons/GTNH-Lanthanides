@@ -1190,29 +1190,26 @@ public class RecipeLoader {
                 WerkstoffMaterialPool.MoTeOCatalyst.get(OrePrefixes.dust, 2),
                 300,
                 120);
-        
-        
-        
+
         GT_Values.RA.addChemicalRecipe(
-        		Materials.Molybdenite.getDust(1),
-        		null,
-        		Materials.Oxygen.getGas(7000),
-        		Materials.SulfurDioxide.getGas(2000),
-        		WerkstoffMaterialPool.MolybdenumTrioxide.get(OrePrefixes.dust, 1),
-        		null,
-        		480,
-        		120
-        		);
-        
+                Materials.Molybdenite.getDust(1),
+                null,
+                Materials.Oxygen.getGas(7000),
+                Materials.SulfurDioxide.getGas(2000),
+                WerkstoffMaterialPool.MolybdenumTrioxide.get(OrePrefixes.dust, 1),
+                null,
+                480,
+                120);
+
         GT_Values.RA.addChemicalRecipe(
-        		WerkstoffMaterialPool.MolybdenumTrioxide.get(OrePrefixes.dust, 1),
-        		null,
-        		Materials.Hydrogen.getGas(6000),
-        		Materials.Water.getFluid(3000),
-        		WerkstoffMaterialPool.MolybdenumIVOxide.get(OrePrefixes.dust, 1),
-        		null,
-        		480,
-        		120);
+                WerkstoffMaterialPool.MolybdenumTrioxide.get(OrePrefixes.dust, 1),
+                null,
+                Materials.Hydrogen.getGas(6000),
+                Materials.Water.getFluid(3000),
+                WerkstoffMaterialPool.MolybdenumIVOxide.get(OrePrefixes.dust, 1),
+                null,
+                480,
+                120);
 
         // Tungstophosphoric Acid
         GT_Values.RA.addChemicalRecipe(

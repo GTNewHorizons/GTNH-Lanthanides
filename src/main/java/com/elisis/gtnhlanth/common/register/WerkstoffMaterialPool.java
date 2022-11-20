@@ -1018,17 +1018,16 @@ public class WerkstoffMaterialPool implements Runnable {
             new Werkstoff.GenerationFeatures().disable().addCells(),
             offsetID3 + 16,
             TextureSet.SET_FLUID);
-    
+
     public static final Werkstoff MolybdenumTrioxide = new Werkstoff(
-    		new short[] {236, 255, 248},
-    		"Molybdenum Trioxide",
-    		subscriptNumbers("MoO3"),
-    		new Werkstoff.Stats(),
-    		Werkstoff.Types.COMPOUND,
-    		new Werkstoff.GenerationFeatures().disable().onlyDust(),
-    		offsetID3 + 17,
-    		TextureSet.SET_DULL);
-    		
+            new short[] {236, 255, 248},
+            "Molybdenum Trioxide",
+            subscriptNumbers("MoO3"),
+            new Werkstoff.Stats(),
+            Werkstoff.Types.COMPOUND,
+            new Werkstoff.GenerationFeatures().disable().onlyDust(),
+            offsetID3 + 17,
+            TextureSet.SET_DULL);
 
     // Beamline fuckery
     public static final Werkstoff Permalloy = new Werkstoff(
