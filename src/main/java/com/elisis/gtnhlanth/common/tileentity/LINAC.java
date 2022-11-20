@@ -203,11 +203,13 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         	return false;
         }
         
+        /*
         int aaa = 0;
         for (FluidStack input : tFluidInputs) {
         	GT_Log.out.print(aaa + "fluid " + input.getLocalizedName());
         	aaa++;
         }
+        */
         
         FluidStack primFluid = tFluidInputs.get(0);
 
@@ -230,7 +232,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         
         
 
-        GT_Log.out.print("Can accelerate");
+        //GT_Log.out.print("Can accelerate");
         
         outputParticle = particleId;
         
@@ -263,7 +265,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
             return false;
         }
 
-        GT_Log.out.print("Fluid ok");
+        //GT_Log.out.print("Fluid ok");
         
         primFluid.amount -= fluidConsumed;
 
@@ -285,12 +287,12 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         	fluidOutput = Materials.Nitrogen.getGas(fluidConsumed);
         }*/
         
-        GT_Log.out.print(primFluid.getLocalizedName());
+        //GT_Log.out.print(primFluid.getLocalizedName());
         
         if (primFluid.isFluidEqual(Materials.LiquidNitrogen.getGas(1L))) {
-        	GT_Log.out.print("Fluid equal blah blah");
+        	//GT_Log.out.print("Fluid equal blah blah");
         	
-        	fluidOutput = Materials.Nitrogen.getGas(fluidConsumed);
+        	fluidOutput = Materials.Nitrogen.getGas(fluidConsumed); //TODO more fluids
         }
         
         
@@ -298,7 +300,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 
         if (Objects.isNull(fluidOutput)) return false;
 
-        GT_Log.out.print("Fluid out ok");
+        //GT_Log.out.print("Fluid out ok");
         
         this.addFluidOutputs(new FluidStack[] {fluidOutput});
         
