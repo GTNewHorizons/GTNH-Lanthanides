@@ -7,6 +7,8 @@ import com.elisis.gtnhlanth.common.hatch.TileHatchOutputBeamline;
 import com.elisis.gtnhlanth.common.tileentity.Digester;
 import com.elisis.gtnhlanth.common.tileentity.DissolutionTank;
 import com.elisis.gtnhlanth.common.tileentity.LINAC;
+import com.elisis.gtnhlanth.common.tileentity.SourceChamber;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -18,6 +20,7 @@ public final class LanthItemList {
     public static ItemStack DISSOLUTION_TANK;
 
     public static ItemStack LINAC;
+    public static ItemStack SOURCE_CHAMBER;
 
     public static ItemStack BEAMLINE_PIPE;
 
@@ -53,6 +56,8 @@ public final class LanthItemList {
                 .getStackForm(1L);
 
         LINAC = new LINAC(10505, "Linear Accelerator", "Linear Accelerator").getStackForm(1L);
+        
+        SOURCE_CHAMBER = new SourceChamber(10506, "Source Chamber", "Source Chamber").getStackForm(1L);
     }
 
     public static void registerTypical() {

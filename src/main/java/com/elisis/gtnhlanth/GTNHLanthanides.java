@@ -4,6 +4,7 @@ import com.elisis.gtnhlanth.common.CommonProxy;
 import com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool;
 import com.elisis.gtnhlanth.common.register.LanthItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
+import com.elisis.gtnhlanth.common.tileentity.recipe.beamline.BeamlineRecipeLoader;
 import com.elisis.gtnhlanth.loader.BotRecipes;
 import com.elisis.gtnhlanth.loader.RecipeLoader;
 import com.elisis.gtnhlanth.loader.ZPMRubberChanges;
@@ -70,6 +71,8 @@ public class GTNHLanthanides {
         RecipeLoader.loadLanthanideRecipes();
         RecipeLoader.addRandomChemCrafting();
         RecipeLoader.loadAccelerator();
+        
+        BeamlineRecipeLoader.load();
 
         BotRecipes.addGTRecipe();
         BotRecipes.addFuels();

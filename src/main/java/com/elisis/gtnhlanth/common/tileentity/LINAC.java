@@ -175,9 +175,9 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
     @Override
     public boolean checkRecipe(ItemStack itemStack) {
 
-        GT_Log.out.print("Hatches " + mInputHatches.size());
+        //GT_Log.out.print("Hatches " + mInputHatches.size());
 
-        GT_Log.out.print("AAAAA in checkRecipe");
+        //GT_Log.out.print("AAAAA in checkRecipe");
 
         float tempFactor = 0;
         float machineFocus = 0;
@@ -313,6 +313,15 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
     }
 
     @Override
+    public void stopMachine() {
+        outputFocus = 0;
+        outputEnergy = 0;
+        outputParticle = 0;
+        outputRate = 0;
+        super.stopMachine();
+    }
+    
+    @Override
     public String[] getInfoData() {
         int mPollutionReduction = 0;
         for (GT_MetaTileEntity_Hatch_Muffler tHatch : mMufflerHatches) {
@@ -382,8 +391,8 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 
         for (TileHatchInputBeamline in : this.mInputBeamline) {
 
-            // if (in.q == null) return null;
-            if (in.q == null) return new BeamInformation(10000, 10, 0, 90); // TODO temporary for testing purposes
+            if (in.q == null) return null;
+            //if (in.q == null) return new BeamInformation(10000, 10, 0, 90); // TODO temporary for testing purposes
 
             return in.q.getContent();
         }
