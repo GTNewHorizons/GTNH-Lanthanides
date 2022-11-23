@@ -37,4 +37,9 @@ public class BeamInformation {
     public float getFocus() {
         return this.focus;
     }
+    
+    @Override
+    public String toString() {
+    	return "Energy=" + this.getEnergy() + ",Rate=" + this.getRate() + ",Particle=" + this.getParticleId() + ",Focus=" + this.getFocus();
+    }
 }
