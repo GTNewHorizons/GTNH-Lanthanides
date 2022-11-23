@@ -215,13 +215,21 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         this.mEfficiency = (10000 - (this.getIdealStatus() - this.getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
 
+        if (this.getInputInformation() == null) {
+        	return false;
+        }
+        
+        if (this.getInputInformation().getEnergy() == 0) {
+        	return false;
+        }
+        
         particleId = this.getInputInformation().getParticleId();
         Particle inputParticle = Particle.values()[particleId];
 
         // GT_Log.out.print("Particle ID = " + particleId + " " + inputParticle.canAccelerate());
 
         if (!inputParticle.canAccelerate()) {
-            return false;
+            stopMachine();
         }
 
         mMaxProgresstime = 20;
@@ -314,6 +322,8 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 
     @Override
     public void stopMachine() {
+    	
+    	GT_Log.out.print("Machine stopped");
         outputFocus = 0;
         outputEnergy = 0;
         outputParticle = 0;
@@ -391,7 +401,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 
         for (TileHatchInputBeamline in : this.mInputBeamline) {
 
-            if (in.q == null) return null;
+            if (in.q == null) return new BeamInformation(0, 0, 0, 0);
             //if (in.q == null) return new BeamInformation(10000, 10, 0, 90); // TODO temporary for testing purposes
 
             return in.q.getContent();
