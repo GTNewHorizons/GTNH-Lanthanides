@@ -8,7 +8,7 @@ public class RecipeSC extends GT_Recipe {
 
 	public int particleId;
 	public int rate;
-	public float baseEnergy;
+	public float maxEnergy;
 	public float focus;
 	public float energyRatio;
 	
@@ -24,7 +24,7 @@ public class RecipeSC extends GT_Recipe {
 			int aEUt, 
 			int particleId,
 			int rate,
-			float baseEnergy,
+			float maxEnergy,
 			float focus,
 			float energyRatio
 			) {
@@ -34,7 +34,7 @@ public class RecipeSC extends GT_Recipe {
 		
 		this.particleId = particleId;
 		this.rate = rate;
-		this.baseEnergy = baseEnergy;
+		this.maxEnergy = maxEnergy;
 		this.focus = focus;
 		this.energyRatio = energyRatio;
 	}

@@ -161,8 +161,11 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
         if (this.mEUt > 0) this.mEUt = (-this.mEUt);
         
         outputParticle = tRecipe.particleId;
-        float maxEnergy = Particle.values()[outputParticle].maxSourceEnergy();
-        outputEnergy = (float) ((-maxEnergy) * Math.pow(1.001, -(tRecipe.energyRatio)*(tVoltage-tRecipe.mEUt))) + maxEnergy;
+        float maxParticleEnergy = Particle.values()[outputParticle].maxSourceEnergy();
+        float maxMaterialEnergy = tRecipe.maxEnergy;
+        //outputEnergy = (float) ((-maxEnergy) * Math.pow(1.001, -(tRecipe.energyRatio)*(tVoltage-tRecipe.mEUt))) + maxEnergy;
+        outputEnergy = (float) Math.min((-maxMaterialEnergy) * Math.pow(1.001, -(tRecipe.energyRatio)*(tVoltage-tRecipe.mEUt)) + maxMaterialEnergy, maxParticleEnergy);
+        
         
         GT_Log.out.print(outputEnergy);
         
