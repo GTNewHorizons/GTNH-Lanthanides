@@ -1,7 +1,6 @@
 package com.elisis.gtnhlanth.common.block;
 
 import com.elisis.gtnhlanth.Tags;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.GregTech_API;

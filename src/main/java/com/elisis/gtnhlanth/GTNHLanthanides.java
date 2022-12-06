@@ -71,7 +71,7 @@ public class GTNHLanthanides {
         RecipeLoader.loadLanthanideRecipes();
         RecipeLoader.addRandomChemCrafting();
         RecipeLoader.loadAccelerator();
-        
+
         BeamlineRecipeLoader.load();
 
         BotRecipes.addGTRecipe();

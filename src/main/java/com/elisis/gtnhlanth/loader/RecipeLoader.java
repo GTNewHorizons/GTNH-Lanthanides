@@ -135,25 +135,23 @@ public class RecipeLoader {
                 new ItemStack(LanthItemList.CAPILLARY_EXCHANGE, 1),
                 400,
                 7680);
-        
-       GT_Values.RA.addAssemblerRecipe(
-    		   new ItemStack[] {
-    				  WerkstoffMaterialPool.MuMetal.get(OrePrefixes.wireFine, 12),
-    				  GT_OreDictUnificator.get(OrePrefixes.stick, Materials.TungstenSteel, 4)
-    		   },
-    		   Materials.SolderingAlloy.getMolten(144),
-    		   new ItemStack(LanthItemList.MM_LATTICE, 1),
-    		   300,
-    		   1920
-    		   );
-       
-       GT_Values.RA.addFluidSolidifierRecipe(
-    		   new ItemStack(LanthItemList.MM_LATTICE, 4),
-    		   Materials.BorosilicateGlass.getMolten(144), 
-    		   new ItemStack(LanthItemList.SHIELDED_ACCELERATOR_GLASS, 1), 
-    		   500, 
-    		   1920
-    		   );
+
+        GT_Values.RA.addAssemblerRecipe(
+                new ItemStack[] {
+                    WerkstoffMaterialPool.MuMetal.get(OrePrefixes.wireFine, 12),
+                    GT_OreDictUnificator.get(OrePrefixes.stick, Materials.TungstenSteel, 4)
+                },
+                Materials.SolderingAlloy.getMolten(144),
+                new ItemStack(LanthItemList.MM_LATTICE, 1),
+                300,
+                1920);
+
+        GT_Values.RA.addFluidSolidifierRecipe(
+                new ItemStack(LanthItemList.MM_LATTICE, 4),
+                Materials.BorosilicateGlass.getMolten(144),
+                new ItemStack(LanthItemList.SHIELDED_ACCELERATOR_GLASS, 1),
+                500,
+                1920);
     }
 
     public static void loadGeneral() {

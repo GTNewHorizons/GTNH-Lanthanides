@@ -1,13 +1,12 @@
 package com.elisis.gtnhlanth.common.tileentity.recipe.beamline;
 
-import java.util.Collection;
-
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
+import java.util.Collection;
 
 public class SCRecipeMap extends GT_Recipe_Map {
-	
-	public SCRecipeMap(
+
+    public SCRecipeMap(
             Collection<GT_Recipe> aRecipeList,
             String aUnlocalizedName,
             String aLocalName,
@@ -40,5 +39,4 @@ public class SCRecipeMap extends GT_Recipe_Map {
                 aShowVoltageAmperageInNEI,
                 aNEIAllowed);
     }
-
 }

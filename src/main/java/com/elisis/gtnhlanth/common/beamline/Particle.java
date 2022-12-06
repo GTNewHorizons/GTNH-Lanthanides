@@ -5,20 +5,26 @@ import net.minecraft.util.StatCollector;
 public enum Particle {
     ELECTRON(true, 0, 0.511f, 5000, "electron", "e\u207B"),
     PHOTON(false, 1, 0, 0, "photon", "\u03B3"),
-	NEUTRON(false, 2, 939.57f, 15000, "neutron", "n\u2070"),
-	PROTON(true, 3, 938.27f, 15000, "proton", "p\u207A"),
-	ALPHA(true, 4, 3727.38f, 8000, "alpha", "\u03B1");
+    NEUTRON(false, 2, 939.57f, 15000, "neutron", "n\u2070"),
+    PROTON(true, 3, 938.27f, 15000, "proton", "p\u207A"),
+    ALPHA(true, 4, 3727.38f, 8000, "alpha", "\u03B1");
 
     private boolean canAcc;
 
-    private float restMass; //in MeV
-    
-    private float maxSourceEnergy; //in keV
+    private float restMass; // in MeV
+
+    private float maxSourceEnergy; // in keV
 
     private String name;
     private String shortName;
 
-    private Particle(boolean canAcc, int id, float restMass, float maxSourceEnergy, String name, String shortName) { // ID is symbolic only
+    private Particle(
+            boolean canAcc,
+            int id,
+            float restMass,
+            float maxSourceEnergy,
+            String name,
+            String shortName) { // ID is symbolic only
         this.canAcc = canAcc;
         this.restMass = restMass;
         this.maxSourceEnergy = maxSourceEnergy;
@@ -33,9 +39,9 @@ public enum Particle {
     public boolean canAccelerate() {
         return this.canAcc;
     }
-    
+
     public float maxSourceEnergy() {
-    	return this.maxSourceEnergy;
+        return this.maxSourceEnergy;
     }
 
     public String getLocalisedName() {

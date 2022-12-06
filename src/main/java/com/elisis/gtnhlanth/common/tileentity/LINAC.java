@@ -175,9 +175,9 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
     @Override
     public boolean checkRecipe(ItemStack itemStack) {
 
-        //GT_Log.out.print("Hatches " + mInputHatches.size());
+        // GT_Log.out.print("Hatches " + mInputHatches.size());
 
-        //GT_Log.out.print("AAAAA in checkRecipe");
+        // GT_Log.out.print("AAAAA in checkRecipe");
 
         float tempFactor = 0;
         float machineFocus = 0;
@@ -216,13 +216,13 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         this.mEfficiencyIncrease = 10000;
 
         if (this.getInputInformation() == null) {
-        	return false;
+            return false;
         }
-        
+
         if (this.getInputInformation().getEnergy() == 0) {
-        	return false;
+            return false;
         }
-        
+
         particleId = this.getInputInformation().getParticleId();
         Particle inputParticle = Particle.values()[particleId];
 
@@ -322,15 +322,15 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 
     @Override
     public void stopMachine() {
-    	
-    	GT_Log.out.print("Machine stopped");
+
+        GT_Log.out.print("Machine stopped");
         outputFocus = 0;
         outputEnergy = 0;
         outputParticle = 0;
         outputRate = 0;
         super.stopMachine();
     }
-    
+
     @Override
     public String[] getInfoData() {
         int mPollutionReduction = 0;
@@ -402,7 +402,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         for (TileHatchInputBeamline in : this.mInputBeamline) {
 
             if (in.q == null) return new BeamInformation(0, 0, 0, 0);
-            //if (in.q == null) return new BeamInformation(10000, 10, 0, 90); // TODO temporary for testing purposes
+            // if (in.q == null) return new BeamInformation(10000, 10, 0, 90); // TODO temporary for testing purposes
 
             return in.q.getContent();
         }

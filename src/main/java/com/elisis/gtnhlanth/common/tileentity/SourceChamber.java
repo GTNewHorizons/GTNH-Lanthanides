@@ -5,9 +5,6 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static gregtech.api.enums.GT_Values.VN;
 import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import com.elisis.gtnhlanth.common.beamline.BeamInformation;
 import com.elisis.gtnhlanth.common.beamline.BeamLinePacket;
 import com.elisis.gtnhlanth.common.beamline.Particle;
@@ -18,7 +15,6 @@ import com.elisis.gtnhlanth.common.tileentity.recipe.beamline.RecipeSC;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
-
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -26,78 +22,66 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMul
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
-import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
+import java.util.ArrayList;
+import java.util.Arrays;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
 
-public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<SourceChamber> implements IConstructable  {
+public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<SourceChamber> implements IConstructable {
 
-	
-	private static final IStructureDefinition<SourceChamber> STRUCTURE_DEFINITION;
-	
-	private ArrayList<TileHatchOutputBeamline> mOutputBeamline = new ArrayList<>();
-	
-	private float outputEnergy;
+    private static final IStructureDefinition<SourceChamber> STRUCTURE_DEFINITION;
+
+    private ArrayList<TileHatchOutputBeamline> mOutputBeamline = new ArrayList<>();
+
+    private float outputEnergy;
     private int outputRate;
     private int outputParticle;
     private float outputFocus;
-    
+
     static {
-    	STRUCTURE_DEFINITION = StructureDefinition.<SourceChamber>builder()
-    			.addShape("sc", new String[][] {
-    				
-    				
-    				{"ccccc", "ckkkc", "ckikc", "ckkkc", "dd~dd"},
-    				{"ckkkc", "keeek", "ke-ek", "keeek", "ccocc"},
-    				{"ckkkc", "k---k", "k---k", "k---k", "ccccc"},
-    				{"ckkkc", "k---k", "k---k", "k---k", "ccccc"},
-    				{"ckkkc", "keeek", "ke-ek", "keeek", "ccccc"},
-    				{"ccccc", "ckkkc", "ckbkc", "ckkkc", "ccccc"}
-    			})
-    			.addElement('c', ofBlock(LanthItemList.SHIELDED_ACCELERATOR_CASING, 0))
+        STRUCTURE_DEFINITION = StructureDefinition.<SourceChamber>builder()
+                .addShape("sc", new String[][] {
+                    {"ccccc", "ckkkc", "ckikc", "ckkkc", "dd~dd"},
+                    {"ckkkc", "keeek", "ke-ek", "keeek", "ccocc"},
+                    {"ckkkc", "k---k", "k---k", "k---k", "ccccc"},
+                    {"ckkkc", "k---k", "k---k", "k---k", "ccccc"},
+                    {"ckkkc", "keeek", "ke-ek", "keeek", "ccccc"},
+                    {"ccccc", "ckkkc", "ckbkc", "ckkkc", "ccccc"}
+                })
+                .addElement('c', ofBlock(LanthItemList.SHIELDED_ACCELERATOR_CASING, 0))
                 .addElement('k', ofBlock(LanthItemList.SHIELDED_ACCELERATOR_GLASS, 0))
                 .addElement('e', ofBlock(LanthItemList.ELECTRODE_CASING, 0))
-    			.addElement('b', ofHatchAdder(SourceChamber::addBeamLineOutputHatch, 49, 1))
-    			
-    			.addElement('i', ofHatchAdder(GT_MetaTileEntity_MultiBlockBase::addInputBusToMachineList, 49, 1))
-    			.addElement('o', ofHatchAdder(GT_MetaTileEntity_MultiBlockBase::addOutputBusToMachineList, 49, 1))
-    			
-    			
-                              
+                .addElement('b', ofHatchAdder(SourceChamber::addBeamLineOutputHatch, 49, 1))
+                .addElement('i', ofHatchAdder(GT_MetaTileEntity_MultiBlockBase::addInputBusToMachineList, 49, 1))
+                .addElement('o', ofHatchAdder(GT_MetaTileEntity_MultiBlockBase::addOutputBusToMachineList, 49, 1))
                 .addElement(
                         'd',
                         ofChain(
                                 ofHatchAdder(SourceChamber::addMaintenanceToMachineList, 49, 1),
                                 ofHatchAdder(SourceChamber::addEnergyInputToMachineList, 49, 1),
                                 ofBlock(LanthItemList.SHIELDED_ACCELERATOR_CASING, 0)))
-    			
-    			.build()
-    					
-    					
-    			
-    			
-    			;
+                .build();
     }
-	
+
     public SourceChamber(int id, String name, String nameRegional) {
-		super(id, name, nameRegional);
-	}
-    
-    public SourceChamber(String name) {
-    	super(name);
+        super(id, name, nameRegional);
     }
-    
+
+    public SourceChamber(String name) {
+        super(name);
+    }
+
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity te) {
-    	return new SourceChamber(this.mName);
+        return new SourceChamber(this.mName);
     }
-    
+
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
@@ -107,7 +91,7 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
         ;
         return tt;
     }
-    
+
     private boolean addBeamLineOutputHatch(IGregTechTileEntity te, int casingIndex) {
 
         if (te == null) return false;
@@ -122,72 +106,73 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
 
         return false;
     }
-    
+
     @Override
     public boolean checkRecipe(ItemStack itemStack) {
-    	
-    	GT_Log.out.print("In checkRecipe");
-    	
-    	outputFocus = 0;
-    	outputEnergy = 0;
-    	outputParticle = 0;
-    	outputRate = 0;
-    	
-    	ItemStack[] tItems = this.getStoredInputs().toArray(new ItemStack[0]);
-    	GT_Log.out.print(Arrays.toString(tItems));
-    	long tVoltage = this.getMaxInputVoltage();
-    	
-    	for (GT_Recipe stack : BeamlineRecipeAdder.instance.SourceChamberRecipes.mRecipeList) {
-    		
-    		GT_Log.out.print("Recipe item " + Arrays.toString(stack.mInputs));
-    		
-    	}
-    	
-    	RecipeSC tRecipe = (RecipeSC) BeamlineRecipeAdder.instance.SourceChamberRecipes.findRecipe(
-    			this.getBaseMetaTileEntity(), false, tVoltage, new FluidStack[] {}, tItems);
-    	
-        
-        if (tRecipe == null || !tRecipe.isRecipeInputEqual(true, new FluidStack[] {}, tItems)) return false; //Consumes input item
-        
+
+        GT_Log.out.print("In checkRecipe");
+
+        outputFocus = 0;
+        outputEnergy = 0;
+        outputParticle = 0;
+        outputRate = 0;
+
+        ItemStack[] tItems = this.getStoredInputs().toArray(new ItemStack[0]);
+        GT_Log.out.print(Arrays.toString(tItems));
+        long tVoltage = this.getMaxInputVoltage();
+
+        for (GT_Recipe stack : BeamlineRecipeAdder.instance.SourceChamberRecipes.mRecipeList) {
+
+            GT_Log.out.print("Recipe item " + Arrays.toString(stack.mInputs));
+        }
+
+        RecipeSC tRecipe = (RecipeSC) BeamlineRecipeAdder.instance.SourceChamberRecipes.findRecipe(
+                this.getBaseMetaTileEntity(), false, tVoltage, new FluidStack[] {}, tItems);
+
+        if (tRecipe == null || !tRecipe.isRecipeInputEqual(true, new FluidStack[] {}, tItems))
+            return false; // Consumes input item
+
         GT_Log.out.print("Recipe good!");
-        
+
         this.mEfficiency = (10000 - (this.getIdealStatus() - this.getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
-        
+
         this.mMaxProgresstime = tRecipe.mDuration;
         if (mMaxProgresstime == Integer.MAX_VALUE - 1 && this.mEUt == Integer.MAX_VALUE - 1) return false;
-        
+
         mEUt = (int) -tVoltage;
         if (this.mEUt > 0) this.mEUt = (-this.mEUt);
-        
+
         outputParticle = tRecipe.particleId;
         float maxParticleEnergy = Particle.values()[outputParticle].maxSourceEnergy();
         float maxMaterialEnergy = tRecipe.maxEnergy;
-        //outputEnergy = (float) ((-maxEnergy) * Math.pow(1.001, -(tRecipe.energyRatio)*(tVoltage-tRecipe.mEUt))) + maxEnergy;
-        outputEnergy = (float) Math.min((-maxMaterialEnergy) * Math.pow(1.001, -(tRecipe.energyRatio)*(tVoltage-tRecipe.mEUt)) + maxMaterialEnergy, maxParticleEnergy);
-        
-        
+        // outputEnergy = (float) ((-maxEnergy) * Math.pow(1.001, -(tRecipe.energyRatio)*(tVoltage-tRecipe.mEUt))) +
+        // maxEnergy;
+        outputEnergy = (float) Math.min(
+                (-maxMaterialEnergy) * Math.pow(1.001, -(tRecipe.energyRatio) * (tVoltage - tRecipe.mEUt))
+                        + maxMaterialEnergy,
+                maxParticleEnergy);
+
         GT_Log.out.print(outputEnergy);
-        
+
         if (outputEnergy <= 0) {
-        	stopMachine();
+            stopMachine();
         }
-        
+
         outputFocus = tRecipe.focus;
         outputRate = tRecipe.rate;
-        
+
         this.mOutputItems = tRecipe.mOutputs;
         this.updateSlots();
-        
+
         outputAfterRecipe();
-        
+
         return true;
-        
     }
 
-	private void outputAfterRecipe() {
-		
-		if (!mOutputBeamline.isEmpty()) {
+    private void outputAfterRecipe() {
+
+        if (!mOutputBeamline.isEmpty()) {
 
             BeamLinePacket packet =
                     new BeamLinePacket(new BeamInformation(outputEnergy, outputRate, outputParticle, outputFocus));
@@ -198,8 +183,8 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
             }
         }
     }
-	
-	@Override
+
+    @Override
     public void stopMachine() {
         outputFocus = 0;
         outputEnergy = 0;
@@ -207,8 +192,8 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
         outputRate = 0;
         super.stopMachine();
     }
-	
-	@Override
+
+    @Override
     public String[] getInfoData() {
         int mPollutionReduction = 0;
         for (GT_MetaTileEntity_Hatch_Muffler tHatch : mMufflerHatches) {
@@ -249,63 +234,65 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
                     + Float.toString(mEfficiency / 100.0F) + EnumChatFormatting.RESET + " %",
             /* 6*/ StatCollector.translateToLocal("GT5U.multiblock.pollution") + ": " + EnumChatFormatting.GREEN
                     + mPollutionReduction + EnumChatFormatting.RESET + " %",
-
-                   EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.out_pre") + ": "
+            EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.out_pre") + ": "
                     + EnumChatFormatting.RESET,
-                    StatCollector.translateToLocal("beamline.particle") + ": " + EnumChatFormatting.GOLD
+            StatCollector.translateToLocal("beamline.particle") + ": " + EnumChatFormatting.GOLD
                     + Particle.values()[this.outputParticle].getLocalisedName() + " " + EnumChatFormatting.RESET,
-                    StatCollector.translateToLocal("beamline.energy") + ": " + EnumChatFormatting.DARK_RED + this.outputEnergy
+            StatCollector.translateToLocal("beamline.energy") + ": " + EnumChatFormatting.DARK_RED + this.outputEnergy
                     + EnumChatFormatting.RESET + " keV",
-                    StatCollector.translateToLocal("beamline.focus") + ": " + EnumChatFormatting.BLUE + this.outputFocus + " "
+            StatCollector.translateToLocal("beamline.focus") + ": " + EnumChatFormatting.BLUE + this.outputFocus + " "
                     + EnumChatFormatting.RESET,
-                    StatCollector.translateToLocal("beamline.amount") + ": " + EnumChatFormatting.LIGHT_PURPLE
+            StatCollector.translateToLocal("beamline.amount") + ": " + EnumChatFormatting.LIGHT_PURPLE
                     + this.outputRate,
         };
     }
 
-	@Override
-	public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex,
-			boolean aActive, boolean aRedstone) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public ITexture[] getTexture(
+            IGregTechTileEntity aBaseMetaTileEntity,
+            byte aSide,
+            byte aFacing,
+            byte aColorIndex,
+            boolean aActive,
+            boolean aRedstone) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public void construct(ItemStack stackSize, boolean hintsOnly) {
-		buildPiece("sc", stackSize, hintsOnly, 2, 4, 0);
-		
-	}
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece("sc", stackSize, hintsOnly, 2, 4, 0);
+    }
 
-	@Override
-	public IStructureDefinition<SourceChamber> getStructureDefinition() {
-		// TODO Auto-generated method stub
-		return STRUCTURE_DEFINITION;
-	}
+    @Override
+    public IStructureDefinition<SourceChamber> getStructureDefinition() {
+        // TODO Auto-generated method stub
+        return STRUCTURE_DEFINITION;
+    }
 
-	@Override
-	public boolean isCorrectMachinePart(ItemStack aStack) {
-		// TODO Auto-generated method stub
-		return true;
-	}
+    @Override
+    public boolean isCorrectMachinePart(ItemStack aStack) {
+        // TODO Auto-generated method stub
+        return true;
+    }
 
-	@Override
-	public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-		return checkPiece("sc", 2, 4, 0);
-	}
+    @Override
+    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        return checkPiece("sc", 2, 4, 0);
+    }
 
-	@Override
-	public int getMaxEfficiency(ItemStack aStack) {
-		return 10000;
-	}
+    @Override
+    public int getMaxEfficiency(ItemStack aStack) {
+        return 10000;
+    }
 
-	@Override
-	public int getDamageToComponent(ItemStack aStack) {
-		return 0;
-	}
+    @Override
+    public int getDamageToComponent(ItemStack aStack) {
+        return 0;
+    }
 
-	@Override
-	public boolean explodesOnComponentBreak(ItemStack aStack) {
-		return false;
-	}
-		
+    @Override
+    public boolean explodesOnComponentBreak(ItemStack aStack) {
+        return false;
+    }
 }

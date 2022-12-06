@@ -1,7 +1,6 @@
 package com.elisis.gtnhlanth.common.block;
 
 import com.elisis.gtnhlanth.Tags;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.GregTech_API;
@@ -12,32 +11,32 @@ import net.minecraft.world.World;
 
 public class ShieldedAccGlass extends Block {
 
-	private static final String name = "shielded_accelerator_glass";
-	
-	public ShieldedAccGlass() {
-		super(Material.glass);
-		this.setBlockName("casing." + name);
-		this.setBlockTextureName(Tags.MODID + ":casing." + name);
-		GregTech_API.registerMachineBlock(this, -1);
-	}
-	
-	@Override
-	public boolean isOpaqueCube() {
-		return false;
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public int getRenderBlockPass() {
-		return 1;
-	}
-	
-	@Override
+    private static final String name = "shielded_accelerator_glass";
+
+    public ShieldedAccGlass() {
+        super(Material.glass);
+        this.setBlockName("casing." + name);
+        this.setBlockTextureName(Tags.MODID + ":casing." + name);
+        GregTech_API.registerMachineBlock(this, -1);
+    }
+
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public int getRenderBlockPass() {
+        return 1;
+    }
+
+    @Override
     public boolean renderAsNormalBlock() {
         return false;
     }
-	
-	@Override
+
+    @Override
     public void onBlockAdded(World aWorld, int aX, int aY, int aZ) {
         if (GregTech_API.isMachineBlock(this, aWorld.getBlockMetadata(aX, aY, aZ))) {
             GregTech_API.causeMachineUpdate(aWorld, aX, aY, aZ);
@@ -50,8 +49,8 @@ public class ShieldedAccGlass extends Block {
             GregTech_API.causeMachineUpdate(aWorld, aX, aY, aZ);
         }
     }
-	
-	@Override
+
+    @Override
     @SideOnly(Side.CLIENT)
     public boolean shouldSideBeRendered(IBlockAccess worldClient, int xCoord, int yCoord, int zCoord, int aSide) {
         if (worldClient.getBlock(xCoord, yCoord, zCoord) instanceof ShieldedAccGlass) return false;
