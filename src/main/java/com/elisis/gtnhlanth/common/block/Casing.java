@@ -1,5 +1,7 @@
 package com.elisis.gtnhlanth.common.block;
 
+import com.elisis.gtnhlanth.Tags;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.GregTech_API;
@@ -19,12 +21,14 @@ public class Casing extends Block {
     public Casing(String name) {
         super(Material.iron);
         this.name = name;
+        this.setBlockTextureName(Tags.MODID + ":casing." + name);
         GregTech_API.registerMachineBlock(this, -1);
     }
 
     public Casing(String name, Material material) {
         super(material);
         this.name = name;
+        this.setBlockTextureName(Tags.MODID + ":casing." + name);
         GregTech_API.registerMachineBlock(this, -1);
     }
 
