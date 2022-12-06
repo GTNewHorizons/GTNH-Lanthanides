@@ -2,6 +2,7 @@ package com.elisis.gtnhlanth.common.register;
 
 import com.elisis.gtnhlanth.common.beamline.TileBeamline;
 import com.elisis.gtnhlanth.common.block.Casing;
+import com.elisis.gtnhlanth.common.block.ShieldedAccGlass;
 import com.elisis.gtnhlanth.common.hatch.TileHatchInputBeamline;
 import com.elisis.gtnhlanth.common.hatch.TileHatchOutputBeamline;
 import com.elisis.gtnhlanth.common.tileentity.Digester;
@@ -28,15 +29,11 @@ public final class LanthItemList {
     public static ItemStack LUV_BEAMLINE_OUTPUT_HATCH;
 
     public static Item CAPILLARY_EXCHANGE = new Item().setUnlocalizedName("capillary_exchange");
+    
+    public static Item MM_LATTICE = new Item().setUnlocalizedName("mm_lattice");
 
     public static final Block SHIELDED_ACCELERATOR_CASING = new Casing("shielded_accelerator");
-    public static final Block SHIELDED_ACCELERATOR_GLASS = new Casing("shielded_accelerator_glass") {
-
-        @Override
-        public boolean isOpaqueCube() {
-            return false;
-        }
-    };
+    public static final Block SHIELDED_ACCELERATOR_GLASS = new ShieldedAccGlass();
 
     public static final Block ELECTRODE_CASING = new Casing("electrode");
 
@@ -63,6 +60,8 @@ public final class LanthItemList {
     public static void registerTypical() {
 
         GameRegistry.registerItem(CAPILLARY_EXCHANGE, CAPILLARY_EXCHANGE.getUnlocalizedName());
+        
+        GameRegistry.registerItem(MM_LATTICE, MM_LATTICE.getUnlocalizedName());
 
         GameRegistry.registerBlock(SHIELDED_ACCELERATOR_CASING, SHIELDED_ACCELERATOR_CASING.getUnlocalizedName());
 
