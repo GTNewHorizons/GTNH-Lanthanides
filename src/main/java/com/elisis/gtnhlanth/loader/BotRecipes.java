@@ -6,12 +6,14 @@ import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.Sodi
 import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.TertButylbenzene;
 import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.TungstenTrioxide;
 import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.TungsticAcid;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.Phosgene;
 import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.UnsymmetricalDimethylhydrazineFuelMix;
 import static gregtech.api.enums.OrePrefixes.cell;
 import static gregtech.api.enums.OrePrefixes.dust;
 import static gregtech.api.enums.OrePrefixes.ingotHot;
 import static gregtech.api.enums.OrePrefixes.item;
 
+import com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool;
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 import cpw.mods.fml.common.Loader;
 import gregtech.api.enums.GT_Values;
@@ -139,7 +141,7 @@ public class BotRecipes {
         // rocket fuels
         // LMP103S
         // 2Cl + CO = COCl2
-        /*GT_Values.RA.addChemicalRecipe(
+        GT_Values.RA.addChemicalRecipe(
                 Materials.CarbonMonoxide.getCells(1),
                 C2,
                 Materials.Chlorine.getGas(2000),
@@ -210,7 +212,7 @@ public class BotRecipes {
                 Materials.Empty.getCells(3),
                 50,
                 480);
-
+		/*
         // COCl2 + C2H6O = HCl + C3H5ClO2
         GT_Values.RA.addChemicalRecipe(
                 Phosgene.get(cell, 1),
