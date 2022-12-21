@@ -170,9 +170,9 @@ public class ZPMRubberChanges implements Runnable {
 
     private static void rewriteAsslineRecipes(
             ItemStack stack, OrePrefixes[] rubberGenerated, GT_Recipe.GT_Recipe_AssemblyLine recipe) {
-        for (OrePrefixes prefix : rubberGenerated) {
-            if (ZPMRubberChanges.doStacksContain(recipe.mInputs, stack)
-                    || ZPMRubberChanges.doStacksContain(new ItemStack[] {recipe.mOutput}, stack)) {
+        if (ZPMRubberChanges.doStacksContain(recipe.mInputs, stack)
+                || ZPMRubberChanges.doStacksContain(new ItemStack[] {recipe.mOutput}, stack)) {
+            for (OrePrefixes prefix : rubberGenerated) {
                 ZPMRubberChanges.replaceStack(
                         recipe.mInputs,
                         GT_OreDictUnificator.get(prefix, Materials.Silicone, 1),
@@ -191,16 +191,16 @@ public class ZPMRubberChanges implements Runnable {
                         GT_OreDictUnificator.get(prefix, Materials.StyreneButadieneRubber, 1),
                         WerkstoffMaterialPool.PTMEGElastomer.get(prefix));
             }
-        }
-        ZPMRubberChanges.replaceStack(
-                recipe.mFluidInputs,
-                Materials.Silicone.getMolten(1),
-                WerkstoffMaterialPool.PTMEGElastomer.getMolten(1).getFluid());
+            ZPMRubberChanges.replaceStack(
+                    recipe.mFluidInputs,
+                    Materials.Silicone.getMolten(1),
+                    WerkstoffMaterialPool.PTMEGElastomer.getMolten(1).getFluid());
 
-        ZPMRubberChanges.replaceStack(
-                recipe.mFluidInputs,
-                Materials.StyreneButadieneRubber.getMolten(1),
-                WerkstoffMaterialPool.PTMEGElastomer.getMolten(1).getFluid());
+            ZPMRubberChanges.replaceStack(
+                    recipe.mFluidInputs,
+                    Materials.StyreneButadieneRubber.getMolten(1),
+                    WerkstoffMaterialPool.PTMEGElastomer.getMolten(1).getFluid());
+        }
     }
 
     private static boolean doStacksContain(ItemStack[] stacks, ItemStack target) {
