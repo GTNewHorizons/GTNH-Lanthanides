@@ -9,6 +9,7 @@ import com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool;
 import com.elisis.gtnhlanth.common.register.LanthItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 import com.github.bartimaeusnek.bartworks.system.material.BW_GT_MaterialReference;
+import com.github.bartimaeusnek.bartworks.system.material.GT_Enhancement.LuVTierEnhancer;
 import com.github.bartimaeusnek.bartworks.system.material.GT_Enhancement.PlatinumSludgeOverHaul;
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 import cpw.mods.fml.common.Loader;
@@ -45,6 +46,8 @@ public class RecipeLoader {
     private static final Materials[] BLACKLIST = null;
 
     public static void loadAccelerator() {
+    	
+    	LuVTierEnhancer.addToBlackListForOsmiridiumReplacement(LanthItemList.BEAMLINE_PIPE);
 
         /*
         //Permalloy
@@ -100,7 +103,8 @@ public class RecipeLoader {
                 new ItemStack(LanthItemList.ELECTRODE_CASING, 1),
                 800,
                 7680);
-
+        
+        // Coolant Delivery Casing
         GT_Values.RA.addAssemblylineRecipe(
                 ItemList.Casing_Pipe_TungstenSteel.get(1L),
                 72000,
@@ -122,6 +126,7 @@ public class RecipeLoader {
                 1000,
                 7680);
 
+        // Capillary Exchange
         GT_Values.RA.addAssemblerRecipe(
                 new ItemStack[] {
                     GT_OreDictUnificator.get(OrePrefixes.pipeTiny, Materials.TungstenSteel, 8),
@@ -136,6 +141,7 @@ public class RecipeLoader {
                 400,
                 7680);
 
+        // Mu-metal lattice
         GT_Values.RA.addAssemblerRecipe(
                 new ItemStack[] {
                     WerkstoffMaterialPool.MuMetal.get(OrePrefixes.wireFine, 12),
@@ -146,12 +152,31 @@ public class RecipeLoader {
                 300,
                 1920);
 
+        // Shielded Accelerator Glass
         GT_Values.RA.addFluidSolidifierRecipe(
                 new ItemStack(LanthItemList.MM_LATTICE, 4),
                 Materials.BorosilicateGlass.getMolten(144),
                 new ItemStack(LanthItemList.SHIELDED_ACCELERATOR_GLASS, 1),
                 500,
                 1920);
+        
+        // Beamline Pipe
+        GT_Values.RA.addAssemblerRecipe(
+        		new ItemStack[] {
+        				WerkstoffMaterialPool.MuMetal.get(OrePrefixes.plate, 4),
+        				GT_OreDictUnificator.get(OrePrefixes.stickLong, Materials.TungstenCarbide, 4),
+        				GT_OreDictUnificator.get(OrePrefixes.stick, Materials.TungstenCarbide, 8),
+        				GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Osmiridium, 4),
+        				GT_Utility.getIntegratedCircuit(7)
+        				
+        		},
+        		Materials.SolderingAlloy.getMolten(144),
+        		LanthItemList.BEAMLINE_PIPE,
+        		400,
+        		1920
+        		);
+        
+        
     }
 
     public static void loadGeneral() {
