@@ -2,6 +2,8 @@ package com.elisis.gtnhlanth.common.beamline;
 
 import static gregtech.api.enums.Dyes.MACHINE_METAL;
 
+import com.github.bartimaeusnek.bartworks.util.BW_Tooltip_Reference;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.GT_Mod;
@@ -20,6 +22,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -78,12 +82,6 @@ public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline 
         } else if (aBaseMetaTileEntity.isClientSide() && GT_Client.changeDetected == 4) {
             aBaseMetaTileEntity.issueTextureUpdate();
         }
-    }
-
-    @Override
-    public String[] getDescription() {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override
@@ -250,5 +248,16 @@ public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline 
 
         return AxisAlignedBB.getBoundingBox(
                 aX + tSide4, aY + tSide0, aZ + tSide2, aX + tSide5, aY + tSide1, aZ + tSide3);
+    }
+    
+    @Override
+    public String[] getDescription() {
+        return new String[] {
+            StatCollector.translateToLocal("beamline.pipe.desc.0"), // Beamline pipe
+            EnumChatFormatting.AQUA
+                    + StatCollector.translateToLocal("beamline.pipe.desc.1"), // Do not cross, split or turn
+            "Added by " + EnumChatFormatting.GREEN + "GTNH: Lanthanides"
+      
+        };
     }
 }
