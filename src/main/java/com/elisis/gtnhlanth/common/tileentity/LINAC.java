@@ -6,6 +6,10 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static gregtech.api.enums.GT_Values.VN;
 import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
+
 import com.elisis.gtnhlanth.common.beamline.BeamInformation;
 import com.elisis.gtnhlanth.common.beamline.BeamLinePacket;
 import com.elisis.gtnhlanth.common.beamline.Particle;
@@ -16,6 +20,7 @@ import com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.ITexture;
@@ -28,18 +33,20 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockB
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Utility;
-import java.util.ArrayList;
-import java.util.Objects;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> implements IConstructable {
 
     private static final IStructureDefinition<LINAC> STRUCTURE_DEFINITION;
 
+    public static final HashMap<Fluid, Fluid> coolantMap = new HashMap<>();
+    
     protected static final String STRUCTURE_PIECE_BASE = "base";
     protected static final String STRUCTURE_PIECE_LAYER = "layer";
     protected static final String STRUCTURE_PIECE_END = "end";
@@ -209,6 +216,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         */
 
         FluidStack primFluid = tFluidInputs.get(0);
+        //GT_Log.out.print("ABFluid " + primFluid.getUnlocalizedName());
 
         final int fluidConsumed = 1000 * length;
 
@@ -235,11 +243,16 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         mMaxProgresstime = 20;
         mEUt = (int) -getMaxInputVoltage();
 
-        // GT_Log.out.print("Can accelerate");
+        //GT_Log.out.print("Can accelerate");
 
         outputParticle = particleId;
 
-        tempFactor = calculateTemperatureFactor(primFluid.getFluid().getTemperature());
+        if (primFluid.isFluidEqual(new FluidStack(FluidRegistry.getFluid("ic2coolant"), 1))) {
+        	tempFactor = calculateTemperatureFactor(60); // Default temp of 300 is unreasonable
+        } else {
+        	tempFactor = calculateTemperatureFactor(primFluid.getFluid().getTemperature());
+        }
+        
         machineFocus = Math.max(((-10) * this.length * tempFactor) + 100, 5); // Absolute maximum of 100, minimum of 5
 
         inputFocus = this.getInputInformation().getFocus();
@@ -259,13 +272,13 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         inputRate = this.getInputInformation().getRate();
         outputRate = inputRate; // Cannot increase rate with this multiblock
 
-        if (primFluid.amount < fluidConsumed || primFluid.getFluid().getTemperature() > 200) {
+        if (primFluid.amount < fluidConsumed || (!primFluid.isFluidEqual(FluidRegistry.getFluidStack("ic2coolant", 1)) && primFluid.getFluid().getTemperature() > 200)) {
 
             stopMachine();
             return false;
         }
 
-        // GT_Log.out.print("Fluid ok");
+        //GT_Log.out.print("Fluid ok");
 
         primFluid.amount -= fluidConsumed;
 
@@ -288,16 +301,24 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         }*/
 
         // GT_Log.out.print(primFluid.getLocalizedName());
-
-        if (primFluid.isFluidEqual(Materials.LiquidNitrogen.getGas(1L))) {
-            // GT_Log.out.print("Fluid equal blah blah");
-
+/*
+        if (primFluid.isFluidEqual(Materials.LiquidNitrogen.getGas(1L))) 
             fluidOutput = Materials.Nitrogen.getGas(fluidConsumed); // TODO more fluids
+        
+        
+        if (primFluid.isFluidEqual(Materials.LiquidOxygen.getGas(1L)))
+        	fluidOutput = Materials.Oxygen.getGas(fluidConsumed);
+        
+        if (primFluid.isFluidEqual(Materials.SuperCoolant.getFluid(1L))) {
+        	
         }
+        */
+        //GT_Log.out.print("ABFluid " + primFluid.getLocalizedName());
+        fluidOutput = new FluidStack(coolantMap.get(primFluid.getFluid()), fluidConsumed);
 
         if (Objects.isNull(fluidOutput)) return false;
 
-        // GT_Log.out.print("Fluid out ok");
+        //GT_Log.out.print("Fluid out ok");
 
         this.addFluidOutputs(new FluidStack[] {fluidOutput});
 
@@ -323,7 +344,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
     @Override
     public void stopMachine() {
 
-        GT_Log.out.print("Machine stopped");
+        //GT_Log.out.print("Machine stopped");
         outputFocus = 0;
         outputEnergy = 0;
         outputParticle = 0;
