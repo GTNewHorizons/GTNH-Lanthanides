@@ -217,13 +217,11 @@ public class Digester extends GT_MetaTileEntity_EnhancedMultiBlockBase<Digester>
 
     @Override
     public boolean explodesOnComponentBreak(ItemStack arg0) {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public int getDamageToComponent(ItemStack arg0) {
-        // TODO Auto-generated method stub
         return 0;
     }
 }
