@@ -1,6 +1,8 @@
 package com.elisis.gtnhlanth.common.register;
 
 import static com.github.bartimaeusnek.bartworks.util.BW_Util.subscriptNumbers;
+import static com.github.bartimaeusnek.bartworks.util.BW_Util.superscriptNumbers;
+
 
 import com.github.bartimaeusnek.bartworks.system.material.Werkstoff;
 import com.github.bartimaeusnek.bartworks.util.Pair;
@@ -1033,14 +1035,14 @@ public class WerkstoffMaterialPool implements Runnable {
     public static final Werkstoff Permalloy = new Werkstoff(
             new short[] {195, 230, 225},
             "Permalloy",
-            subscriptNumbers("?NiFe?"),
+            subscriptNumbers("NiFeMo"),
             new Werkstoff.Stats().setCentrifuge(true),
             Werkstoff.Types.MIXTURE,
             new Werkstoff.GenerationFeatures()
                     .disable()
                     .onlyDust()
                     .addMetalItems()
-                    .addMixerRecipes()
+                    .addMixerRecipes((short) 3)
                     .enforceUnification(),
             offsetID4,
             TextureSet.SET_DULL,
@@ -1059,10 +1061,21 @@ public class WerkstoffMaterialPool implements Runnable {
                     .onlyDust()
                     .addMetalItems()
                     .addMultipleIngotMetalWorkingItems()
+                    .addSimpleMetalWorkingItems()
                     .addCraftingMetalWorkingItems()
                     .enforceUnification(),
             offsetID4 + 1,
             TextureSet.SET_METALLIC);
+    
+    public static final Werkstoff Thorium234 = new Werkstoff(
+    		new short[] {0, 40, 0},
+    		"Thorium 234",
+    		superscriptNumbers("Th234"),
+    		new Werkstoff.Stats().setBlastFurnace(true).setRadioactive(true),
+    		Werkstoff.Types.ISOTOPE,
+    		new Werkstoff.GenerationFeatures().disable().onlyDust(),
+    		offsetID4 + 2,
+    		TextureSet.SET_DULL);
 
     public static void runInit() {
         addSubTags();
