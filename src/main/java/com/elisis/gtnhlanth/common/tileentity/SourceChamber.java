@@ -107,10 +107,11 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
         return false;
     }
 
+    //TODO: Variable recipe duration
     @Override
     public boolean checkRecipe(ItemStack itemStack) {
 
-        GT_Log.out.print("In checkRecipe");
+        //GT_Log.out.print("In checkRecipe");
 
         outputFocus = 0;
         outputEnergy = 0;
@@ -120,19 +121,21 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
         ItemStack[] tItems = this.getStoredInputs().toArray(new ItemStack[0]);
         GT_Log.out.print(Arrays.toString(tItems));
         long tVoltage = this.getMaxInputVoltage();
-
+        
+        /*
         for (GT_Recipe stack : BeamlineRecipeAdder.instance.SourceChamberRecipes.mRecipeList) {
 
             GT_Log.out.print("Recipe item " + Arrays.toString(stack.mInputs));
         }
-
+         */
+        
         RecipeSC tRecipe = (RecipeSC) BeamlineRecipeAdder.instance.SourceChamberRecipes.findRecipe(
                 this.getBaseMetaTileEntity(), false, tVoltage, new FluidStack[] {}, tItems);
 
         if (tRecipe == null || !tRecipe.isRecipeInputEqual(true, new FluidStack[] {}, tItems))
             return false; // Consumes input item
 
-        GT_Log.out.print("Recipe good!");
+        //GT_Log.out.print("Recipe good!");
 
         this.mEfficiency = (10000 - (this.getIdealStatus() - this.getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
@@ -266,13 +269,11 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
 
     @Override
     public IStructureDefinition<SourceChamber> getStructureDefinition() {
-        // TODO Auto-generated method stub
         return STRUCTURE_DEFINITION;
     }
 
     @Override
     public boolean isCorrectMachinePart(ItemStack aStack) {
-        // TODO Auto-generated method stub
         return true;
     }
 
