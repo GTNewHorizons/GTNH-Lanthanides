@@ -684,14 +684,13 @@ public class RecipeLoader {
         GT_Values.RA.addSifterRecipe(
                 WerkstoffMaterialPool.NeutralizedUraniumFiltrate.get(OrePrefixes.dust, 1),
                 new ItemStack[] {
-                    Materials.Fluorite.getDust(1),
                     Materials.Uranium.getDust(1),
                     Materials.Uranium.getDust(1),
                     Materials.Uranium.getDust(1),
                     Materials.Uranium235.getDust(1),
                     Materials.Uranium235.getDust(1),
                 },
-                new int[] {9500, 4500, 4000, 3000, 3000, 2000},
+                new int[] {4500, 4000, 3000, 3000, 2000},
                 1000,
                 30);
 
@@ -750,6 +749,16 @@ public class RecipeLoader {
                 0);
 
         // BEGIN Cerium
+        // Cerium-rich mixture + 3HCl = CeCl3 + Monazite (to allow cerium processing without bastnazite/monazite)
+        GT_Values.RA.addChemicalRecipe(
+                WerkstoffMaterialPool.CeriumRichMixture.get(OrePrefixes.dust, 15),
+                null,
+                Materials.HydrochloricAcid.getFluid(750),
+                Materials.Water.getFluid(750),
+                WerkstoffMaterialPool.CeriumChloride.get(OrePrefixes.dust, 1),
+                Materials.Monazite.getDust(1),
+                300,
+                450);
         // CeO2 + 3NH4Cl + H = 3NH3 + CeCl3 + 2H2O
         GT_Values.RA.addChemicalRecipe(
                 WerkstoffMaterialPool.CeriumDioxide.get(OrePrefixes.dust, 3),
@@ -1402,9 +1411,6 @@ public class RecipeLoader {
                                 tRecipe.mOutputs[i] = GT_Utility.copyAmount(
                                         tRecipe.mOutputs[i].stackSize * 2,
                                         WerkstoffMaterialPool.SamariumOreConcentrate.get(OrePrefixes.dust, 1));
-                                modified = true;
-                            } else if (tRecipe.mOutputs[i].isItemEqual(Materials.Lanthanum.getDust(1))) {
-                                tRecipe.mOutputs[i] = null;
                                 modified = true;
                             }
                         }

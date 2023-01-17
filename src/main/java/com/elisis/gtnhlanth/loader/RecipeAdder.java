@@ -1,6 +1,8 @@
 package com.elisis.gtnhlanth.loader;
 
+import gregtech.api.gui.modularui.GT_UITextures;
 import gregtech.api.util.GT_Recipe;
+import gregtech.nei.HeatingCoilSpecialValueFormatter;
 import java.util.Collection;
 import java.util.HashSet;
 import net.minecraft.item.ItemStack;
@@ -11,39 +13,43 @@ public class RecipeAdder {
 
     public static final RecipeAdder instance = new RecipeAdder();
 
-    public final DigestMap DigesterRecipes = new DigestMap(
-            new HashSet<>(100),
-            "gtnhlanth.recipe.digester",
-            StatCollector.translateToLocal("tile.recipe.digester"),
-            null,
-            "gtnhlanth:textures/gui/Digester",
-            1,
-            1,
-            1,
-            1,
-            1,
-            StatCollector.translateToLocal("value.digester") + ": ", // Heat Capacity
-            1,
-            "K",
-            false,
-            false);
+    public final DigestMap DigesterRecipes = (DigestMap) new DigestMap(
+                    new HashSet<>(100),
+                    "gtnhlanth.recipe.digester",
+                    StatCollector.translateToLocal("tile.recipe.digester"),
+                    null,
+                    "gtnhlanth:textures/gui/Digester",
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    StatCollector.translateToLocal("value.digester") + ": ", // Heat Capacity
+                    1,
+                    "K",
+                    false,
+                    true)
+            .setProgressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+            .setNEISpecialInfoFormatter(HeatingCoilSpecialValueFormatter.INSTANCE);
 
-    public final DissolutionTankMap DissolutionTankRecipes = new DissolutionTankMap(
-            new HashSet<>(100),
-            "gtnhlanth.recipe.disstank",
-            StatCollector.translateToLocal("tile.recipe.disstank"),
-            null,
-            "gtnhlanth:textures/gui/Disstank",
-            2,
-            3,
-            1,
-            1,
-            1,
-            StatCollector.translateToLocal("value.disstank") + ": ", // Ratio
-            1,
-            ":1",
-            false,
-            false);
+    public final DissolutionTankMap DissolutionTankRecipes = (DissolutionTankMap) new DissolutionTankMap(
+                    new HashSet<>(100),
+                    "gtnhlanth.recipe.disstank",
+                    StatCollector.translateToLocal("tile.recipe.disstank"),
+                    null,
+                    "gtnhlanth:textures/gui/Disstank",
+                    2,
+                    3,
+                    1,
+                    1,
+                    1,
+                    StatCollector.translateToLocal("value.disstank") + ": ", // Ratio
+                    1,
+                    ":1",
+                    false,
+                    true)
+            .setProgressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+            .setUsualFluidInputCount(2);
 
     public class DigestMap extends GT_Recipe.GT_Recipe_Map {
 
