@@ -31,7 +31,7 @@ import java.util.HashSet;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-
+	
 /*
  *
  * Originally authored by botn365 under the MIT License. See BotdustriesLICENSE
@@ -276,7 +276,7 @@ public class BotRecipes {
                 1920);
 
         // LMP-103S
-        /*
+        
         GT_Values.RA.addMultiblockChemicalRecipe(
                 new ItemStack[] {C24},
                 new FluidStack[] {
@@ -289,7 +289,7 @@ public class BotRecipes {
                 null,
                 1200,
                 1920);
-         */
+         
 
         // P4O10 + 2HNO3 + 5H2O = 4H3PO4 + N2O5
         GT_Values.RA.addChemicalRecipe(
@@ -490,7 +490,7 @@ public class BotRecipes {
                 80,
                 16000);
 
-        /*
+        
         GT_Values.RA.addMixerRecipe(
                 AmmoniumDinitramide.get(cell, 1),
                 C1,
@@ -513,7 +513,7 @@ public class BotRecipes {
                 cells,
                 20,
                 480);
-         */
+         
         cells.stackSize = 1;
 
         // unsimetrical hydazine

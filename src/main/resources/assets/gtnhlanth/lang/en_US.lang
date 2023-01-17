@@ -64,3 +64,4 @@ beamline.pipe.desc.1=Does not auto-connect or bend
 
 particle.electron=Electron
 particle.photon=Photon
+particle.alpha=Alpha
