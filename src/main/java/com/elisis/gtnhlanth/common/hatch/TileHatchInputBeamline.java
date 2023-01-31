@@ -1,12 +1,14 @@
 package com.elisis.gtnhlanth.common.hatch;
 
+import net.minecraft.nbt.NBTTagCompound;
+
 import com.elisis.gtnhlanth.common.beamline.BeamLinePacket;
 import com.elisis.gtnhlanth.common.beamline.IConnectsToBeamline;
 import com.github.technus.tectech.util.TT_Utility;
+
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class TileHatchInputBeamline extends TileHatchBeamlineConnector<BeamLinePacket> {
 

@@ -1,14 +1,16 @@
 package com.elisis.gtnhlanth.common.hatch;
 
+import net.minecraft.nbt.NBTTagCompound;
+
 import com.elisis.gtnhlanth.common.beamline.BeamLinePacket;
 import com.elisis.gtnhlanth.common.beamline.IConnectsToBeamline;
 import com.elisis.gtnhlanth.common.beamline.TileBeamline;
 import com.github.technus.tectech.util.TT_Utility;
+
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.util.GT_Utility;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class TileHatchOutputBeamline extends TileHatchBeamlineConnector<BeamLinePacket> implements IConnectsToBeamline {
 
@@ -40,8 +42,8 @@ public class TileHatchOutputBeamline extends TileHatchBeamlineConnector<BeamLine
         } else if (meta instanceof TileHatchInputBeamline
                 && ((TileHatchInputBeamline) meta).canConnect(GT_Utility.getOppositeSide(base.getFrontFacing()))) {
 
-            return (IConnectsToBeamline) meta;
-        }
+                    return (IConnectsToBeamline) meta;
+                }
 
         return null;
     }

@@ -1,5 +1,9 @@
 package com.elisis.gtnhlanth.common.register;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
 import com.elisis.gtnhlanth.common.beamline.TileBeamline;
 import com.elisis.gtnhlanth.common.block.Casing;
 import com.elisis.gtnhlanth.common.block.ShieldedAccGlass;
@@ -10,9 +14,6 @@ import com.elisis.gtnhlanth.common.tileentity.DissolutionTank;
 import com.elisis.gtnhlanth.common.tileentity.LINAC;
 import com.elisis.gtnhlanth.common.tileentity.SourceChamber;
 import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 
 public final class LanthItemList {
 
@@ -45,11 +46,15 @@ public final class LanthItemList {
 
         BEAMLINE_PIPE = new TileBeamline(10502, "Beamline Pipe", "Beamline Pipe").getStackForm(1L);
         LUV_BEAMLINE_INPUT_HATCH = new TileHatchInputBeamline(
-                        10503, "LuV Beamline Input Hatch", "LuV Beamline Input Hatch", 6)
-                .getStackForm(1L);
+                10503,
+                "LuV Beamline Input Hatch",
+                "LuV Beamline Input Hatch",
+                6).getStackForm(1L);
         LUV_BEAMLINE_OUTPUT_HATCH = new TileHatchOutputBeamline(
-                        10504, "LuV Beamline Output Hatch", "LuV Beamline Output Hatch", 6)
-                .getStackForm(1L);
+                10504,
+                "LuV Beamline Output Hatch",
+                "LuV Beamline Output Hatch",
+                6).getStackForm(1L);
 
         LINAC = new LINAC(10505, "Linear Accelerator", "Linear Accelerator").getStackForm(1L);
 

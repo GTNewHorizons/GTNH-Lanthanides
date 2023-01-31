@@ -1,7 +1,8 @@
 package com.elisis.gtnhlanth.common.beamline;
 
-import com.github.technus.tectech.mechanics.dataTransport.DataPacket;
 import net.minecraft.nbt.NBTTagCompound;
+
+import com.github.technus.tectech.mechanics.dataTransport.DataPacket;
 
 public class BeamLinePacket extends DataPacket<BeamInformation> {
 
@@ -16,10 +17,13 @@ public class BeamLinePacket extends DataPacket<BeamInformation> {
     @Override
     protected BeamInformation contentFromNBT(NBTTagCompound nbt) {
         /*
-        NBTTagCompound compound = nbt.getCompoundTag("beamline");
-        */
+         * NBTTagCompound compound = nbt.getCompoundTag("beamline");
+         */
         return new BeamInformation(
-                nbt.getFloat("energy"), nbt.getInteger("rate"), nbt.getInteger("particleId"), nbt.getInteger("focus"));
+                nbt.getFloat("energy"),
+                nbt.getInteger("rate"),
+                nbt.getInteger("particleId"),
+                nbt.getInteger("focus"));
     }
 
     @Override

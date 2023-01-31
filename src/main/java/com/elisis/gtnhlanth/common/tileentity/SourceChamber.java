@@ -5,6 +5,14 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static gregtech.api.enums.GT_Values.VN;
 import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.fluids.FluidStack;
+
 import com.elisis.gtnhlanth.common.beamline.BeamInformation;
 import com.elisis.gtnhlanth.common.beamline.BeamLinePacket;
 import com.elisis.gtnhlanth.common.beamline.Particle;
@@ -15,6 +23,7 @@ import com.elisis.gtnhlanth.common.tileentity.recipe.beamline.RecipeSC;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -24,14 +33,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffl
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
-import java.util.ArrayList;
-import java.util.Arrays;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.fluids.FluidStack;
 
 public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<SourceChamber> implements IConstructable {
 
@@ -46,14 +48,14 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
 
     static {
         STRUCTURE_DEFINITION = StructureDefinition.<SourceChamber>builder()
-                .addShape("sc", new String[][] {
-                    {"ccccc", "ckkkc", "ckikc", "ckkkc", "dd~dd"},
-                    {"ckkkc", "keeek", "ke-ek", "keeek", "ccocc"},
-                    {"ckkkc", "k---k", "k---k", "k---k", "ccccc"},
-                    {"ckkkc", "k---k", "k---k", "k---k", "ccccc"},
-                    {"ckkkc", "keeek", "ke-ek", "keeek", "ccccc"},
-                    {"ccccc", "ckkkc", "ckbkc", "ckkkc", "ccccc"}
-                })
+                .addShape(
+                        "sc",
+                        new String[][] { { "ccccc", "ckkkc", "ckikc", "ckkkc", "dd~dd" },
+                                { "ckkkc", "keeek", "ke-ek", "keeek", "ccocc" },
+                                { "ckkkc", "k---k", "k---k", "k---k", "ccccc" },
+                                { "ckkkc", "k---k", "k---k", "k---k", "ccccc" },
+                                { "ckkkc", "keeek", "ke-ek", "keeek", "ccccc" },
+                                { "ccccc", "ckkkc", "ckbkc", "ckkkc", "ccccc" } })
                 .addElement('c', ofBlock(LanthItemList.SHIELDED_ACCELERATOR_CASING, 0))
                 .addElement('k', ofBlock(LanthItemList.SHIELDED_ACCELERATOR_GLASS, 0))
                 .addElement('e', ofBlock(LanthItemList.ELECTRODE_CASING, 0))
@@ -85,10 +87,8 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-        tt.addMachineType("Particle Source")
-                .addInfo("Controller block for the Source Chamber")
-                .toolTipFinisher("GTNH: Lanthanides");
-        ;
+        tt.addMachineType("Particle Source").addInfo("Controller block for the Source Chamber")
+                .toolTipFinisher("GTNH: Lanthanides");;
         return tt;
     }
 
@@ -107,11 +107,11 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
         return false;
     }
 
-    //TODO: Variable recipe duration
+    // TODO: Variable recipe duration
     @Override
     public boolean checkRecipe(ItemStack itemStack) {
 
-        //GT_Log.out.print("In checkRecipe");
+        // GT_Log.out.print("In checkRecipe");
 
         outputFocus = 0;
         outputEnergy = 0;
@@ -121,21 +121,20 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
         ItemStack[] tItems = this.getStoredInputs().toArray(new ItemStack[0]);
         GT_Log.out.print(Arrays.toString(tItems));
         long tVoltage = this.getMaxInputVoltage();
-        
+
         /*
-        for (GT_Recipe stack : BeamlineRecipeAdder.instance.SourceChamberRecipes.mRecipeList) {
-
-            GT_Log.out.print("Recipe item " + Arrays.toString(stack.mInputs));
-        }
+         * for (GT_Recipe stack : BeamlineRecipeAdder.instance.SourceChamberRecipes.mRecipeList) {
+         * GT_Log.out.print("Recipe item " + Arrays.toString(stack.mInputs)); }
          */
-        
-        RecipeSC tRecipe = (RecipeSC) BeamlineRecipeAdder.instance.SourceChamberRecipes.findRecipe(
-                this.getBaseMetaTileEntity(), false, tVoltage, new FluidStack[] {}, tItems);
 
-        if (tRecipe == null || !tRecipe.isRecipeInputEqual(true, new FluidStack[] {}, tItems))
-            return false; // Consumes input item
+        RecipeSC tRecipe = (RecipeSC) BeamlineRecipeAdder.instance.SourceChamberRecipes
+                .findRecipe(this.getBaseMetaTileEntity(), false, tVoltage, new FluidStack[] {}, tItems);
 
-        //GT_Log.out.print("Recipe good!");
+        if (tRecipe == null || !tRecipe.isRecipeInputEqual(true, new FluidStack[] {}, tItems)) return false; // Consumes
+                                                                                                             // input
+                                                                                                             // item
+
+        // GT_Log.out.print("Recipe good!");
 
         this.mEfficiency = (10000 - (this.getIdealStatus() - this.getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
@@ -177,8 +176,8 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
 
         if (!mOutputBeamline.isEmpty()) {
 
-            BeamLinePacket packet =
-                    new BeamLinePacket(new BeamInformation(outputEnergy, outputRate, outputParticle, outputFocus));
+            BeamLinePacket packet = new BeamLinePacket(
+                    new BeamInformation(outputEnergy, outputRate, outputParticle, outputFocus));
 
             for (TileHatchOutputBeamline o : mOutputBeamline) {
 
@@ -215,49 +214,81 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
         }
 
         return new String[] {
-            /* 1*/ StatCollector.translateToLocal("GT5U.multiblock.Progress") + ": " + EnumChatFormatting.GREEN
-                    + GT_Utility.formatNumbers(mProgresstime / 20) + EnumChatFormatting.RESET + " s / "
-                    + EnumChatFormatting.YELLOW
-                    + GT_Utility.formatNumbers(mMaxProgresstime / 20) + EnumChatFormatting.RESET + " s",
-            /* 2*/ StatCollector.translateToLocal("GT5U.multiblock.energy") + ": " + EnumChatFormatting.GREEN
-                    + GT_Utility.formatNumbers(storedEnergy) + EnumChatFormatting.RESET + " EU / "
-                    + EnumChatFormatting.YELLOW
-                    + GT_Utility.formatNumbers(maxEnergy) + EnumChatFormatting.RESET + " EU",
-            /* 3*/ StatCollector.translateToLocal("GT5U.multiblock.usage") + ": " + EnumChatFormatting.RED
-                    + GT_Utility.formatNumbers(getActualEnergyUsage()) + EnumChatFormatting.RESET + " EU/t",
-            /* 4*/ StatCollector.translateToLocal("GT5U.multiblock.mei") + ": " + EnumChatFormatting.YELLOW
-                    + GT_Utility.formatNumbers(getMaxInputVoltage()) + EnumChatFormatting.RESET + " EU/t(*2A) "
-                    + StatCollector.translateToLocal("GT5U.machines.tier")
-                    + ": " + EnumChatFormatting.YELLOW
-                    + VN[GT_Utility.getTier(getMaxInputVoltage())] + EnumChatFormatting.RESET,
-            /* 5*/ StatCollector.translateToLocal("GT5U.multiblock.problems") + ": " + EnumChatFormatting.RED
-                    + (getIdealStatus() - getRepairStatus()) + EnumChatFormatting.RESET + " "
-                    + StatCollector.translateToLocal("GT5U.multiblock.efficiency")
-                    + ": " + EnumChatFormatting.YELLOW
-                    + Float.toString(mEfficiency / 100.0F) + EnumChatFormatting.RESET + " %",
-            /* 6*/ StatCollector.translateToLocal("GT5U.multiblock.pollution") + ": " + EnumChatFormatting.GREEN
-                    + mPollutionReduction + EnumChatFormatting.RESET + " %",
-            EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.out_pre") + ": "
-                    + EnumChatFormatting.RESET,
-            StatCollector.translateToLocal("beamline.particle") + ": " + EnumChatFormatting.GOLD
-                    + Particle.values()[this.outputParticle].getLocalisedName() + " " + EnumChatFormatting.RESET,
-            StatCollector.translateToLocal("beamline.energy") + ": " + EnumChatFormatting.DARK_RED + this.outputEnergy
-                    + EnumChatFormatting.RESET + " keV",
-            StatCollector.translateToLocal("beamline.focus") + ": " + EnumChatFormatting.BLUE + this.outputFocus + " "
-                    + EnumChatFormatting.RESET,
-            StatCollector.translateToLocal("beamline.amount") + ": " + EnumChatFormatting.LIGHT_PURPLE
-                    + this.outputRate,
-        };
+                /* 1 */ StatCollector.translateToLocal("GT5U.multiblock.Progress") + ": "
+                        + EnumChatFormatting.GREEN
+                        + GT_Utility.formatNumbers(mProgresstime / 20)
+                        + EnumChatFormatting.RESET
+                        + " s / "
+                        + EnumChatFormatting.YELLOW
+                        + GT_Utility.formatNumbers(mMaxProgresstime / 20)
+                        + EnumChatFormatting.RESET
+                        + " s",
+                /* 2 */ StatCollector.translateToLocal("GT5U.multiblock.energy") + ": "
+                        + EnumChatFormatting.GREEN
+                        + GT_Utility.formatNumbers(storedEnergy)
+                        + EnumChatFormatting.RESET
+                        + " EU / "
+                        + EnumChatFormatting.YELLOW
+                        + GT_Utility.formatNumbers(maxEnergy)
+                        + EnumChatFormatting.RESET
+                        + " EU",
+                /* 3 */ StatCollector.translateToLocal("GT5U.multiblock.usage") + ": "
+                        + EnumChatFormatting.RED
+                        + GT_Utility.formatNumbers(getActualEnergyUsage())
+                        + EnumChatFormatting.RESET
+                        + " EU/t",
+                /* 4 */ StatCollector.translateToLocal("GT5U.multiblock.mei") + ": "
+                        + EnumChatFormatting.YELLOW
+                        + GT_Utility.formatNumbers(getMaxInputVoltage())
+                        + EnumChatFormatting.RESET
+                        + " EU/t(*2A) "
+                        + StatCollector.translateToLocal("GT5U.machines.tier")
+                        + ": "
+                        + EnumChatFormatting.YELLOW
+                        + VN[GT_Utility.getTier(getMaxInputVoltage())]
+                        + EnumChatFormatting.RESET,
+                /* 5 */ StatCollector.translateToLocal("GT5U.multiblock.problems") + ": "
+                        + EnumChatFormatting.RED
+                        + (getIdealStatus() - getRepairStatus())
+                        + EnumChatFormatting.RESET
+                        + " "
+                        + StatCollector.translateToLocal("GT5U.multiblock.efficiency")
+                        + ": "
+                        + EnumChatFormatting.YELLOW
+                        + Float.toString(mEfficiency / 100.0F)
+                        + EnumChatFormatting.RESET
+                        + " %",
+                /* 6 */ StatCollector.translateToLocal("GT5U.multiblock.pollution") + ": "
+                        + EnumChatFormatting.GREEN
+                        + mPollutionReduction
+                        + EnumChatFormatting.RESET
+                        + " %",
+                EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.out_pre")
+                        + ": "
+                        + EnumChatFormatting.RESET,
+                StatCollector.translateToLocal("beamline.particle") + ": "
+                        + EnumChatFormatting.GOLD
+                        + Particle.values()[this.outputParticle].getLocalisedName()
+                        + " "
+                        + EnumChatFormatting.RESET,
+                StatCollector.translateToLocal("beamline.energy") + ": "
+                        + EnumChatFormatting.DARK_RED
+                        + this.outputEnergy
+                        + EnumChatFormatting.RESET
+                        + " keV",
+                StatCollector.translateToLocal("beamline.focus") + ": "
+                        + EnumChatFormatting.BLUE
+                        + this.outputFocus
+                        + " "
+                        + EnumChatFormatting.RESET,
+                StatCollector.translateToLocal("beamline.amount") + ": "
+                        + EnumChatFormatting.LIGHT_PURPLE
+                        + this.outputRate, };
     }
 
     @Override
-    public ITexture[] getTexture(
-            IGregTechTileEntity aBaseMetaTileEntity,
-            byte aSide,
-            byte aFacing,
-            byte aColorIndex,
-            boolean aActive,
-            boolean aRedstone) {
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex,
+            boolean aActive, boolean aRedstone) {
         // TODO Auto-generated method stub
         return null;
     }
