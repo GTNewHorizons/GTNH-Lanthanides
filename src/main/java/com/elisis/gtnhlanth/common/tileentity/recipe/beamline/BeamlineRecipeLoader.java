@@ -3,6 +3,7 @@ package com.elisis.gtnhlanth.common.tileentity.recipe.beamline;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 
+import com.elisis.gtnhlanth.common.beamline.Particle;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 import com.elisis.gtnhlanth.common.tileentity.LINAC;
 
@@ -29,7 +30,7 @@ public class BeamlineRecipeLoader {
         BeamlineRecipeAdder.instance.addSourceChamberRecipe(
                 new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Tungsten, 1) },
                 null,
-                0,
+                Particle.ELECTRON.ordinal(),
                 20,
                 5000,
                 98,
@@ -42,7 +43,7 @@ public class BeamlineRecipeLoader {
         BeamlineRecipeAdder.instance.addSourceChamberRecipe(
                 new ItemStack[] { ELEMENT.getInstance().CALIFORNIUM.getDust(1) },
                 null,
-                2,
+                Particle.NEUTRON.ordinal(),
                 10,
                 9000,
                 95,
@@ -55,7 +56,7 @@ public class BeamlineRecipeLoader {
         BeamlineRecipeAdder.instance.addSourceChamberRecipe(
                 new ItemStack[] { Materials.Uranium.getDustTiny(1) },
                 new ItemStack[] { WerkstoffMaterialPool.Thorium234.get(OrePrefixes.dustTiny, 1) },
-                4,
+                Particle.ALPHA.ordinal(),
                 1,
                 4270,
                 90,

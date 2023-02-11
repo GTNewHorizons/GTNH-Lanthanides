@@ -47,7 +47,7 @@ import gregtech.api.util.GT_Utility;
 
 public class RecipeLoader {
 
-    private static final Materials[] BLACKLIST = null;
+    //private static final Materials[] BLACKLIST = null;
 
     public static void loadAccelerator() {
 
@@ -1305,7 +1305,7 @@ public class RecipeLoader {
                 for (int oreDictID : oreDict) {
                     if ((OreDictionary.getOreName(oreDictID).startsWith("ore") || OreDictionary.getOreName(oreDictID)
                             .startsWith("crushed")) /* && OreDictionary.getOreName(oreDictID).contains("Cerium") */) {
-                        GT_Log.out.print(OreDictionary.getOreName(oreDictID));
+                        //GT_Log.out.print(OreDictionary.getOreName(oreDictID));
                         GT_Recipe tRecipe = recipe.copy();
                         boolean modified = false;
                         for (int i = 0; i < tRecipe.mOutputs.length; i++) {
@@ -1565,7 +1565,7 @@ public class RecipeLoader {
         // Electrolyzer
         for (GT_Recipe recipe : GT_Recipe.GT_Recipe_Map.sElectrolyzerRecipes.mRecipeList) {
             for (ItemStack input : recipe.mInputs) {
-                GT_Log.out.print(input.getDisplayName() + "\n");
+                //GT_Log.out.print(input.getDisplayName() + "\n");
                 if (GT_Utility.isStackValid(input)) {
                     int[] oreDict = OreDictionary.getOreIDs(input);
                     for (int oreDictID : oreDict) {
@@ -1733,7 +1733,7 @@ public class RecipeLoader {
         for (GT_Recipe recipe : GT_Recipe.GT_Recipe_Map.sChemicalBathRecipes.mRecipeList) {
             // ItemStack input = recipe.mInputs[0];
             for (ItemStack input : recipe.mInputs) {
-                GT_Log.out.print(input.getDisplayName() + "\n");
+                //GT_Log.out.print(input.getDisplayName() + "\n");
                 if (GT_Utility.isStackValid(input)) {
                     int[] oreDict = OreDictionary.getOreIDs(input);
                     for (int oreDictID : oreDict) {

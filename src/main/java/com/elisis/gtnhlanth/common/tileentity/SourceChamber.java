@@ -6,12 +6,6 @@ import static gregtech.api.enums.GT_Values.VN;
 import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.fluids.FluidStack;
 
 import com.elisis.gtnhlanth.common.beamline.BeamInformation;
 import com.elisis.gtnhlanth.common.beamline.BeamLinePacket;
@@ -31,9 +25,12 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMul
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
-import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Utility;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.fluids.FluidStack;
 
 public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<SourceChamber> implements IConstructable {
 
@@ -119,7 +116,7 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
         outputRate = 0;
 
         ItemStack[] tItems = this.getStoredInputs().toArray(new ItemStack[0]);
-        GT_Log.out.print(Arrays.toString(tItems));
+        //GT_Log.out.print(Arrays.toString(tItems));
         long tVoltage = this.getMaxInputVoltage();
 
         /*
@@ -146,7 +143,7 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
         if (this.mEUt > 0) this.mEUt = (-this.mEUt);
 
         outputParticle = tRecipe.particleId;
-        float maxParticleEnergy = Particle.values()[outputParticle].maxSourceEnergy();
+        float maxParticleEnergy = Particle.getParticleFromId(outputParticle).maxSourceEnergy();
         float maxMaterialEnergy = tRecipe.maxEnergy;
         // outputEnergy = (float) ((-maxEnergy) * Math.pow(1.001, -(tRecipe.energyRatio)*(tVoltage-tRecipe.mEUt))) +
         // maxEnergy;
@@ -155,7 +152,7 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
                         + maxMaterialEnergy,
                 maxParticleEnergy);
 
-        GT_Log.out.print(outputEnergy);
+        //GT_Log.out.print(outputEnergy);
 
         if (outputEnergy <= 0) {
             stopMachine();
@@ -268,7 +265,7 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
                         + EnumChatFormatting.RESET,
                 StatCollector.translateToLocal("beamline.particle") + ": "
                         + EnumChatFormatting.GOLD
-                        + Particle.values()[this.outputParticle].getLocalisedName()
+                        + Particle.getParticleFromId(this.outputParticle).getLocalisedName()
                         + " "
                         + EnumChatFormatting.RESET,
                 StatCollector.translateToLocal("beamline.energy") + ": "

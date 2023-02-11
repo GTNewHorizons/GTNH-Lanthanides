@@ -10,14 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-
 import com.elisis.gtnhlanth.common.beamline.BeamInformation;
 import com.elisis.gtnhlanth.common.beamline.BeamLinePacket;
 import com.elisis.gtnhlanth.common.beamline.Particle;
@@ -37,9 +29,15 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMul
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
-import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Utility;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> implements IConstructable {
 
@@ -224,9 +222,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         }
 
         particleId = this.getInputInformation().getParticleId();
-        Particle inputParticle = Particle.values()[particleId];
-
-        // GT_Log.out.print("Particle ID = " + particleId + " " + inputParticle.canAccelerate());
+        Particle inputParticle = Particle.getParticleFromId(particleId);
 
         if (!inputParticle.canAccelerate()) {
             stopMachine();
@@ -351,6 +347,8 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
             }
         }
 
+        BeamInformation information = this.getInputInformation();
+        
         return new String[] {
                 /* 1 */ StatCollector.translateToLocal("GT5U.multiblock.Progress") + ": "
                         + EnumChatFormatting.GREEN
@@ -407,28 +405,28 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
                         + EnumChatFormatting.RESET,
                 StatCollector.translateToLocal("beamline.particle") + ": "
                         + EnumChatFormatting.GOLD
-                        + Particle.values()[this.getInputInformation().getParticleId()].getLocalisedName()
+                        + Particle.getParticleFromId(information.getParticleId()).getLocalisedName()
                         + " "
                         + EnumChatFormatting.RESET,
                 StatCollector.translateToLocal("beamline.energy") + ": "
                         + EnumChatFormatting.DARK_RED
-                        + this.getInputInformation().getEnergy()
+                        + information.getEnergy()
                         + EnumChatFormatting.RESET
                         + " keV",
                 StatCollector.translateToLocal("beamline.focus") + ": "
                         + EnumChatFormatting.BLUE
-                        + this.getInputInformation().getFocus()
+                        + information.getFocus()
                         + " "
                         + EnumChatFormatting.RESET,
                 StatCollector.translateToLocal("beamline.amount") + ": "
                         + EnumChatFormatting.LIGHT_PURPLE
-                        + this.getInputInformation().getRate(),
+                        + information.getRate(),
                 EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.out_pre")
                         + ": "
                         + EnumChatFormatting.RESET,
                 StatCollector.translateToLocal("beamline.particle") + ": "
                         + EnumChatFormatting.GOLD
-                        + Particle.values()[this.outputParticle].getLocalisedName()
+                        + Particle.getParticleFromId(this.outputParticle).getLocalisedName()
                         + " "
                         + EnumChatFormatting.RESET,
                 StatCollector.translateToLocal("beamline.energy") + ": "
@@ -464,7 +462,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         return factor;
     }
 
-    private float calculateVoltageFactor(long voltage) {
+    private static float calculateVoltageFactor(long voltage) {
 
         float factor = (float) Math.pow(1.00009, -(voltage - 125000));
         return factor;
@@ -525,7 +523,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 
         for (int i = -8; i > -lLength - 1; i -= 2) {
 
-            GT_Log.out.print("Building inner piece! i = " + i);
+            //GT_Log.out.print("Building inner piece! i = " + i);
 
             buildPiece(STRUCTURE_PIECE_LAYER, stackSize, hintsOnly, 3, 6, i);
         }
