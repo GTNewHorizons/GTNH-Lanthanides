@@ -3,6 +3,8 @@ package com.elisis.gtnhlanth;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
+
+import net.minecraftforge.oredict.OreDictionary;
 import com.elisis.gtnhlanth.common.CommonProxy;
 import com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool;
 import com.elisis.gtnhlanth.common.register.LanthItemList;

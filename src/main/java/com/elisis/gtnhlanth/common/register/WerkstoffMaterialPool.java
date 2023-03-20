@@ -5,6 +5,8 @@ import static com.github.bartimaeusnek.bartworks.util.BW_Util.superscriptNumbers
 
 import java.util.Arrays;
 
+import java.util.Arrays;
+
 import com.github.bartimaeusnek.bartworks.system.material.Werkstoff;
 import com.github.bartimaeusnek.bartworks.util.Pair;
 
@@ -524,6 +526,16 @@ public class WerkstoffMaterialPool implements Runnable {
             Werkstoff.Types.MIXTURE,
             new Werkstoff.GenerationFeatures().disable().onlyDust(),
             offsetID + 49,
+            TextureSet.SET_DULL);
+
+    public static final Werkstoff EuropiumIIIOxide = new Werkstoff(
+            new short[] { 255, 230, 255 },
+            "Europium III Oxide",
+            subscriptNumbers("Eu2O3"),
+            new Werkstoff.Stats(),
+            Werkstoff.Types.COMPOUND,
+            new Werkstoff.GenerationFeatures().disable().onlyDust(),
+            offsetID + 50,
             TextureSet.SET_DULL);
 
     // TODO
