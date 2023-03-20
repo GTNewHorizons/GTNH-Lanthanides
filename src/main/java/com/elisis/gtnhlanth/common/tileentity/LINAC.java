@@ -180,15 +180,21 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         // GT_Log.out.print("AAAAA in checkRecipe");
 
         float tempFactor = 0;
+        //Focus as determined by multi properties 
         float machineFocus = 0;
+        //Input particle focus
         float inputFocus = 0;
+        
+        //Output focus to be set
         outputFocus = 0;
 
         float voltageFactor = 0;
         float inputEnergy = 0;
-        float machineEnergy = 0;
+        
+        //Energy quantity determined by multi
+        float machineEnergy = 0;     
         outputEnergy = 0;
-
+        
         int particleId = 0;
         outputParticle = 0;
 
@@ -205,9 +211,14 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
          * input.getLocalizedName()); aaa++; }
          */
 
+        
+        //Coolant input
         FluidStack primFluid = tFluidInputs.get(0);
+        
         // GT_Log.out.print("ABFluid " + primFluid.getUnlocalizedName());
 
+        
+        //1b (1000L)/m/operation
         final int fluidConsumed = 1000 * length;
 
         this.mEfficiency = (10000 - (this.getIdealStatus() - this.getRepairStatus()) * 1000);
@@ -233,6 +244,8 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 
         // GT_Log.out.print("Can accelerate");
 
+        
+        //Particle stays the same with this multiblock
         outputParticle = particleId;
 
         if (primFluid.isFluidEqual(new FluidStack(FluidRegistry.getFluid("ic2coolant"), 1))) {
@@ -246,7 +259,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         inputFocus = this.getInputInformation().getFocus();
 
         outputFocus = (inputFocus > machineFocus) ? ((inputFocus + machineFocus) / 2)
-                : inputFocus * (machineFocus / 100);
+                : inputFocus * (machineFocus / 100); //If input focus > machine focus, take the average of both, else weigh the former by the latter
 
         long voltage = this.getMaxInputVoltage();
         voltageFactor = calculateVoltageFactor(voltage);
@@ -403,25 +416,25 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
                 /* 7 */ EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.in_pre")
                         + ": "
                         + EnumChatFormatting.RESET,
-                StatCollector.translateToLocal("beamline.particle") + ": "
+                StatCollector.translateToLocal("beamline.particle") + ": " //"Multiblock Beamline Input:"
                         + EnumChatFormatting.GOLD
-                        + Particle.getParticleFromId(information.getParticleId()).getLocalisedName()
+                        + Particle.getParticleFromId(information.getParticleId()).getLocalisedName() //e.g. "Electron (e-)"
                         + " "
                         + EnumChatFormatting.RESET,
-                StatCollector.translateToLocal("beamline.energy") + ": "
+                StatCollector.translateToLocal("beamline.energy") + ": " //"Energy:"
                         + EnumChatFormatting.DARK_RED
                         + information.getEnergy()
                         + EnumChatFormatting.RESET
-                        + " keV",
-                StatCollector.translateToLocal("beamline.focus") + ": "
+                        + " keV", //e.g. "10240 keV"
+                StatCollector.translateToLocal("beamline.focus") + ": " //"Focus:"
                         + EnumChatFormatting.BLUE
                         + information.getFocus()
                         + " "
                         + EnumChatFormatting.RESET,
-                StatCollector.translateToLocal("beamline.amount") + ": "
+                StatCollector.translateToLocal("beamline.amount") + ": " //"Amount:"
                         + EnumChatFormatting.LIGHT_PURPLE
                         + information.getRate(),
-                EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.out_pre")
+                EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.out_pre") //"Multiblock Beamline Output:"
                         + ": "
                         + EnumChatFormatting.RESET,
                 StatCollector.translateToLocal("beamline.particle") + ": "
@@ -446,7 +459,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 
     private BeamInformation getInputInformation() {
 
-        for (TileHatchInputBeamline in : this.mInputBeamline) {
+        for (TileHatchInputBeamline in : this.mInputBeamline) { //Easy way to find the desired input. Efficient? No. Will it matter? No :boubs_glasses:
 
             if (in.q == null) return new BeamInformation(0, 0, 0, 0);
             // if (in.q == null) return new BeamInformation(10000, 10, 0, 90); // TODO temporary for testing purposes

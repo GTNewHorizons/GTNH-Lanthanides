@@ -110,6 +110,9 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
 
         // GT_Log.out.print("In checkRecipe");
 
+    	
+    	//No input particle, so no input quantities
+    	
         outputFocus = 0;
         outputEnergy = 0;
         outputParticle = 0;
@@ -143,8 +146,8 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
         if (this.mEUt > 0) this.mEUt = (-this.mEUt);
 
         outputParticle = tRecipe.particleId;
-        float maxParticleEnergy = Particle.getParticleFromId(outputParticle).maxSourceEnergy();
-        float maxMaterialEnergy = tRecipe.maxEnergy;
+        float maxParticleEnergy = Particle.getParticleFromId(outputParticle).maxSourceEnergy(); //The maximum energy a particle can possess when produced by this multiblock
+        float maxMaterialEnergy = tRecipe.maxEnergy; //The maximum energy for the recipe processed
         // outputEnergy = (float) ((-maxEnergy) * Math.pow(1.001, -(tRecipe.energyRatio)*(tVoltage-tRecipe.mEUt))) +
         // maxEnergy;
         outputEnergy = (float) Math.min(
