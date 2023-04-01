@@ -1,15 +1,45 @@
 package com.elisis.gtnhlanth.loader;
 
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.Acetylhydrazine;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.AmmoniaBoronfluorideSolution;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.AmmoniumDinitramide;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.AmmoniumNitrate;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.AmmoniumNnitrourethane;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.BoronTrifluoride;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.BoronTrioxide;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.DimethylSulfate;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.DinitrogenPentoxide;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.EthylDinitrocarbamate;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.EthylNnitrocarbamate;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.Ethylcarbamate;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.Ethylchloroformate;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.Formaldehyde;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.Hydrazine;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.HydrogenPeroxide;
 import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.LMP103S;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.Monomethylhydrazine;
 import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.MonomethylhydrazineFuelMix;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.Nitromethane;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.NitroniumTetrafluoroborate;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.OXylene;
 import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.Phosgene;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.PhthalicAnhydride;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.SodiumFluoride;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.SodiumTetrafluoroborate;
 import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.SodiumTungstate;
 import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.TertButylbenzene;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.Tetrafluoroborate;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.Trinitramid;
 import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.TungstenTrioxide;
 import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.TungsticAcid;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.TwoTertButylAnthrahydroquinone;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.TwoTertButylAnthraquinone;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.UnsymmetricalDimethylhydrazine;
 import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.UnsymmetricalDimethylhydrazineFuelMix;
+import static com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool.VanadiumPentoxide;
 import static gregtech.api.enums.OrePrefixes.cell;
 import static gregtech.api.enums.OrePrefixes.dust;
+import static gregtech.api.enums.OrePrefixes.dustTiny;
 import static gregtech.api.enums.OrePrefixes.ingotHot;
 import static gregtech.api.enums.OrePrefixes.item;
 
@@ -18,20 +48,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashSet;
-
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.HashSet;
-
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 
 import com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool;
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
@@ -44,6 +60,9 @@ import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import ic2.core.Ic2Items;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 /*
  * Originally authored by botn365 under the MIT License. See BotdustriesLICENSE
