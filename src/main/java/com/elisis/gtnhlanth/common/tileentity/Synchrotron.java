@@ -10,6 +10,7 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 
+import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -37,6 +38,8 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
      * Coolant Delivery casing 
      */
     
+    
+    // TODO: E > 1200eV for x-ray lithography
     static {
     	
     	STRUCTURE_DEFINITION = StructureDefinition.<Synchrotron>builder().addShape(
@@ -110,7 +113,8 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
     						"cd---d----------------------c      ",
     						" cdddcc-------ccccc-------cc       ",
     						"  cccccccccccc     ccccccc         ",
-    						
+    					},
+    					{
     						
     					}
     					
@@ -119,6 +123,8 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
     					
     					)
     			.addElement('c', ofBlock(LanthItemList.SHIELDED_ACCELERATOR_CASING, 0))
+    			.addElement('k', ofBlock(GregTech_API.sBlockCasings1, 15)) // Superconducting coils
+    			.addElement('d', ofBlock(LanthItemList.COOLANT_DELIVERY_CASING, 0))
     			
     			
     			.build();

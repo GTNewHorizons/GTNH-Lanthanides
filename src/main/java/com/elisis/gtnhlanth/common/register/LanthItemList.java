@@ -1,14 +1,15 @@
 package com.elisis.gtnhlanth.common.register;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.elisis.gtnhlanth.common.beamline.TileBeamline;
 import com.elisis.gtnhlanth.common.block.Casing;
 import com.elisis.gtnhlanth.common.block.ShieldedAccGlass;
 import com.elisis.gtnhlanth.common.hatch.TileHatchInputBeamline;
 import com.elisis.gtnhlanth.common.hatch.TileHatchOutputBeamline;
+import com.elisis.gtnhlanth.common.item.MaskList;
+import com.elisis.gtnhlanth.common.item.PhotolithographicMask;
 import com.elisis.gtnhlanth.common.tileentity.Digester;
 import com.elisis.gtnhlanth.common.tileentity.DissolutionTank;
 import com.elisis.gtnhlanth.common.tileentity.LINAC;
@@ -16,6 +17,12 @@ import com.elisis.gtnhlanth.common.tileentity.SourceChamber;
 import com.elisis.gtnhlanth.common.tileentity.Synchrotron;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import gregtech.api.util.GT_LanguageManager;
+import gregtech.api.util.GT_Log;
+import gregtech.common.items.GT_MetaGenerated_Item_03;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public final class LanthItemList {
 
@@ -45,6 +52,8 @@ public final class LanthItemList {
     
     public static final Block ANTENNA_CASING_T1 = new Casing("antenna_t1");
     public static final Block ANTENNA_CASING_T2 = new Casing("antenna_t2");
+    
+    public static HashMap<MaskList, Item> maskMap = new HashMap<>();
 
     public static void registerGTMTE() {
 
@@ -87,6 +96,20 @@ public final class LanthItemList {
         GameRegistry.registerBlock(ANTENNA_CASING_T1, ANTENNA_CASING_T1.getUnlocalizedName());
         
         GameRegistry.registerBlock(ANTENNA_CASING_T2, ANTENNA_CASING_T2.getUnlocalizedName());
+        
+        for (MaskList mask : MaskList.values()) {
+        	
+        	GT_Log.out.print("HAHA\n");
+        	
+        	String english = mask.getEnglishName();
+        	
+        	PhotolithographicMask maskItem = new PhotolithographicMask(mask.getName(), mask.getDamage());
+        	GT_Log.out.print(maskItem.getUnlocalizedName() + "\n");
+           	GameRegistry.registerItem(maskItem, maskItem.getUnlocalizedName());
+           	GT_LanguageManager.addStringLocalization(maskItem.getUnlocalizedName() + ".name", "Mask (" + english + ")");
+           	maskMap.put(mask, maskItem);
+        	
+        }
         
     }
 }
