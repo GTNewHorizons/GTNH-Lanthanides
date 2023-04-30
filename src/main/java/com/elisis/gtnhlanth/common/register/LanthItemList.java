@@ -99,14 +99,13 @@ public final class LanthItemList {
         
         for (MaskList mask : MaskList.values()) {
         	
-        	GT_Log.out.print("HAHA\n");
-        	
         	String english = mask.getEnglishName();
         	
         	PhotolithographicMask maskItem = new PhotolithographicMask(mask.getName(), mask.getDamage());
-        	GT_Log.out.print(maskItem.getUnlocalizedName() + "\n");
            	GameRegistry.registerItem(maskItem, maskItem.getUnlocalizedName());
+           	
            	GT_LanguageManager.addStringLocalization(maskItem.getUnlocalizedName() + ".name", "Mask (" + english + ")");
+           	
            	maskMap.put(mask, maskItem);
         	
         }
