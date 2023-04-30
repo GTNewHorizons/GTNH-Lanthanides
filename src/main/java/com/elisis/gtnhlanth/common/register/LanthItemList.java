@@ -13,6 +13,8 @@ import com.elisis.gtnhlanth.common.tileentity.Digester;
 import com.elisis.gtnhlanth.common.tileentity.DissolutionTank;
 import com.elisis.gtnhlanth.common.tileentity.LINAC;
 import com.elisis.gtnhlanth.common.tileentity.SourceChamber;
+import com.elisis.gtnhlanth.common.tileentity.Synchrotron;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public final class LanthItemList {
@@ -22,6 +24,8 @@ public final class LanthItemList {
 
     public static ItemStack LINAC;
     public static ItemStack SOURCE_CHAMBER;
+    
+    public static ItemStack SYNCHROTRON;
 
     public static ItemStack BEAMLINE_PIPE;
 
@@ -38,6 +42,9 @@ public final class LanthItemList {
     public static final Block ELECTRODE_CASING = new Casing("electrode");
 
     public static final Block COOLANT_DELIVERY_CASING = new Casing("coolant_delivery");
+    
+    public static final Block ANTENNA_CASING_T1 = new Casing("antenna_t1");
+    public static final Block ANTENNA_CASING_T2 = new Casing("antenna_t2");
 
     public static void registerGTMTE() {
 
@@ -59,6 +66,8 @@ public final class LanthItemList {
         LINAC = new LINAC(10505, "Linear Accelerator", "Linear Accelerator").getStackForm(1L);
 
         SOURCE_CHAMBER = new SourceChamber(10506, "Source Chamber", "Source Chamber").getStackForm(1L);
+        
+        SYNCHROTRON = new Synchrotron(10507, "Synchrotron", "Synchrotron").getStackForm(1L);
     }
 
     public static void registerTypical() {
@@ -74,5 +83,10 @@ public final class LanthItemList {
         GameRegistry.registerBlock(COOLANT_DELIVERY_CASING, COOLANT_DELIVERY_CASING.getUnlocalizedName());
         
         GameRegistry.registerBlock(SHIELDED_ACCELERATOR_GLASS, SHIELDED_ACCELERATOR_GLASS.getUnlocalizedName());
+        
+        GameRegistry.registerBlock(ANTENNA_CASING_T1, ANTENNA_CASING_T1.getUnlocalizedName());
+        
+        GameRegistry.registerBlock(ANTENNA_CASING_T2, ANTENNA_CASING_T2.getUnlocalizedName());
+        
     }
 }
