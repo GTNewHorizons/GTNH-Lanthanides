@@ -24,6 +24,7 @@ import gregtech.api.metatileentity.BaseMetaPipeEntity;
 import gregtech.api.metatileentity.MetaPipeEntity;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.common.GT_Client;
+import gregtech.common.render.GT_TextureBuilder;
 
 public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline {
 
@@ -160,8 +161,9 @@ public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection aSide,
             ForgeDirection aConnections, int aColorIndex, boolean aConnected, boolean aRedstone) {
-        return new ITexture[] { new GT_RenderedTexture(pipe),
-                new GT_RenderedTexture(pipe, Dyes.getModulation(aColorIndex, MACHINE_METAL.getRGBA())) };
+        return new ITexture[] { 
+        		new GT_TextureBuilder().addIcon(pipe).build(),
+                new GT_TextureBuilder().addIcon(pipe).setRGBA(Dyes.getModulation((byte) aColorIndex, MACHINE_METAL.getRGBA())).build()};
     }
 
     public void markUsed() {
