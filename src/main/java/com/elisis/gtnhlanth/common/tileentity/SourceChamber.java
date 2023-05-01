@@ -30,6 +30,7 @@ import gregtech.api.util.GT_Utility;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
 public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<SourceChamber> implements IConstructable {
@@ -287,13 +288,6 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
     }
 
     @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex,
-            boolean aActive, boolean aRedstone) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         buildPiece("sc", stackSize, hintsOnly, 2, 4, 0);
     }
@@ -327,4 +321,11 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
     }
+
+	@Override
+	public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
+			int colorIndex, boolean active, boolean redstoneLevel) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

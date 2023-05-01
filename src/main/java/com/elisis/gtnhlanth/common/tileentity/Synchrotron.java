@@ -1,5 +1,7 @@
 package com.elisis.gtnhlanth.common.tileentity;
 
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+
 import java.util.ArrayList;
 
 import com.elisis.gtnhlanth.common.hatch.TileHatchInputBeamline;
@@ -8,7 +10,6 @@ import com.elisis.gtnhlanth.common.register.LanthItemList;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 
 import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.ITexture;
@@ -17,6 +18,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMultiBlockBase;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchrotron> implements IConstructable {
 	
@@ -153,7 +155,7 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
     }
 	
 	@Override
-	public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex,
+	public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection aSide, ForgeDirection aFacing, int aColorIndex,
 			boolean aActive, boolean aRedstone) {
 		// TODO Auto-generated method stub
 		return null;

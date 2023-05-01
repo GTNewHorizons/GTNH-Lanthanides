@@ -1,6 +1,5 @@
 package com.elisis.gtnhlanth.loader;
 
-import static com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader.blockCasingAdvanced;
 import static gregtech.common.items.GT_MetaGenerated_Item_01.registerCauldronCleaningFor;
 
 import java.lang.reflect.Constructor;
@@ -44,6 +43,7 @@ import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
+import static gregtech.api.enums.OrePrefixes.blockCasingAdvanced;
 
 
 public class RecipeLoader {
