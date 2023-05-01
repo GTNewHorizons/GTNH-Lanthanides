@@ -160,7 +160,7 @@ public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline 
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection aSide,
-            ForgeDirection aConnections, int aColorIndex, boolean aConnected, boolean aRedstone) {
+            int aConnections, int aColorIndex, boolean aConnected, boolean aRedstone) {
         return new ITexture[] { 
         		new GT_TextureBuilder().addIcon(pipe).build(),
                 new GT_TextureBuilder().addIcon(pipe).setRGBA(Dyes.getModulation((byte) aColorIndex, MACHINE_METAL.getRGBA())).build()};
