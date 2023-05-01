@@ -1,7 +1,5 @@
 package com.elisis.gtnhlanth.common.hatch;
 
-import net.minecraft.nbt.NBTTagCompound;
-
 import com.elisis.gtnhlanth.common.beamline.BeamLinePacket;
 import com.elisis.gtnhlanth.common.beamline.IConnectsToBeamline;
 import com.github.technus.tectech.util.TT_Utility;
@@ -9,6 +7,8 @@ import com.github.technus.tectech.util.TT_Utility;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileHatchInputBeamline extends TileHatchBeamlineConnector<BeamLinePacket> {
 
@@ -35,17 +35,17 @@ public class TileHatchInputBeamline extends TileHatchBeamlineConnector<BeamLineP
     }
 
     @Override
-    public boolean isInputFacing(byte side) {
+    public boolean isInputFacing(ForgeDirection side) {
         return side == getBaseMetaTileEntity().getFrontFacing();
     }
 
     @Override
-    public boolean isDataInputFacing(byte side) {
+    public boolean isDataInputFacing(ForgeDirection side) {
         return isInputFacing(side);
     }
 
     @Override
-    public boolean isOutputFacing(byte aSide) {
+    public boolean isOutputFacing(ForgeDirection aSide) {
         return false;
     }
 
@@ -55,7 +55,7 @@ public class TileHatchInputBeamline extends TileHatchBeamlineConnector<BeamLineP
     }
 
     @Override
-    public boolean canConnect(byte side) {
+    public boolean canConnect(ForgeDirection side) {
         return isInputFacing(side);
     }
 

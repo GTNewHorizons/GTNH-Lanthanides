@@ -127,32 +127,12 @@ public abstract class TileHatchBeamlineConnector<T extends DataPacket> extends G
     }
 
     @Override
-    public boolean isFacingValid(byte aFacing) {
-        return true;
-    }
-
-    @Override
     public boolean isAccessAllowed(EntityPlayer aPlayer) {
         return true;
     }
 
     @Override
-    public boolean isLiquidInput(byte aSide) {
-        return false;
-    }
-
-    @Override
     public boolean isFluidInputAllowed(FluidStack aFluid) {
-        return false;
-    }
-
-    @Override
-    public boolean allowPullStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        return false;
-    }
-
-    @Override
-    public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
         return false;
     }
 

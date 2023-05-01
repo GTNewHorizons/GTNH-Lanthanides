@@ -3,6 +3,9 @@ package com.elisis.gtnhlanth.common.item;
 public enum MaskList {
 	
 	ERROR("error", "ERROR", 0),
+	BLANK1("blank1", "Blank Tier 1", 0),
+	BLANK2("blank2", "Blank Tier 2", 0),
+	BLANK3("blank3", "Blank Tier 3", 0),
 	ILC("ilc", "Integrated Logic Circuit", 100),
 	RAM("ram", "Random Access Memory", 200),
 	NAND("nand", "NAND", 200),

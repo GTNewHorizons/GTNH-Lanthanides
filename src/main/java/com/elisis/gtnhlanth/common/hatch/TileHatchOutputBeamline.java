@@ -1,7 +1,5 @@
 package com.elisis.gtnhlanth.common.hatch;
 
-import net.minecraft.nbt.NBTTagCompound;
-
 import com.elisis.gtnhlanth.common.beamline.BeamLinePacket;
 import com.elisis.gtnhlanth.common.beamline.IConnectsToBeamline;
 import com.elisis.gtnhlanth.common.beamline.TileBeamline;
@@ -10,7 +8,8 @@ import com.github.technus.tectech.util.TT_Utility;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.util.GT_Utility;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileHatchOutputBeamline extends TileHatchBeamlineConnector<BeamLinePacket> implements IConnectsToBeamline {
 
@@ -40,7 +39,7 @@ public class TileHatchOutputBeamline extends TileHatchBeamlineConnector<BeamLine
             return (IConnectsToBeamline) meta;
 
         } else if (meta instanceof TileHatchInputBeamline
-                && ((TileHatchInputBeamline) meta).canConnect(GT_Utility.getOppositeSide(base.getFrontFacing()))) {
+                && ((TileHatchInputBeamline) meta).canConnect(base.getFrontFacing().getOpposite())) {
 
                     return (IConnectsToBeamline) meta;
                 }
@@ -69,22 +68,22 @@ public class TileHatchOutputBeamline extends TileHatchBeamlineConnector<BeamLine
     }
 
     @Override
-    public boolean canConnect(byte side) {
+    public boolean canConnect(ForgeDirection side) {
         return this.isOutputFacing(side);
     }
 
     @Override
-    public boolean isDataInputFacing(byte side) {
+    public boolean isDataInputFacing(ForgeDirection side) {
         return this.isInputFacing(side);
     }
 
     @Override
-    public boolean isInputFacing(byte aSide) {
+    public boolean isInputFacing(ForgeDirection aSide) {
         return false;
     }
 
     @Override
-    public boolean isOutputFacing(byte side) {
+    public boolean isOutputFacing(ForgeDirection side) {
         return side == this.getBaseMetaTileEntity().getFrontFacing();
     }
 

@@ -23,6 +23,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 
 import com.dreammaster.gthandler.CustomItemList;
 import com.elisis.gtnhlanth.Tags;
+import com.elisis.gtnhlanth.common.item.MaskList;
 import com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool;
 import com.elisis.gtnhlanth.common.register.LanthItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
@@ -154,6 +155,20 @@ public class RecipeLoader {
                 LanthItemList.BEAMLINE_PIPE,
                 400,
                 1920);
+        
+        // Masks
+        // Quartz + Fe2O3 T1
+        // " + Cr T2
+        //
+        GT_Values.RA.addAssemblerRecipe(
+        		new ItemStack[] {
+        				Materials.Quartz.getPlates(2),
+        				Materials.Hematite.getDust(1)
+        		},
+        		Materials.Glass.getMolten(144),
+        		new ItemStack(LanthItemList.maskMap.get(MaskList.BLANK1)),
+        		400,
+        		1920);
 
     }
 

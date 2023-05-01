@@ -43,35 +43,26 @@ public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline 
     }
 
     @Override
-    public boolean allowPullStack(IGregTechTileEntity arg0, int arg1, byte arg2, ItemStack arg3) {
-        return false;
-    }
-
-    @Override
-    public boolean allowPutStack(IGregTechTileEntity arg0, int arg1, byte arg2, ItemStack arg3) {
-        return false;
-    }
-
-    @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if (aBaseMetaTileEntity.isServerSide()) {
             if ((aTick & 31) == 31) {
                 mConnections = 0;
                 connectionCount = 0;
 
-                for (byte b0 = 0, b1; b0 < 6; b0++) {
-                    b1 = GT_Utility.getOppositeSide(b0);
-                    TileEntity tTileEntity = aBaseMetaTileEntity.getTileEntityAtSide(b0);
+                for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+                    ForgeDirection d1;
+                	d1 = dir.getOpposite();
+                    TileEntity tTileEntity = aBaseMetaTileEntity.getTileEntityAtSide(dir);
                     if (tTileEntity instanceof IConnectsToBeamline) {
-                        if (((IConnectsToBeamline) tTileEntity).canConnect(b1)) {
-                            mConnections |= 1 << b0;
+                        if (((IConnectsToBeamline) tTileEntity).canConnect(d1)) {
+                            mConnections |= 1 << dir.ordinal();
                             connectionCount++;
                         }
                     } else if (tTileEntity instanceof IGregTechTileEntity) {
                         IMetaTileEntity meta = ((IGregTechTileEntity) tTileEntity).getMetaTileEntity();
                         if (meta instanceof IConnectsToBeamline) {
-                            if (((IConnectsToBeamline) meta).canConnect(b1)) {
-                                mConnections |= 1 << b0;
+                            if (((IConnectsToBeamline) meta).canConnect(d1)) {
+                                mConnections |= 1 << dir.ordinal();
                                 connectionCount++;
                             }
                         }
@@ -108,12 +99,12 @@ public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline 
     }
 
     @Override
-    public boolean renderInside(byte arg0) {
+    public boolean renderInside(ForgeDirection arg0) {
         return false;
     }
 
     @Override
-    public boolean canConnect(byte side) {
+    public boolean canConnect(ForgeDirection side) {
         return true;
     }
 
@@ -125,16 +116,16 @@ public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline 
             return null;
         }
 
-        for (byte b = 0; b < 6; b++) {
+        for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
 
-            if ((mConnections & 1 << b) == 0) {
+            if ((mConnections & 1 << dir.ordinal()) == 0) {
                 continue;
             }
 
-            TileEntity next = this.getBaseMetaTileEntity().getTileEntityAtSide(b);
+            TileEntity next = this.getBaseMetaTileEntity().getTileEntityAtSide(dir);
             if (next instanceof IConnectsToBeamline && next != source) {
 
-                if (((IConnectsToBeamline) next).isDataInputFacing(GT_Utility.getOppositeSide(b))) {
+                if (((IConnectsToBeamline) next).isDataInputFacing(dir.getOpposite())) {
                     return (IConnectsToBeamline) next;
                 }
 
@@ -149,7 +140,7 @@ public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline 
                         return (IConnectsToBeamline) meta;
                     }
 
-                    if (((IConnectsToBeamline) meta).isDataInputFacing(GT_Utility.getOppositeSide(b))) {
+                    if (((IConnectsToBeamline) meta).isDataInputFacing(dir.getOpposite())) {
 
                         return (IConnectsToBeamline) meta;
                     }
@@ -168,8 +159,8 @@ public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline 
     }
 
     @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aConnections,
-            byte aColorIndex, boolean aConnected, boolean aRedstone) {
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection aSide, ForgeDirection aConnections,
+            int aColorIndex, boolean aConnected, boolean aRedstone) {
         return new ITexture[] { new GT_RenderedTexture(pipe),
                 new GT_RenderedTexture(pipe, Dyes.getModulation(aColorIndex, MACHINE_METAL.getRGBA())) };
     }
@@ -179,7 +170,7 @@ public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline 
     }
 
     @Override
-    public boolean isDataInputFacing(byte side) {
+    public boolean isDataInputFacing(ForgeDirection side) {
         return true;
     }
 
@@ -193,27 +184,27 @@ public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline 
         float tSide4 = tSpace;
         float tSide5 = 1f - tSpace;
 
-        if (getBaseMetaTileEntity().getCoverIDAtSide((byte) 0) != 0) {
+        if (getBaseMetaTileEntity().getCoverIDAtSide(ForgeDirection.DOWN) != 0) {
             tSide0 = tSide2 = tSide4 = 0;
             tSide3 = tSide5 = 1;
         }
-        if (getBaseMetaTileEntity().getCoverIDAtSide((byte) 1) != 0) {
+        if (getBaseMetaTileEntity().getCoverIDAtSide(ForgeDirection.UP) != 0) {
             tSide2 = tSide4 = 0;
             tSide1 = tSide3 = tSide5 = 1;
         }
-        if (getBaseMetaTileEntity().getCoverIDAtSide((byte) 2) != 0) {
+        if (getBaseMetaTileEntity().getCoverIDAtSide(ForgeDirection.NORTH) != 0) {
             tSide0 = tSide2 = tSide4 = 0;
             tSide1 = tSide5 = 1;
         }
-        if (getBaseMetaTileEntity().getCoverIDAtSide((byte) 3) != 0) {
+        if (getBaseMetaTileEntity().getCoverIDAtSide(ForgeDirection.SOUTH) != 0) {
             tSide0 = tSide4 = 0;
             tSide1 = tSide3 = tSide5 = 1;
         }
-        if (getBaseMetaTileEntity().getCoverIDAtSide((byte) 4) != 0) {
+        if (getBaseMetaTileEntity().getCoverIDAtSide(ForgeDirection.WEST) != 0) {
             tSide0 = tSide2 = tSide4 = 0;
             tSide1 = tSide3 = 1;
         }
-        if (getBaseMetaTileEntity().getCoverIDAtSide((byte) 5) != 0) {
+        if (getBaseMetaTileEntity().getCoverIDAtSide(ForgeDirection.EAST) != 0) {
             tSide0 = tSide2 = 0;
             tSide1 = tSide3 = tSide5 = 1;
         }
@@ -251,4 +242,16 @@ public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline 
 
         };
     }
+
+	@Override
+	public boolean allowPullStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, ForgeDirection side,
+			ItemStack aStack) {
+		return false;
+	}
+
+	@Override
+	public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, ForgeDirection side,
+			ItemStack aStack) {
+		return false;
+	}
 }
