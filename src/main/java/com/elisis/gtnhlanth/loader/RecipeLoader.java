@@ -1,5 +1,6 @@
 package com.elisis.gtnhlanth.loader;
 
+import static gregtech.api.enums.OrePrefixes.blockCasingAdvanced;
 import static gregtech.common.items.GT_MetaGenerated_Item_01.registerCauldronCleaningFor;
 
 import java.lang.reflect.Constructor;
@@ -44,12 +45,10 @@ import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
-import static gregtech.api.enums.OrePrefixes.blockCasingAdvanced;
-
 
 public class RecipeLoader {
 
-    //private static final Materials[] BLACKLIST = null;
+    // private static final Materials[] BLACKLIST = null;
 
     public static void loadAccelerator() {
 
@@ -155,20 +154,17 @@ public class RecipeLoader {
                 LanthItemList.BEAMLINE_PIPE,
                 400,
                 1920);
-        
+
         // Masks
         // Quartz + Fe2O3 T1
         // " + Cr T2
         //
         GT_Values.RA.addAssemblerRecipe(
-        		new ItemStack[] {
-        				Materials.Quartz.getPlates(2),
-        				Materials.Hematite.getDust(1)
-        		},
-        		Materials.Glass.getMolten(144),
-        		new ItemStack(LanthItemList.maskMap.get(MaskList.BLANK1)),
-        		400,
-        		1920);
+                new ItemStack[] { Materials.Quartz.getPlates(2), Materials.Hematite.getDust(1) },
+                Materials.Glass.getMolten(144),
+                new ItemStack(LanthItemList.maskMap.get(MaskList.BLANK1)),
+                400,
+                1920);
 
     }
 
@@ -1338,7 +1334,7 @@ public class RecipeLoader {
                 for (int oreDictID : oreDict) {
                     if ((OreDictionary.getOreName(oreDictID).startsWith("ore") || OreDictionary.getOreName(oreDictID)
                             .startsWith("crushed")) /* && OreDictionary.getOreName(oreDictID).contains("Cerium") */) {
-                        //GT_Log.out.print(OreDictionary.getOreName(oreDictID));
+                        // GT_Log.out.print(OreDictionary.getOreName(oreDictID));
                         GT_Recipe tRecipe = recipe.copy();
                         boolean modified = false;
                         for (int i = 0; i < tRecipe.mOutputs.length; i++) {
@@ -1592,7 +1588,7 @@ public class RecipeLoader {
         // Electrolyzer
         for (GT_Recipe recipe : GT_Recipe.GT_Recipe_Map.sElectrolyzerRecipes.mRecipeList) {
             for (ItemStack input : recipe.mInputs) {
-                //GT_Log.out.print(input.getDisplayName() + "\n");
+                // GT_Log.out.print(input.getDisplayName() + "\n");
                 if (GT_Utility.isStackValid(input)) {
                     int[] oreDict = OreDictionary.getOreIDs(input);
                     for (int oreDictID : oreDict) {
@@ -1746,7 +1742,7 @@ public class RecipeLoader {
         for (GT_Recipe recipe : GT_Recipe.GT_Recipe_Map.sChemicalBathRecipes.mRecipeList) {
             // ItemStack input = recipe.mInputs[0];
             for (ItemStack input : recipe.mInputs) {
-                //GT_Log.out.print(input.getDisplayName() + "\n");
+                // GT_Log.out.print(input.getDisplayName() + "\n");
                 if (GT_Utility.isStackValid(input)) {
                     int[] oreDict = OreDictionary.getOreIDs(input);
                     for (int oreDictID : oreDict) {

@@ -1,7 +1,8 @@
 package com.elisis.gtnhlanth.common.beamline;
 
-import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 
 public interface IConnectsToBeamline extends IMetaTileEntity {
 

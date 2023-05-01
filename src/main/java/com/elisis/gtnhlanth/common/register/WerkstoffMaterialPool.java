@@ -5,8 +5,6 @@ import static com.github.bartimaeusnek.bartworks.util.BW_Util.superscriptNumbers
 
 import java.util.Arrays;
 
-import java.util.Arrays;
-
 import com.github.bartimaeusnek.bartworks.system.material.Werkstoff;
 import com.github.bartimaeusnek.bartworks.util.Pair;
 

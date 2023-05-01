@@ -10,6 +10,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+
 import com.elisis.gtnhlanth.common.beamline.BeamInformation;
 import com.elisis.gtnhlanth.common.beamline.BeamLinePacket;
 import com.elisis.gtnhlanth.common.beamline.Particle;
@@ -31,14 +40,6 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffl
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Utility;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 
 public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> implements IConstructable {
 
@@ -181,21 +182,21 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         // GT_Log.out.print("AAAAA in checkRecipe");
 
         float tempFactor = 0;
-        //Focus as determined by multi properties 
+        // Focus as determined by multi properties
         float machineFocus = 0;
-        //Input particle focus
+        // Input particle focus
         float inputFocus = 0;
-        
-        //Output focus to be set
+
+        // Output focus to be set
         outputFocus = 0;
 
         float voltageFactor = 0;
         float inputEnergy = 0;
-        
-        //Energy quantity determined by multi
-        float machineEnergy = 0;     
+
+        // Energy quantity determined by multi
+        float machineEnergy = 0;
         outputEnergy = 0;
-        
+
         int particleId = 0;
         outputParticle = 0;
 
@@ -212,14 +213,12 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
          * input.getLocalizedName()); aaa++; }
          */
 
-        
-        //Coolant input
+        // Coolant input
         FluidStack primFluid = tFluidInputs.get(0);
-        
+
         // GT_Log.out.print("ABFluid " + primFluid.getUnlocalizedName());
 
-        
-        //1b (1000L)/m/operation
+        // 1b (1000L)/m/operation
         final int fluidConsumed = 1000 * length;
 
         this.mEfficiency = (10000 - (this.getIdealStatus() - this.getRepairStatus()) * 1000);
@@ -245,8 +244,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 
         // GT_Log.out.print("Can accelerate");
 
-        
-        //Particle stays the same with this multiblock
+        // Particle stays the same with this multiblock
         outputParticle = particleId;
 
         if (primFluid.isFluidEqual(new FluidStack(FluidRegistry.getFluid("ic2coolant"), 1))) {
@@ -260,7 +258,8 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         inputFocus = this.getInputInformation().getFocus();
 
         outputFocus = (inputFocus > machineFocus) ? ((inputFocus + machineFocus) / 2)
-                : inputFocus * (machineFocus / 100); //If input focus > machine focus, take the average of both, else weigh the former by the latter
+                : inputFocus * (machineFocus / 100); // If input focus > machine focus, take the average of both, else
+                                                     // weigh the former by the latter
 
         long voltage = this.getMaxInputVoltage();
         voltageFactor = calculateVoltageFactor(voltage);
@@ -362,7 +361,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         }
 
         BeamInformation information = this.getInputInformation();
-        
+
         return new String[] {
                 /* 1 */ StatCollector.translateToLocal("GT5U.multiblock.Progress") + ": "
                         + EnumChatFormatting.GREEN
@@ -417,25 +416,27 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
                 /* 7 */ EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.in_pre")
                         + ": "
                         + EnumChatFormatting.RESET,
-                StatCollector.translateToLocal("beamline.particle") + ": " //"Multiblock Beamline Input:"
+                StatCollector.translateToLocal("beamline.particle") + ": " // "Multiblock Beamline Input:"
                         + EnumChatFormatting.GOLD
-                        + Particle.getParticleFromId(information.getParticleId()).getLocalisedName() //e.g. "Electron (e-)"
+                        + Particle.getParticleFromId(information.getParticleId()).getLocalisedName() // e.g. "Electron
+                                                                                                     // (e-)"
                         + " "
                         + EnumChatFormatting.RESET,
-                StatCollector.translateToLocal("beamline.energy") + ": " //"Energy:"
+                StatCollector.translateToLocal("beamline.energy") + ": " // "Energy:"
                         + EnumChatFormatting.DARK_RED
                         + information.getEnergy()
                         + EnumChatFormatting.RESET
-                        + " keV", //e.g. "10240 keV"
-                StatCollector.translateToLocal("beamline.focus") + ": " //"Focus:"
+                        + " keV", // e.g. "10240 keV"
+                StatCollector.translateToLocal("beamline.focus") + ": " // "Focus:"
                         + EnumChatFormatting.BLUE
                         + information.getFocus()
                         + " "
                         + EnumChatFormatting.RESET,
-                StatCollector.translateToLocal("beamline.amount") + ": " //"Amount:"
+                StatCollector.translateToLocal("beamline.amount") + ": " // "Amount:"
                         + EnumChatFormatting.LIGHT_PURPLE
                         + information.getRate(),
-                EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.out_pre") //"Multiblock Beamline Output:"
+                EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.out_pre") // "Multiblock Beamline
+                                                                                             // Output:"
                         + ": "
                         + EnumChatFormatting.RESET,
                 StatCollector.translateToLocal("beamline.particle") + ": "
@@ -460,7 +461,8 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 
     private BeamInformation getInputInformation() {
 
-        for (TileHatchInputBeamline in : this.mInputBeamline) { //Easy way to find the desired input. Efficient? No. Will it matter? No :boubs_glasses:
+        for (TileHatchInputBeamline in : this.mInputBeamline) { // Easy way to find the desired input. Efficient? No.
+                                                                // Will it matter? No :boubs_glasses:
 
             if (in.q == null) return new BeamInformation(0, 0, 0, 0);
             // if (in.q == null) return new BeamInformation(10000, 10, 0, 90); // TODO temporary for testing purposes
@@ -537,7 +539,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 
         for (int i = -8; i > -lLength - 1; i -= 2) {
 
-            //GT_Log.out.print("Building inner piece! i = " + i);
+            // GT_Log.out.print("Building inner piece! i = " + i);
 
             buildPiece(STRUCTURE_PIECE_LAYER, stackSize, hintsOnly, 3, 6, i);
         }
@@ -546,8 +548,8 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
     }
 
     @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection aSide, ForgeDirection aFacing, int aColorIndex,
-            boolean aActive, boolean aRedstone) {
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection aSide, ForgeDirection aFacing,
+            int aColorIndex, boolean aActive, boolean aRedstone) {
         // TODO Auto-generated method stub
         return null;
     }

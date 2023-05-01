@@ -1,7 +1,10 @@
 package com.elisis.gtnhlanth.common.register;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 import com.elisis.gtnhlanth.common.beamline.TileBeamline;
 import com.elisis.gtnhlanth.common.block.Casing;
@@ -18,11 +21,6 @@ import com.elisis.gtnhlanth.common.tileentity.Synchrotron;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.util.GT_LanguageManager;
-import gregtech.api.util.GT_Log;
-import gregtech.common.items.GT_MetaGenerated_Item_03;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 
 public final class LanthItemList {
 
@@ -31,7 +29,7 @@ public final class LanthItemList {
 
     public static ItemStack LINAC;
     public static ItemStack SOURCE_CHAMBER;
-    
+
     public static ItemStack SYNCHROTRON;
 
     public static ItemStack BEAMLINE_PIPE;
@@ -49,10 +47,10 @@ public final class LanthItemList {
     public static final Block ELECTRODE_CASING = new Casing("electrode");
 
     public static final Block COOLANT_DELIVERY_CASING = new Casing("coolant_delivery");
-    
+
     public static final Block ANTENNA_CASING_T1 = new Casing("antenna_t1");
     public static final Block ANTENNA_CASING_T2 = new Casing("antenna_t2");
-    
+
     public static HashMap<MaskList, Item> maskMap = new HashMap<>();
 
     public static void registerGTMTE() {
@@ -75,7 +73,7 @@ public final class LanthItemList {
         LINAC = new LINAC(10505, "Linear Accelerator", "Linear Accelerator").getStackForm(1L);
 
         SOURCE_CHAMBER = new SourceChamber(10506, "Source Chamber", "Source Chamber").getStackForm(1L);
-        
+
         SYNCHROTRON = new Synchrotron(10507, "Synchrotron", "Synchrotron").getStackForm(1L);
     }
 
@@ -90,25 +88,25 @@ public final class LanthItemList {
         GameRegistry.registerBlock(ELECTRODE_CASING, ELECTRODE_CASING.getUnlocalizedName());
 
         GameRegistry.registerBlock(COOLANT_DELIVERY_CASING, COOLANT_DELIVERY_CASING.getUnlocalizedName());
-        
+
         GameRegistry.registerBlock(SHIELDED_ACCELERATOR_GLASS, SHIELDED_ACCELERATOR_GLASS.getUnlocalizedName());
-        
+
         GameRegistry.registerBlock(ANTENNA_CASING_T1, ANTENNA_CASING_T1.getUnlocalizedName());
-        
+
         GameRegistry.registerBlock(ANTENNA_CASING_T2, ANTENNA_CASING_T2.getUnlocalizedName());
-        
+
         for (MaskList mask : MaskList.values()) {
-        	
-        	String english = mask.getEnglishName();
-        	
-        	PhotolithographicMask maskItem = new PhotolithographicMask(mask.getName(), mask.getDamage());
-           	GameRegistry.registerItem(maskItem, maskItem.getUnlocalizedName());
-           	
-           	GT_LanguageManager.addStringLocalization(maskItem.getUnlocalizedName() + ".name", "Mask (" + english + ")");
-           	
-           	maskMap.put(mask, maskItem);
-        	
+
+            String english = mask.getEnglishName();
+
+            PhotolithographicMask maskItem = new PhotolithographicMask(mask.getName(), mask.getDamage());
+            GameRegistry.registerItem(maskItem, maskItem.getUnlocalizedName());
+
+            GT_LanguageManager.addStringLocalization(maskItem.getUnlocalizedName() + ".name", "Mask (" + english + ")");
+
+            maskMap.put(mask, maskItem);
+
         }
-        
+
     }
 }

@@ -7,6 +7,12 @@ import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
 import java.util.ArrayList;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
+
 import com.elisis.gtnhlanth.common.beamline.BeamInformation;
 import com.elisis.gtnhlanth.common.beamline.BeamLinePacket;
 import com.elisis.gtnhlanth.common.beamline.Particle;
@@ -27,11 +33,6 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffl
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Utility;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
 
 public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<SourceChamber> implements IConstructable {
 
@@ -111,16 +112,15 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
 
         // GT_Log.out.print("In checkRecipe");
 
-    	
-    	//No input particle, so no input quantities
-    	
+        // No input particle, so no input quantities
+
         outputFocus = 0;
         outputEnergy = 0;
         outputParticle = 0;
         outputRate = 0;
 
         ItemStack[] tItems = this.getStoredInputs().toArray(new ItemStack[0]);
-        //GT_Log.out.print(Arrays.toString(tItems));
+        // GT_Log.out.print(Arrays.toString(tItems));
         long tVoltage = this.getMaxInputVoltage();
 
         /*
@@ -147,8 +147,11 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
         if (this.mEUt > 0) this.mEUt = (-this.mEUt);
 
         outputParticle = tRecipe.particleId;
-        float maxParticleEnergy = Particle.getParticleFromId(outputParticle).maxSourceEnergy(); //The maximum energy a particle can possess when produced by this multiblock
-        float maxMaterialEnergy = tRecipe.maxEnergy; //The maximum energy for the recipe processed
+        float maxParticleEnergy = Particle.getParticleFromId(outputParticle).maxSourceEnergy(); // The maximum energy a
+                                                                                                // particle can possess
+                                                                                                // when produced by this
+                                                                                                // multiblock
+        float maxMaterialEnergy = tRecipe.maxEnergy; // The maximum energy for the recipe processed
         // outputEnergy = (float) ((-maxEnergy) * Math.pow(1.001, -(tRecipe.energyRatio)*(tVoltage-tRecipe.mEUt))) +
         // maxEnergy;
         outputEnergy = (float) Math.min(
@@ -156,7 +159,7 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
                         + maxMaterialEnergy,
                 maxParticleEnergy);
 
-        //GT_Log.out.print(outputEnergy);
+        // GT_Log.out.print(outputEnergy);
 
         if (outputEnergy <= 0) {
             stopMachine();
@@ -322,10 +325,10 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
         return false;
     }
 
-	@Override
-	public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-			int colorIndex, boolean active, boolean redstoneLevel) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
+            int colorIndex, boolean active, boolean redstoneLevel) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

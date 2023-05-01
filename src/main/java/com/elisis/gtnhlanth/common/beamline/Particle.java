@@ -45,8 +45,8 @@ public enum Particle {
     public String getLocalisedName() {
         return StatCollector.translateToLocal("particle." + this.name) + " (" + this.shortName + ")";
     }
-    
+
     public static Particle getParticleFromId(int id) {
-    	return Particle.values()[id];
+        return Particle.values()[id];
     }
 }

@@ -23,7 +23,6 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.BaseMetaPipeEntity;
 import gregtech.api.metatileentity.MetaPipeEntity;
 import gregtech.api.objects.GT_RenderedTexture;
-import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Client;
 
 public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline {
@@ -51,7 +50,7 @@ public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline 
 
                 for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
                     ForgeDirection d1;
-                	d1 = dir.getOpposite();
+                    d1 = dir.getOpposite();
                     TileEntity tTileEntity = aBaseMetaTileEntity.getTileEntityAtSide(dir);
                     if (tTileEntity instanceof IConnectsToBeamline) {
                         if (((IConnectsToBeamline) tTileEntity).canConnect(d1)) {
@@ -159,8 +158,8 @@ public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline 
     }
 
     @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection aSide, ForgeDirection aConnections,
-            int aColorIndex, boolean aConnected, boolean aRedstone) {
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection aSide,
+            ForgeDirection aConnections, int aColorIndex, boolean aConnected, boolean aRedstone) {
         return new ITexture[] { new GT_RenderedTexture(pipe),
                 new GT_RenderedTexture(pipe, Dyes.getModulation(aColorIndex, MACHINE_METAL.getRGBA())) };
     }
@@ -243,15 +242,15 @@ public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline 
         };
     }
 
-	@Override
-	public boolean allowPullStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, ForgeDirection side,
-			ItemStack aStack) {
-		return false;
-	}
+    @Override
+    public boolean allowPullStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, ForgeDirection side,
+            ItemStack aStack) {
+        return false;
+    }
 
-	@Override
-	public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, ForgeDirection side,
-			ItemStack aStack) {
-		return false;
-	}
+    @Override
+    public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, ForgeDirection side,
+            ItemStack aStack) {
+        return false;
+    }
 }
