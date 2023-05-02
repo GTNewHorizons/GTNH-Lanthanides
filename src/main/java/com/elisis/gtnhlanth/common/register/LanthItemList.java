@@ -40,6 +40,8 @@ public final class LanthItemList {
     public static Item CAPILLARY_EXCHANGE = new Item().setUnlocalizedName("capillary_exchange");
 
     public static Item MM_LATTICE = new Item().setUnlocalizedName("mm_lattice");
+    
+    public static Item IRON_COATED_QUARTZ = new Item().setUnlocalizedName("iron_quartz_plate");
 
     public static final Block SHIELDED_ACCELERATOR_CASING = new Casing("shielded_accelerator");
     public static final Block SHIELDED_ACCELERATOR_GLASS = new ShieldedAccGlass();
@@ -82,6 +84,8 @@ public final class LanthItemList {
         GameRegistry.registerItem(CAPILLARY_EXCHANGE, CAPILLARY_EXCHANGE.getUnlocalizedName());
 
         GameRegistry.registerItem(MM_LATTICE, MM_LATTICE.getUnlocalizedName());
+        
+        GameRegistry.registerItem(IRON_COATED_QUARTZ, IRON_COATED_QUARTZ.getUnlocalizedName());
 
         GameRegistry.registerBlock(SHIELDED_ACCELERATOR_CASING, SHIELDED_ACCELERATOR_CASING.getUnlocalizedName());
 
@@ -98,8 +102,10 @@ public final class LanthItemList {
         for (MaskList mask : MaskList.values()) {
 
             String english = mask.getEnglishName();
+            
+            String descSpectrum = mask.getSpectrum();
 
-            PhotolithographicMask maskItem = new PhotolithographicMask(mask.getName(), mask.getDamage());
+            PhotolithographicMask maskItem = new PhotolithographicMask(mask.getName(), mask.getDamage(), descSpectrum);
             GameRegistry.registerItem(maskItem, maskItem.getUnlocalizedName());
 
             GT_LanguageManager.addStringLocalization(maskItem.getUnlocalizedName() + ".name", "Mask (" + english + ")");

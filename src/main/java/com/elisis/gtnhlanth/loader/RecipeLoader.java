@@ -10,16 +10,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashSet;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraft.item.crafting.ShapelessRecipes;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
-
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import com.dreammaster.gthandler.CustomItemList;
@@ -29,12 +19,14 @@ import com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool;
 import com.elisis.gtnhlanth.common.register.LanthItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 import com.github.bartimaeusnek.bartworks.system.material.BW_GT_MaterialReference;
+import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 import com.github.bartimaeusnek.bartworks.system.material.GT_Enhancement.LuVTierEnhancer;
 import com.github.bartimaeusnek.bartworks.system.material.GT_Enhancement.PlatinumSludgeOverHaul;
-import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.registry.GameRegistry;
 import goodgenerator.items.MyMaterial;
+import gregtech.api.enums.Dyes;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
@@ -45,6 +37,15 @@ import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 public class RecipeLoader {
 
@@ -155,16 +156,105 @@ public class RecipeLoader {
                 400,
                 1920);
 
+        
+        // Boring but makes a lot more sense than needing to make it in an assembler or something similar
+        GameRegistry.addShapelessRecipe(new ItemStack(LanthItemList.IRON_COATED_QUARTZ), Materials.Iron.getDust(2), Materials.NetherQuartz.getPlates(1));
+        
         // Masks
         // Quartz + Fe2O3 T1
         // " + Cr T2
         //
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { Materials.Quartz.getPlates(2), Materials.Hematite.getDust(1) },
-                Materials.Glass.getMolten(144),
-                new ItemStack(LanthItemList.maskMap.get(MaskList.BLANK1)),
-                400,
-                1920);
+        GT_Values.RA.addAutoclaveRecipe(
+        		new ItemStack(LanthItemList.IRON_COATED_QUARTZ),
+        		null,
+        		Materials.Oxygen.getGas(1000), 
+        		new ItemStack(LanthItemList.maskMap.get(MaskList.BLANK1)),		
+        		10000,
+        		240, 
+        		1920,
+        		true);
+        
+        
+        
+        
+        
+ 
+        for (MaskList mask : MaskList.values()) {
+        	
+        	MaskList maskIngredient = mask.getPrecursor();
+        	Dyes lensColour = mask.getLensColour();
+        	
+        	if (maskIngredient == null) 
+        		continue;
+        		
+        	if (mask.getLensColour() == null)
+        		continue;
+        	
+        	if (mask == MaskList.NAND) {
+    			
+        		
+        		//Very copy-paste heavy, could possibly offload most of this into one case and just assign an otherIngredient variable or something, wouldn't save much space though. Plus: lazy
+    			GT_Values.RA.addLaserEngraverRecipe(
+        				new ItemStack[] {
+        						new ItemStack(LanthItemList.maskMap.get(maskIngredient)),
+        						GT_Utility.copyAmount(0, GT_OreDictUnificator.get(OrePrefixes.lens, Materials.EnderPearl, 1))
+        				}, 
+        				null, 
+        				new ItemStack[] {
+        						new ItemStack(LanthItemList.maskMap.get(mask))
+        				}, 
+        				null, 
+        				2400, 
+        				1920, 
+        				true
+        				);
+    		
+    		} else if (mask == MaskList.NOR) {
+    			
+    			GT_Values.RA.addLaserEngraverRecipe(
+        				new ItemStack[] {
+        						new ItemStack(LanthItemList.maskMap.get(maskIngredient)),
+        						GT_Utility.copyAmount(0, GT_OreDictUnificator.get(OrePrefixes.lens, Materials.EnderEye, 1))
+        				}, 
+        				null, 
+        				new ItemStack[] {
+        						new ItemStack(LanthItemList.maskMap.get(mask))
+        				}, 
+        				null, 
+        				2400, 
+        				1920, 
+        				true
+        				);
+    			
+    		}
+    		
+    		else
+    		{
+    			//TODO Copyamount
+    			for (ItemStack lens : OreDictionary.getOres("craftingLens" + lensColour.mName.replace(" ", ""))) {
+        		
+    				if (lens == null)
+    					continue;
+        		
+    				GT_Values.RA.addLaserEngraverRecipe(
+    					new ItemStack[] {
+        						new ItemStack(LanthItemList.maskMap.get(maskIngredient)),
+        						GT_Utility.copyAmount(0, lens) // Ensure the lens is not consumed
+        				}, 
+        				null, 
+        				new ItemStack[] {
+        						new ItemStack(LanthItemList.maskMap.get(mask))
+        				}, 
+        				null, 
+        				2400, 
+        				1920, 
+        				true
+        				);
+        		
+    			}
+    		}
+       }
+        
 
     }
 
