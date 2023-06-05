@@ -14,6 +14,7 @@ import com.elisis.gtnhlanth.xmod.nei.IMC;
 import com.github.bartimaeusnek.bartworks.API.WerkstoffAdderRegistry;
 import com.github.bartimaeusnek.bartworks.system.material.Werkstoff;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;

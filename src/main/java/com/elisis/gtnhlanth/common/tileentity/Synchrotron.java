@@ -41,52 +41,101 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
         STRUCTURE_DEFINITION = StructureDefinition.<Synchrotron>builder().addShape(
                 STRUCTURE_PIECE_ENTRANCE,
 
-                new String[][] { { "                                    ", "  ccc                               ",
-                        " c---c                              ", " c---c                              ",
-                        " c---c                              ", "  ccc                               " } })
+                // spotless:off
+                
+                new String[][] { 
+                		{ 
+                			"                                    ", 
+                			"  ccc                               ",
+                			" c---c                              ", 
+                        	" c---c                              ",
+                        	" c---c                              ", 
+                        	"  ccc                               " 
+                		} 
+                })
                 .addShape(
-                        STRUCTURE_PIECE_BASE,
+                    STRUCTURE_PIECE_BASE,
 
-                        new String[][] {
-                                { "                                    ", "  ccc                               ",
-                                        " c---c       ccccccc                ", " c---c      cccc~cccc               ",
-                                        " c---c       ccccccc                ", "  ccc                               ",
-                                        "                                    " },
-                                { "                                    ", "  ccc      ccccccccccc              ",
-                                        " c---c    ccc-------ccc             ", " c---c    cc---------cc             ",
-                                        " c---c    ccc-------ccc             ", "  ccc      ccccccccccc              ",
-                                        "                                    " },
-                                { "           ccccccccccc             ", "  ccc    cc-----------cc           ",
-                                        " c---c  cc-------------cc          ", " c---c  cc-------------cc          ",
-                                        " c---c  cc-------------cc          ", "  ccc    ccc---------ccc           ",
-                                        "           ccccccccccc             " },
-                                { "         ccccccccccccccc           ", "  ccc  cc---------------cc         ",
-                                        " c---c c-----------------c         ", " c---ccc-----------------cc        ",
-                                        " c---c c-----------------c         ", "  ccc  cc---------------cc         ",
-                                        "         ccccccccccccccc           ",
+                    new String[][] {
+                    	{ 
+                    		"                                    ", 
+                    		"  ccc                               ",
+                    		" c---c       ccccccc                ", 
+                    		" c---c      cccc~cccc               ",
+                    		" c---c       ccccccc                ", 
+                    		"  ccc                               ",
+                    		"                                    " 
+                    	},
+                    	{ 
+                    		"                                    ", 
+                    		"  ccc      ccccccccccc              ",
+                    		" c---c    ccc-------ccc             ", 
+                    		" c---c    cc---------cc             ",
+                    		" c---c    ccc-------ccc             ", 
+                    		"  ccc      ccccccccccc              ",
+                    		"                                    " 
+                    	},
+                    	{ 
+                    		"           ccccccccccc             ", 
+                    		"  ccc    cc-----------cc           ",
+                    		" c---c  cc-------------cc          ", 
+                    		" c---c  cc-------------cc          ",
+                    		" c---c  cc-------------cc          ", 
+                    		"  ccc    ccc---------ccc           ",
+                    		"           ccccccccccc             " 
+                    	},
+                    	{
+                    		"         ccccccccccccccc           ", 
+                    		"  ccc  cc---------------cc         ",
+                    		" c---c c-----------------c         ", 
+                    		" c---ccc-----------------cc        ",
+                    		" c---c c-----------------c         ", 
+                    		"  ccc  cc---------------cc         ",
+                    		"         ccccccccccccccc           ",
+                    		
+                    	},
+                    	{
+                    		"  ccc   ccccccccccccccccc          ", 
+                    		" ckkkccc-----------------cc        ",
+                    		"ck---kc-------------------cc       ", 
+                    		"ck---kc--------------------c       ",
+                    		"ck---kc-------------------cc       ", 
+                    		" ckkkccc-----------------cc        ",
+                    		"  ccc  cccccccccccccccccc          "
+                    		
+                    	},
+                    	{ 
+                    		"  cccccccccccc     ccccccc         ", 
+                    		" cdddcc-------ccccc-------cc       ",
+                    		"cd---d----------------------c      ", 
+                    		"cd---d----------------------c      ",
+                    		"cd---d----------------------c      ", 
+                    		" cdddcc-------ccccc-------cc       ",
+                    		"  cccccccccccc     ccccccc         ", 
+                    	},
+                    	{
+                    		"  ccccccccc           ccccc        ",
+                    		" ckkkc-----cccc   cccc-----cc      ",
+                    		"ck---k-------ccccccc--------c      ",
+                    		"ck---k-------ccccccc---------c     ",
+                    		"ck---k-------ccccccc--------c      ",
+                    		" ckkkc-----cccc   cccc-----cc      ",
+                    		"  ccccccccc           ccccc        "
+                    	},
+                    	{
+                    		"  cccccccc             ccccc       ",
+                    		" c--------"
+                    	}
 
-                                },
-                                { "  ccc   ccccccccccccccccc          ", " ckkkccc-----------------cc        ",
-                                        "ck---kc-------------------cc       ", "ck---kc--------------------c       ",
-                                        "ck---kc-------------------cc       ", " ckkkccc-----------------cc        ",
-                                        "  ccc  cccccccccccccccccc          "
-
-                                },
-                                { "  cccccccccccc     ccccccc         ", " cdddcc-------ccccc-------cc       ",
-                                        "cd---d----------------------c      ", "cd---d----------------------c      ",
-                                        "cd---d----------------------c      ", " cdddcc-------ccccc-------cc       ",
-                                        "  cccccccccccc     ccccccc         ", },
-                                {
-
-                                }
-
-                        }
+                   }
 
                 ).addElement('c', ofBlock(LanthItemList.SHIELDED_ACCELERATOR_CASING, 0))
                 .addElement('k', ofBlock(GregTech_API.sBlockCasings1, 15)) // Superconducting coils
                 .addElement('d', ofBlock(LanthItemList.COOLANT_DELIVERY_CASING, 0))
 
                 .build();
+        
+     // spotless:on
 
     }
 
