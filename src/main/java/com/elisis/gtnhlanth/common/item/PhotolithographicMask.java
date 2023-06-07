@@ -25,7 +25,8 @@ public class PhotolithographicMask extends Item {
         return "item.photomask." + this.name;
     }
     
-    @Override
+    @SuppressWarnings({"rawtypes", "unchecked"})
+	@Override
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool) {
     	
     	if (!this.descSpectrum.isEmpty())
