@@ -40,17 +40,17 @@ public final class LanthItemList {
     public static Item CAPILLARY_EXCHANGE = new Item().setUnlocalizedName("capillary_exchange");
 
     public static Item MM_LATTICE = new Item().setUnlocalizedName("mm_lattice");
-    
+
     public static Item IRON_COATED_QUARTZ = new Item().setUnlocalizedName("iron_quartz_plate");
-    
+
     public static Item SUBSTRATE_PRECURSOR = new Item().setUnlocalizedName("substrate_precursor");
-    
+
     public static Item MASK_SUBSTRATE = new Item().setUnlocalizedName("mask_substrate");
-    
+
     public static Item MASKED_MASK = new Item().setUnlocalizedName("masked_mask_substrate");
-    
+
     public static Item ETCHED_MASK_1 = new Item().setUnlocalizedName("etched_mask1");
-    
+
     public static Item SILICON_NITRIDE_MEMBRANE = new Item().setUnlocalizedName("nitride_gold_membrane");
 
     public static final Block SHIELDED_ACCELERATOR_CASING = new Casing("shielded_accelerator");
@@ -94,15 +94,15 @@ public final class LanthItemList {
         GameRegistry.registerItem(CAPILLARY_EXCHANGE, CAPILLARY_EXCHANGE.getUnlocalizedName());
 
         GameRegistry.registerItem(MM_LATTICE, MM_LATTICE.getUnlocalizedName());
-        
+
         GameRegistry.registerItem(IRON_COATED_QUARTZ, IRON_COATED_QUARTZ.getUnlocalizedName());
-        
+
         GameRegistry.registerItem(MASK_SUBSTRATE, MASK_SUBSTRATE.getUnlocalizedName());
-        
+
         GameRegistry.registerItem(ETCHED_MASK_1, ETCHED_MASK_1.getUnlocalizedName());
-        
+
         GameRegistry.registerItem(SUBSTRATE_PRECURSOR, SUBSTRATE_PRECURSOR.getUnlocalizedName());
-        
+
         GameRegistry.registerItem(MASKED_MASK, MASKED_MASK.getUnlocalizedName());
 
         GameRegistry.registerBlock(SHIELDED_ACCELERATOR_CASING, SHIELDED_ACCELERATOR_CASING.getUnlocalizedName());
@@ -120,7 +120,7 @@ public final class LanthItemList {
         for (MaskList mask : MaskList.values()) {
 
             String english = mask.getEnglishName();
-            
+
             String descSpectrum = mask.getSpectrum();
 
             PhotolithographicMask maskItem = new PhotolithographicMask(mask.getName(), mask.getDamage(), descSpectrum);

@@ -24,13 +24,13 @@ public class PhotolithographicMask extends Item {
     public String getUnlocalizedName() {
         return "item.photomask." + this.name;
     }
-    
-    @SuppressWarnings({"rawtypes", "unchecked"})
-	@Override
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool) {
-    	
-    	if (!this.descSpectrum.isEmpty())
-        	list.add("Suitable for the " + this.descSpectrum + " segment of the electromagnetic spectrum and lower");
+
+        if (!this.descSpectrum.isEmpty())
+            list.add("Suitable for the " + this.descSpectrum + " segment of the electromagnetic spectrum and lower");
 
     }
 

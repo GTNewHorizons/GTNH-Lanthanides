@@ -10,6 +10,16 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashSet;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
+
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import com.dreammaster.gthandler.CustomItemList;
@@ -19,8 +29,8 @@ import com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool;
 import com.elisis.gtnhlanth.common.register.LanthItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 import com.github.bartimaeusnek.bartworks.system.material.BW_GT_MaterialReference;
-import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 import com.github.bartimaeusnek.bartworks.system.material.GT_Enhancement.PlatinumSludgeOverHaul;
+import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -38,22 +48,13 @@ import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_RecipeBuilder;
 import gregtech.api.util.GT_Utility;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraft.item.crafting.ShapelessRecipes;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 public class RecipeLoader {
 
     // private static final Materials[] BLACKLIST = null;
 
     @SuppressWarnings("deprecation")
-	public static void loadAccelerator() {
+    public static void loadAccelerator() {
 
         /*
          * //Permalloy GT_Values.RA.addMixerRecipe( GT_Utility.getIntegratedCircuit(4), Materials.Nickel.getDust(4),
@@ -158,194 +159,147 @@ public class RecipeLoader {
 
         // NB: http://www.smfl.rit.edu/pdf/process/process_nitride_etch_paper.pdf
         // Reactive Ion Etchant
-        GT_Values.RA.stdBuilder()
-        	.noItemInputs()
-        	.fluidInputs(WerkstoffMaterialPool.Fluoroform.getFluidOrGas(3000), Materials.Oxygen.getGas(4000))
-        	.noItemOutputs()
-        	.fluidOutputs(WerkstoffMaterialPool.FluoroformOxygenMix.getFluidOrGas(5000))
-        	.duration(15 * GT_RecipeBuilder.SECONDS)
-        	.eut(1920)
-        	.addTo(GT_Recipe.GT_Recipe_Map.sMixerRecipes);
-        
-        
+        GT_Values.RA.stdBuilder().noItemInputs()
+                .fluidInputs(WerkstoffMaterialPool.Fluoroform.getFluidOrGas(3000), Materials.Oxygen.getGas(4000))
+                .noItemOutputs().fluidOutputs(WerkstoffMaterialPool.FluoroformOxygenMix.getFluidOrGas(5000))
+                .duration(15 * GT_RecipeBuilder.SECONDS).eut(1920).addTo(GT_Recipe.GT_Recipe_Map.sMixerRecipes);
+
         // Boring but makes a lot more sense than needing to make it in an assembler or something similar
-        GameRegistry.addShapelessRecipe(new ItemStack(LanthItemList.IRON_COATED_QUARTZ), Materials.Iron.getDust(2), Materials.NetherQuartz.getPlates(1));
-        
+        GameRegistry.addShapelessRecipe(
+                new ItemStack(LanthItemList.IRON_COATED_QUARTZ),
+                Materials.Iron.getDust(2),
+                Materials.NetherQuartz.getPlates(1));
+
         // Masks
         // Quartz + Fe2O3 T1
         // " + Cr T2
         //
         GT_Values.RA.addAutoclaveRecipe(
-        		new ItemStack(LanthItemList.IRON_COATED_QUARTZ),
-        		null,
-        		Materials.Oxygen.getGas(1000), 
-        		new ItemStack(LanthItemList.maskMap.get(MaskList.BLANK1)),		
-        		10000,
-        		240, 
-        		1920,
-        		true);
-        
+                new ItemStack(LanthItemList.IRON_COATED_QUARTZ),
+                null,
+                Materials.Oxygen.getGas(1000),
+                new ItemStack(LanthItemList.maskMap.get(MaskList.BLANK1)),
+                10000,
+                240,
+                1920,
+                true);
+
         GT_Values.RA.addAutoclaveRecipe(
-        		new ItemStack(LanthItemList.IRON_COATED_QUARTZ),
-        		Materials.Chrome.getDust(1),
-        		Materials.Oxygen.getGas(1000),
-        		new ItemStack(LanthItemList.maskMap.get(MaskList.BLANK2)),
-        		10000,
-        		240,
-        		7980,
-        		true);
-        
-        
+                new ItemStack(LanthItemList.IRON_COATED_QUARTZ),
+                Materials.Chrome.getDust(1),
+                Materials.Oxygen.getGas(1000),
+                new ItemStack(LanthItemList.maskMap.get(MaskList.BLANK2)),
+                10000,
+                240,
+                7980,
+                true);
+
         // Grow the first silicon
-        GT_Values.RA.stdBuilder()
-        	.itemInputs(Materials.Glass.getPlates(1))
-        	.fluidInputs(Materials.Silane.getGas(4000))
-        	.noFluidOutputs()
-        	.itemOutputs(new ItemStack(LanthItemList.SUBSTRATE_PRECURSOR))
-        	.duration(60 * GT_RecipeBuilder.SECONDS)
-        	.eut(480)
-        	.requiresCleanRoom()
-        	.addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
-        
+        GT_Values.RA.stdBuilder().itemInputs(Materials.Glass.getPlates(1)).fluidInputs(Materials.Silane.getGas(4000))
+                .noFluidOutputs().itemOutputs(new ItemStack(LanthItemList.SUBSTRATE_PRECURSOR))
+                .duration(60 * GT_RecipeBuilder.SECONDS).eut(480).requiresCleanRoom()
+                .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
+
         // Now to deposit nitride
         GT_Values.RA.stdBuilder()
-        	.itemInputs(new ItemStack(LanthItemList.SUBSTRATE_PRECURSOR), Materials.Silane.getCells(2))
-        	.fluidInputs(Materials.Nitrogen.getPlasma(4000))
-        	.fluidOutputs(Materials.Nitrogen.getGas(3000))
-        	.itemOutputs(new ItemStack(LanthItemList.MASK_SUBSTRATE), Materials.Empty.getCells(2))
-        	.duration(30 * GT_RecipeBuilder.SECONDS)
-        		.eut(TierEU.EV)
-        	.specialValue(3200)
-        	.requiresCleanRoom()
-        	.addTo(GT_Recipe.GT_Recipe_Map.sBlastRecipes);
-        
+                .itemInputs(new ItemStack(LanthItemList.SUBSTRATE_PRECURSOR), Materials.Silane.getCells(2))
+                .fluidInputs(Materials.Nitrogen.getPlasma(4000)).fluidOutputs(Materials.Nitrogen.getGas(3000))
+                .itemOutputs(new ItemStack(LanthItemList.MASK_SUBSTRATE), Materials.Empty.getCells(2))
+                .duration(30 * GT_RecipeBuilder.SECONDS).eut(TierEU.EV).specialValue(3200).requiresCleanRoom()
+                .addTo(GT_Recipe.GT_Recipe_Map.sBlastRecipes);
+
         /*
-        
-        GT_Values.RA.stdBuilder().itemInputs(GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Silicon, 1))
-        	.fluidInputs(Materials.SiliconTetrachloride.getFluid(3000), Materials.Ammonia.getFluid(4000))
-        	.fluidOutputs(Materials.HydrochloricAcid.getFluid(12000))
-        	.itemOutputs(WerkstoffMaterialPool.SiliconNitride.get(OrePrefixes.plate))
-        	.duration(GT_RecipeBuilder.SECONDS * 30)
-        		.eut(TierEU.EV)
-        	.addTo(GT_Recipe.GT_Recipe_Map.sPlasmaArcFurnaceRecipes);
-        */
-        
+         * GT_Values.RA.stdBuilder().itemInputs(GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Silicon, 1))
+         * .fluidInputs(Materials.SiliconTetrachloride.getFluid(3000), Materials.Ammonia.getFluid(4000))
+         * .fluidOutputs(Materials.HydrochloricAcid.getFluid(12000))
+         * .itemOutputs(WerkstoffMaterialPool.SiliconNitride.get(OrePrefixes.plate)) .duration(GT_RecipeBuilder.SECONDS
+         * * 30) .eut(TierEU.EV) .addTo(GT_Recipe.GT_Recipe_Map.sPlasmaArcFurnaceRecipes);
+         */
+
         for (ItemStack lens : OreDictionary.getOres("craftingLensYellow")) {
-        	
-        	GT_Values.RA.stdBuilder()
-        		.itemInputs(GT_Utility.copyAmount(0, lens), new ItemStack(LanthItemList.MASK_SUBSTRATE))
-        		.noFluidInputs()
-        		.noFluidOutputs()
-        		.itemOutputs(new ItemStack(LanthItemList.MASKED_MASK))
-        		.duration(60 * GT_RecipeBuilder.SECONDS)
-        			.eut(1920)
-        		.requiresCleanRoom()
-        		.addTo(GT_Recipe.GT_Recipe_Map.sLaserEngraverRecipes);
-        	
+
+            GT_Values.RA.stdBuilder()
+                    .itemInputs(GT_Utility.copyAmount(0, lens), new ItemStack(LanthItemList.MASK_SUBSTRATE))
+                    .noFluidInputs().noFluidOutputs().itemOutputs(new ItemStack(LanthItemList.MASKED_MASK))
+                    .duration(60 * GT_RecipeBuilder.SECONDS).eut(1920).requiresCleanRoom()
+                    .addTo(GT_Recipe.GT_Recipe_Map.sLaserEngraverRecipes);
+
         }
-        
-        GT_Values.RA.stdBuilder()
-        	.itemInputs(new ItemStack(LanthItemList.MASKED_MASK))
-        	.fluidInputs(WerkstoffMaterialPool.FluoroformOxygenMix.getFluidOrGas(4000))
-        	.noFluidOutputs()
-        	.itemOutputs(new ItemStack(LanthItemList.ETCHED_MASK_1))
-        	.duration(60 * GT_RecipeBuilder.SECONDS)
-        	.eut(1920)
-        	.requiresCleanRoom()
-        	.addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
-        	
-       
+
+        GT_Values.RA.stdBuilder().itemInputs(new ItemStack(LanthItemList.MASKED_MASK))
+                .fluidInputs(WerkstoffMaterialPool.FluoroformOxygenMix.getFluidOrGas(4000)).noFluidOutputs()
+                .itemOutputs(new ItemStack(LanthItemList.ETCHED_MASK_1)).duration(60 * GT_RecipeBuilder.SECONDS)
+                .eut(1920).requiresCleanRoom().addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
+
         // Etch pt. 2 with KOH
         GT_Values.RA.stdBuilder()
-        	.itemInputs(new ItemStack(LanthItemList.ETCHED_MASK_1), Materials.Sodium.getDust(1), Materials.Chrome.getPlates(1), Materials.Gold.getPlates(2))
-        	.fluidInputs(Materials.Hydrogen.getGas(1000))
-        	.noFluidOutputs()
-        	.itemOutputs(new ItemStack(LanthItemList.maskMap.get(MaskList.BLANK3)))
-        	.duration(10 * GT_RecipeBuilder.SECONDS)
-        	.eut(1920)
-        	.specialValue(3600)
-        	.addTo(GT_Recipe.GT_Recipe_Map.sBlastRecipes);
-        
-        
-        
-        
- 
+                .itemInputs(
+                        new ItemStack(LanthItemList.ETCHED_MASK_1),
+                        Materials.Sodium.getDust(1),
+                        Materials.Chrome.getPlates(1),
+                        Materials.Gold.getPlates(2))
+                .fluidInputs(Materials.Hydrogen.getGas(1000)).noFluidOutputs()
+                .itemOutputs(new ItemStack(LanthItemList.maskMap.get(MaskList.BLANK3)))
+                .duration(10 * GT_RecipeBuilder.SECONDS).eut(1920).specialValue(3600)
+                .addTo(GT_Recipe.GT_Recipe_Map.sBlastRecipes);
+
         for (MaskList mask : MaskList.values()) {
-        	
-        	MaskList maskIngredient = mask.getPrecursor();
-        	Dyes lensColour = mask.getLensColour();
-        	
-        	if (maskIngredient == null) 
-        		continue;
-        		
-        	if (mask.getLensColour() == null)
-        		continue;
-        	
-        	if (mask == MaskList.NAND) {
-    			
-        		
-        		//Very copy-paste heavy, could possibly offload most of this into one case and just assign an otherIngredient variable or something, wouldn't save much space though. Plus: lazy
-    			GT_Values.RA.addLaserEngraverRecipe(
-        				new ItemStack[] {
-        						new ItemStack(LanthItemList.maskMap.get(maskIngredient)),
-        						GT_Utility.copyAmount(0, GT_OreDictUnificator.get(OrePrefixes.lens, Materials.EnderPearl, 1))
-        				}, 
-        				null, 
-        				new ItemStack[] {
-        						new ItemStack(LanthItemList.maskMap.get(mask))
-        				}, 
-        				null, 
-        				2400, 
-        				1920, 
-        				true
-        				);
-    		
-    		} else if (mask == MaskList.NOR) {
-    			
-    			GT_Values.RA.addLaserEngraverRecipe(
-        				new ItemStack[] {
-        						new ItemStack(LanthItemList.maskMap.get(maskIngredient)),
-        						GT_Utility.copyAmount(0, GT_OreDictUnificator.get(OrePrefixes.lens, Materials.EnderEye, 1))
-        				}, 
-        				null, 
-        				new ItemStack[] {
-        						new ItemStack(LanthItemList.maskMap.get(mask))
-        				}, 
-        				null, 
-        				2400, 
-        				1920, 
-        				true
-        				);
-    			
-    		}
-    		
-    		else
-    		{
-    			//TODO Copyamount
-    			for (ItemStack lens : OreDictionary.getOres("craftingLens" + lensColour.mName.replace(" ", ""))) {
-        		
-    				if (lens == null)
-    					continue;
-        		
-    				GT_Values.RA.addLaserEngraverRecipe(
-    					new ItemStack[] {
-        						new ItemStack(LanthItemList.maskMap.get(maskIngredient)),
-        						GT_Utility.copyAmount(0, lens) // Do not consume lens
-        				}, 
-        				null, 
-        				new ItemStack[] {
-        						new ItemStack(LanthItemList.maskMap.get(mask))
-        				}, 
-        				null, 
-        				2400, 
-        				1920, 
-        				true
-        				);
-        		
-    			}
-    		}
-       }
-        
+
+            MaskList maskIngredient = mask.getPrecursor();
+            Dyes lensColour = mask.getLensColour();
+
+            if (maskIngredient == null) continue;
+
+            if (mask.getLensColour() == null) continue;
+
+            if (mask == MaskList.NAND) {
+
+                // Very copy-paste heavy, could possibly offload most of this into one case and just assign an
+                // otherIngredient variable or something, wouldn't save much space though. Plus: lazy
+                GT_Values.RA.addLaserEngraverRecipe(
+                        new ItemStack[] { new ItemStack(LanthItemList.maskMap.get(maskIngredient)), GT_Utility
+                                .copyAmount(0, GT_OreDictUnificator.get(OrePrefixes.lens, Materials.EnderPearl, 1)) },
+                        null,
+                        new ItemStack[] { new ItemStack(LanthItemList.maskMap.get(mask)) },
+                        null,
+                        2400,
+                        1920,
+                        true);
+
+            } else if (mask == MaskList.NOR) {
+
+                GT_Values.RA.addLaserEngraverRecipe(
+                        new ItemStack[] { new ItemStack(LanthItemList.maskMap.get(maskIngredient)), GT_Utility
+                                .copyAmount(0, GT_OreDictUnificator.get(OrePrefixes.lens, Materials.EnderEye, 1)) },
+                        null,
+                        new ItemStack[] { new ItemStack(LanthItemList.maskMap.get(mask)) },
+                        null,
+                        2400,
+                        1920,
+                        true);
+
+            }
+
+            else {
+                // TODO Copyamount
+                for (ItemStack lens : OreDictionary.getOres("craftingLens" + lensColour.mName.replace(" ", ""))) {
+
+                    if (lens == null) continue;
+
+                    GT_Values.RA.addLaserEngraverRecipe(
+                            new ItemStack[] { new ItemStack(LanthItemList.maskMap.get(maskIngredient)),
+                                    GT_Utility.copyAmount(0, lens) // Do not consume lens
+                    },
+                            null,
+                            new ItemStack[] { new ItemStack(LanthItemList.maskMap.get(mask)) },
+                            null,
+                            2400,
+                            1920,
+                            true);
+
+                }
+            }
+        }
 
     }
 

@@ -1058,44 +1058,39 @@ public class WerkstoffMaterialPool implements Runnable {
             new Werkstoff.GenerationFeatures().disable().onlyDust(),
             offsetID4 + 2,
             TextureSet.SET_DULL);
-    
+
     public static final Werkstoff SiliconNitride = new Werkstoff(
-    		new short[] {132, 140, 120},
-    		"Silicon Nitride",
-    		subscriptNumbers("Si3N4"),
-    		new Werkstoff.Stats(),
-    		Werkstoff.Types.COMPOUND,
-    		new Werkstoff.GenerationFeatures().disable().onlyDust().addMetalItems().enforceUnification(),
-    		offsetID4 + 3,
-    		TextureSet.SET_DULL
-    		);
-    
+            new short[] { 132, 140, 120 },
+            "Silicon Nitride",
+            subscriptNumbers("Si3N4"),
+            new Werkstoff.Stats(),
+            Werkstoff.Types.COMPOUND,
+            new Werkstoff.GenerationFeatures().disable().onlyDust().addMetalItems().enforceUnification(),
+            offsetID4 + 3,
+            TextureSet.SET_DULL);
+
     public static final Werkstoff Fluoroform = new Werkstoff(
-    		new short[] {0, 0, 0},
-    		"Fluoroform",
-    		subscriptNumbers("CHF3"),
-    		new Werkstoff.Stats().setElektrolysis(true),
-    		Werkstoff.Types.COMPOUND,
-    		new Werkstoff.GenerationFeatures().disable().addCells(),
-    		offsetID4 + 4,
-    		TextureSet.SET_FLUID,
-    		new Pair<>(Materials.Carbon, 1),
-    		new Pair<>(Materials.Hydrogen, 1),
-    		new Pair<>(Materials.Fluorine, 3)
-    		);
-    
+            new short[] { 0, 0, 0 },
+            "Fluoroform",
+            subscriptNumbers("CHF3"),
+            new Werkstoff.Stats().setElektrolysis(true),
+            Werkstoff.Types.COMPOUND,
+            new Werkstoff.GenerationFeatures().disable().addCells(),
+            offsetID4 + 4,
+            TextureSet.SET_FLUID,
+            new Pair<>(Materials.Carbon, 1),
+            new Pair<>(Materials.Hydrogen, 1),
+            new Pair<>(Materials.Fluorine, 3));
+
     public static final Werkstoff FluoroformOxygenMix = new Werkstoff(
-    		new short[] {0, 0, 0},
-    		"Reactive-Ion Etching Mixture",
-    		subscriptNumbers("CHF3/O2"),
-    		new Werkstoff.Stats().setCentrifuge(true),
-    		Werkstoff.Types.MIXTURE,
-    		new Werkstoff.GenerationFeatures().disable().addCells(),
-    		offsetID4 + 5,
-    		TextureSet.SET_FLUID
-    		);
-    
-    
+            new short[] { 0, 0, 0 },
+            "Reactive-Ion Etching Mixture",
+            subscriptNumbers("CHF3/O2"),
+            new Werkstoff.Stats().setCentrifuge(true),
+            Werkstoff.Types.MIXTURE,
+            new Werkstoff.GenerationFeatures().disable().addCells(),
+            offsetID4 + 5,
+            TextureSet.SET_FLUID);
 
     public static void runInit() {
         addSubTags();
