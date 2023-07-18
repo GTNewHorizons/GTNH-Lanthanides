@@ -4,11 +4,11 @@ import net.minecraft.util.StatCollector;
 
 public enum Particle {
 
-    ELECTRON(true, 0, 0.511f, 5000, "electron", "e\u207B"),
-    PHOTON(false, 1, 0, 0, "photon", "\u03B3"),
-    NEUTRON(false, 2, 939.57f, 15000, "neutron", "n\u2070"),
-    PROTON(true, 3, 938.27f, 15000, "proton", "p\u207A"),
-    ALPHA(true, 4, 3727.38f, 8000, "alpha", "\u03B1");
+    ELECTRON(true, 0, 0.511f, 5000, "electron", "e\u207B", -1),
+    PHOTON(false, 1, 0, 0, "photon", "\u03B3", 0),
+    NEUTRON(false, 2, 939.57f, 15000, "neutron", "n\u2070", 0),
+    PROTON(true, 3, 938.27f, 15000, "proton", "p\u207A", 1),
+    ALPHA(true, 4, 3727.38f, 8000, "alpha", "\u03B1", 2);
 
     private boolean canAcc;
 
@@ -18,8 +18,10 @@ public enum Particle {
 
     private String name;
     private String shortName;
+    
+    private int charge; // in multiples of elemental charge
 
-    private Particle(boolean canAcc, int id, float restMass, float maxSourceEnergy, String name, String shortName) { // ID
+    private Particle(boolean canAcc, int id, float restMass, float maxSourceEnergy, String name, String shortName, int charge) { // ID
                                                                                                                      // is
                                                                                                                      // symbolic
                                                                                                                      // only
@@ -28,6 +30,7 @@ public enum Particle {
         this.maxSourceEnergy = maxSourceEnergy;
         this.name = name;
         this.shortName = shortName;
+        this.charge = charge;
     }
 
     public float getMass() {
