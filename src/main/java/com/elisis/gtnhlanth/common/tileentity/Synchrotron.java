@@ -1,12 +1,12 @@
 package com.elisis.gtnhlanth.common.tileentity;
 
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAdder;
+import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
 import java.util.ArrayList;
 
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
-
+import com.elisis.gtnhlanth.common.block.AntennaCasing;
 import com.elisis.gtnhlanth.common.hatch.TileHatchInputBeamline;
 import com.elisis.gtnhlanth.common.hatch.TileHatchOutputBeamline;
 import com.elisis.gtnhlanth.common.register.LanthItemList;
@@ -19,7 +19,11 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMultiBlockBase;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchrotron> implements IConstructable {
 
@@ -30,18 +34,27 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
 
     private ArrayList<TileHatchInputBeamline> mInputBeamline = new ArrayList<>();
     private ArrayList<TileHatchOutputBeamline> mOutputBeamline = new ArrayList<>();
+    
+    public ArrayList<AntennaCasing> mAntennaCasings = new ArrayList<>();
+    
+    private static final int CASING_INDEX = 49;
+    
+    private int energyHatchTier;
+    
+    private int antennaeTier;
 
     /*
      * c: Shielded accelerator casing v: Vacuum k: Superconducting coil d: Coolant Delivery casing
      */
 
     // TODO: E > 1200eV for x-ray lithography
+    // spotless:off
     static {
 
         STRUCTURE_DEFINITION = StructureDefinition.<Synchrotron>builder().addShape(
                 STRUCTURE_PIECE_ENTRANCE,
 
-                // spotless:off
+                
                 
                 new String[][] { 
                 		{ 
@@ -124,7 +137,203 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
                     	},
                     	{
                     		"  cccccccc             ccccc       ",
-                    		" c--------"
+                    		" c--------cc         cc-----cc     ",
+                    		"c----------cc       cc-------c     ",
+                    		"c----------cc       cc-------c     ",
+                    		"c----------cc       cc-------c     ",
+                    		" c--------cc         cc-----cc     ",
+                    		"  cccccccc             ccccc       "
+                    		
+                    	},
+                    	{
+                    		"  ccccccc               ccccc      ",
+                    		" c-------c             c-----c     ",
+                    		"c---------c           c-------c    ",
+                    		"c---------c           c-------c    ",
+                    		"c---------c           c-------c    ",
+                    		" c-------c             c-----c     ",
+                    		"  ccccccc               ccccc      "
+                    	
+                    	},
+                    	{
+                    		"  cccccc                 ccccc     ",
+                    		" c------c               c-----c    ",
+                    		"c--------c             c------c    ",
+                    		"c--------c             c------c    ",
+                    		"c--------c             c------c    ",
+                    		" c------c               c-----c    ",
+                    		"  cccccc                 ccccc     "
+                    	
+                    	},
+                    	{
+                    		"  ccccc                   cccc     ",
+                    		" c-----c                 c----c    ",
+                    		"c-------c               c------c   ",
+                    		"c-------c               c------c   ",
+                    		"c-------c               c------c   ",
+                    		" c-----c                 c----c    ",
+                    		"  ccccc                   cccc     "
+                    		
+                    	},
+                    	{
+                    		"  cccc                     ccc     ",
+                    		" c----cc                 cc---cc   ",
+                    		"c------c                 c-----c   ",
+                    		"c------c                 c-----c   ",
+                    		"c------c                 c-----c   ",
+                    		" c----cc                 cc---cc   ",
+                    		"  cccc                     ccc     "
+                    		
+                    	},
+                    	{
+                    		"  cccc                     cccc    ",
+                    		" c---cc                   c----c   ",
+                    		"c------c                 c-----c   ",
+                    		"c------c                 c-----cc  ",
+                    		"c------c                 c-----c   ",
+                    		" c---cc                   cc---c   ",
+                    		"  cccc                     cccc    "
+                    	
+                    	},
+                    	{
+                    		"  cccc                     cccc    ",
+                    		" c---cc                   c----c   ",
+                    		"c-----c                   c----cc  ",
+                    		"c-----c                   c----cc  ",
+                    		"c-----c                   c----cc  ",
+                    		" c---cc                   cc---c   ",
+                    		"  cccc                     cccc    "
+                    	
+                    	},
+                    	{
+                    		"  ccc                       ccc    ",
+                    		" ckkkcc                   cckkkc   ",
+                    		"ck---kc                   ck---kc  ",
+                    		"ck---kc                   ck---kc  ",
+                    		"ck---kc                   ck---kc  ",
+                    		" ckkkcc                   cckkkc   ",
+                    		"  ccc                       ccc    "
+                    	
+                    	},
+                    	{
+                    		"  cec                       cec    ",
+                    		" cnanc                     cnanc   ",
+                    		"cn---nc                   cn---nc  ",
+                    		"cn---nc                   cn---nc  ",
+                    		"cn---nc                   cn---nc  ",
+                    		" cnnnc                     cnnnc   ",
+                    		"  ccc                       ccc    "
+                    		
+                    	},
+                    	{
+                    		"  cic                       cic    ",
+                    		" cndnc                     cndnc   ",
+                    		"cn---nc                   cn---nc  ",
+                    		"cn---nc                   cn---nc  ",
+                    		"cn---nc                   cn---nc  ",
+                    		" cndnc                     cndnc   ",
+                    		"  coc                       coc    "
+                    		
+                    	},
+                    	{
+                    		"  cec                       cec    ",
+                    		" cnanc                     cnanc   ",
+                    		"cn---nc                   cn---nc  ",
+                    		"cn---nc                   cn---nc  ",
+                    		"cn---nc                   cn---nc  ",
+                    		" cnnnc                     cnnnc   ",
+                    		"  ccc                       ccc    "
+                    		
+                    	},
+                    	{
+                    		"  ccc                       ccc    ",
+                    		" ckkkcc                   cckkkc   ",
+                    		"ck---kc                   ck---kc  ",
+                    		"ck---kc                   ck---kc  ",
+                    		"ck---kc                   ck---kc  ",
+                    		" ckkkcc                   cckkkc   ",
+                    		"  ccc                       ccc    "
+                    		
+                    	},
+                    	{
+                    		"  cccc                     cccc    ",
+                    		" c----c                   c----c   ",
+                    		"cc----c                   c----cc  ",
+                    		"cc----c                   c----cc  ",
+                    		"cc----c                   c----cc  ",
+                    		" c---cc                   cc---c   ",
+                    		"  cccc                     cccc    "
+                    		
+                    	},
+                    	{
+                    		"  cccc                     cccc    ",
+                    		" c----c                   c----c   ",
+                    		" c-----c                 c-----c   ",
+                    		"cc-----c                 c-----cc  ",
+                    		" c-----c                 c-----c   ",
+                    		" c---cc                   cc---c   ",
+                    		"  cccc                     cccc    "
+                    		
+                    	},
+                    	{
+                    		"   ccc                     ccc     ",
+                    		" cc---cc                 cc---cc   ",
+                    		" c-----c                 c-----c   ",
+                    		" c-----c                 c-----c   ",
+                    		" c-----c                 c-----c   ",
+                    		" cc---cc                 cc---cc   ",
+                    		"   ccc                     ccc     "
+                    		
+                    	},
+                    	{
+                    		"   cccc                   cccc     ",
+                    		"  c----c                 c----c    ",
+                    		" c------c               c------c   ",
+                    		" c------c               c------c   ",
+                    		" c------c               c------c   ",
+                    		"  c----c                 c----c    ",
+                    		"   cccc                   cccc     "
+                    		
+                    	},
+                    	{
+                    		"   ccccc                 ccccc     ",
+                    		"  c-----c               c-----c    ",
+                    		"  c------c             c------c    ",
+                    		"  c------c             c------c    ",
+                    		"  c------c             c------c    ",
+                    		"  c-----c               c-----c    ",
+                    		"   ccccc                 ccccc     "
+                    		
+                    	},
+                    	{
+                    		"    ccccc               ccccc      ",
+                    		"   c-----c             c-----c     ",
+                    		"  c-------c           c-------c    ",
+                    		"  c-------c           c-------c    ",
+                    		"  c-------c           c-------c    ",
+                    		"   c-----c             c-----c     ",
+                    		"    ccccc               ccccc      "
+                    		
+                    	},
+                    	{
+                    		"     ccccc             ccccc       ",
+                    		"    c-----cc         cc-----c      ",
+                    		"   c-------cc       cc-------cc    ",
+                    		"   c-------cc       cc-------cc    ",
+                    		"   c-------cc       cc-------cc    ",
+                    		"    c-----cc         cc------c     ",
+                    		"     ccccc             cccccc      "
+                    		
+                    	},
+                    	{
+                    		"      ccccc           ccccccc      ",
+                    		"    cc-----cccc   cccc-----ccc     ",
+                    		"    c--------ccccccc--------cccc   ",
+                    		"    c--------ccccccc--------cccc   ",
+                    		"    c--------ccccccc--------cccc   ",
+                    		"    cc-----cccc   cccc------cc     ",
+                    		"      ccccc           cccccc       "
+                    		
                     	}
 
                    }
@@ -132,13 +341,30 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
                 ).addElement('c', ofBlock(LanthItemList.SHIELDED_ACCELERATOR_CASING, 0))
                 .addElement('k', ofBlock(GregTech_API.sBlockCasings1, 15)) // Superconducting coils
                 .addElement('d', ofBlock(LanthItemList.COOLANT_DELIVERY_CASING, 0))
+                .addElement('e', ofHatchAdder(Synchrotron::addEnergyInputToMachineList, CASING_INDEX, 2))
+                .addElement('n', ofBlock(GregTech_API.sBlockMetal5, 5)) //Niobium Blocks
+                .addElement('a', ofBlockAdder(Synchrotron::addAntenna, LanthItemList.ANTENNA_CASING_T1, 3)) //Antenna Casings
 
                 .build();
         
-     // spotless:on
+     
 
     }
+    
+    // spotless:on
+    
+    /*
+     * v = pi * lorentz^2 * sfreq
 
+		sfreq = sw / 2pi
+
+		sw = e * B / mass(e) * c
+
+		v = (e * B * l^2) / (2 * mass(e) * c)
+
+  		= 292.718624222 * l^2 * B
+     */
+    
     public Synchrotron(String aName) {
         super(aName);
     }
@@ -177,6 +403,55 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
     @Override
     public IStructureDefinition<Synchrotron> getStructureDefinition() {
         return STRUCTURE_DEFINITION;
+    }
+    
+    public boolean addEnergyInputToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        if (aTileEntity == null) {
+            return false;
+        }
+        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
+        if (aMetaTileEntity == null) return false;
+        if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_Energy) {
+        	
+        	GT_MetaTileEntity_Hatch_Energy hatch = (GT_MetaTileEntity_Hatch_Energy) aMetaTileEntity;
+        	
+        	//First energy hatch added
+        	if (this.mEnergyHatches.size() == 0)
+        		this.energyHatchTier = hatch.mTier;
+        	
+        	// Disallow any hatches that don't match the tier of the first hatch added
+        	if (hatch.mTier != this.energyHatchTier)
+        		return false;
+        		
+        	
+            hatch.updateTexture(aBaseCasingIndex);
+            hatch.updateCraftingIcon(this.getMachineCraftingIcon());
+            return mEnergyHatches.add(hatch);
+        }
+        return false;
+    }
+    
+    private boolean addAntenna(Block block, int meta) {
+    	
+    	if (block == null)
+    		return false;
+    	
+    	if (!(block instanceof AntennaCasing))
+    		return false;
+    	
+    	AntennaCasing antennaBlock = (AntennaCasing) block;
+    	
+    	int antennaTier = antennaBlock.getTier();
+    	
+    	//First antenna casing added
+    	if (this.mAntennaCasings.size() == 0)
+    		this.antennaeTier = antennaTier;
+    	
+    	if (antennaTier != this.antennaeTier) 
+    		return false;
+    	
+    	return mAntennaCasings.add(antennaBlock);
+    	
     }
 
     @Override

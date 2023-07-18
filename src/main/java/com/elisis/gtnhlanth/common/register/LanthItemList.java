@@ -7,6 +7,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import com.elisis.gtnhlanth.common.beamline.TileBeamline;
+import com.elisis.gtnhlanth.common.block.AntennaCasing;
 import com.elisis.gtnhlanth.common.block.Casing;
 import com.elisis.gtnhlanth.common.block.ShieldedAccGlass;
 import com.elisis.gtnhlanth.common.hatch.TileHatchInputBeamline;
@@ -60,8 +61,9 @@ public final class LanthItemList {
 
     public static final Block COOLANT_DELIVERY_CASING = new Casing("coolant_delivery");
 
-    public static final Block ANTENNA_CASING_T1 = new Casing("antenna_t1");
-    public static final Block ANTENNA_CASING_T2 = new Casing("antenna_t2");
+    //public static final Block ANTENNA_CASING_T1 = new Casing("antenna_t1");
+    public static final Block ANTENNA_CASING_T1 = new AntennaCasing(1);
+    public static final Block ANTENNA_CASING_T2 = new AntennaCasing(2);
 
     public static HashMap<MaskList, Item> maskMap = new HashMap<>();
 
