@@ -348,7 +348,50 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
                     	{
                     		"        cccccccccccccccccccc        ",
                     		"      cc-------------------ccccccccc",
+                    		"     cc-----------------------------",
+                    		"     c------------------------------",
+                    		"     cc-----------------------------",
+                    		"       c-------------------ccccccccc",
+                    		"        ccccccccccccccccccc         "
                     		
+                    	},
+                    	{
+                    		"         ccccccccccccccccccc        ",
+                    		"       cc-----------------cccccccccc",
+                    		"       c----------------------------",
+                    		"      cc----------------------------",
+                    		"       c----------------------------",
+                    		"        c-----------------cccccccccc",
+                    		"         ccccccccccccccccc          "
+                    		
+                    	},
+                    	{
+                    		"            ccccccccccccccc         ",
+                    		"         ccc-------------ccccccccccc",
+                    		"        cc--------------------------",
+                    		"        cc--------------------------",
+                    		"        cc--------------------------",
+                    		"         ccc-------------ccccccccccc",
+                    		"            ccccccccccccc           "
+                    		
+                    	},
+                    	{
+                    		"                                    ",
+                    		"           cccccccccccccccccc       ",
+                    		"          ccc-kdkdk------ccccccccccc",
+                    		"          cc--kdkdk------ccccccccccc",
+                    		"          ccc-kdkdk------ccccccccccc",
+                    		"           cccccccccccccccccc       "
+                    		
+                    	},
+                    	{
+                    		"                                    ",
+                    		"                                    ",
+                    		"             cccccccccccccccc       ",
+                    		"            ccccccccccccccccc       ",
+                    		"             cccccccccccccccc       ",
+                    		"                                    ",
+                    		"                                    "
                     		
                     	}
 
@@ -360,6 +403,8 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
                 .addElement('e', ofHatchAdder(Synchrotron::addEnergyInputToMachineList, CASING_INDEX, 2))
                 .addElement('n', ofBlock(GregTech_API.sBlockMetal5, 5)) //Niobium Blocks
                 .addElement('a', ofBlockAdder(Synchrotron::addAntenna, LanthItemList.ANTENNA_CASING_T1, 3)) //Antenna Casings
+                .addElement('i', ofHatchAdder(Synchrotron::addInputHatchToMachineList, CASING_INDEX, 2))
+                .addElement('o', ofHatchAdder(Synchrotron::addOutputHatchToMachineList, CASING_INDEX, 2))
 
                 .build();
         
