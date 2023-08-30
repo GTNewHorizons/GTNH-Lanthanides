@@ -7,17 +7,7 @@ import static gregtech.api.enums.GT_Values.VN;
 import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Objects;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 
 import com.elisis.gtnhlanth.common.beamline.BeamInformation;
 import com.elisis.gtnhlanth.common.beamline.BeamLinePacket;
@@ -25,6 +15,7 @@ import com.elisis.gtnhlanth.common.beamline.Particle;
 import com.elisis.gtnhlanth.common.hatch.TileHatchInputBeamline;
 import com.elisis.gtnhlanth.common.hatch.TileHatchOutputBeamline;
 import com.elisis.gtnhlanth.common.register.LanthItemList;
+import com.elisis.gtnhlanth.common.tileentity.recipe.beamline.BeamlineRecipeLoader;
 import com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -38,14 +29,20 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMul
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
+import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Utility;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> implements IConstructable {
 
     private static final IStructureDefinition<LINAC> STRUCTURE_DEFINITION;
-
-    public static final HashMap<Fluid, Fluid> coolantMap = new HashMap<>();
 
     protected static final String STRUCTURE_PIECE_BASE = "base";
     protected static final String STRUCTURE_PIECE_LAYER = "layer";
@@ -253,8 +250,13 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
             tempFactor = calculateTemperatureFactor(primFluid.getFluid().getTemperature());
         }
 
-        machineFocus = Math.max(((-10) * this.length * tempFactor) + 100, 5); // Absolute maximum of 100, minimum of 5
-
+        machineFocus = Math.max(((-0.9f) * this.length * tempFactor) + 110, 5); // Min of 5
+        if (machineFocus >= 90) { // Max of 100
+        	return false; 
+        }
+        
+        //GT_Log.out.print("machine focus " +  machineFocus);
+        
         inputFocus = this.getInputInformation().getFocus();
 
         outputFocus = (inputFocus > machineFocus) ? ((inputFocus + machineFocus) / 2)
@@ -304,7 +306,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
          * Materials.Oxygen.getGas(fluidConsumed); if (primFluid.isFluidEqual(Materials.SuperCoolant.getFluid(1L))) { }
          */
         // GT_Log.out.print("ABFluid " + primFluid.getLocalizedName());
-        fluidOutput = new FluidStack(coolantMap.get(primFluid.getFluid()), fluidConsumed);
+        fluidOutput = new FluidStack(BeamlineRecipeLoader.coolantMap.get(primFluid.getFluid()), fluidConsumed);
 
         if (Objects.isNull(fluidOutput)) return false;
 
@@ -474,7 +476,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 
     private static float calculateTemperatureFactor(int fluidTemp) {
 
-        float factor = (float) Math.pow(1.1, -(0.4 * fluidTemp - 50));
+        float factor = (float) Math.pow(1.1, 0.2 * fluidTemp);
         return factor;
     }
 
