@@ -51,6 +51,11 @@ public class TileHatchInputBeamline extends TileHatchBeamlineConnector<BeamLineP
     }
 
     @Override
+    public boolean isFacingValid(ForgeDirection facing) {
+    	return true;
+    }
+    
+    @Override
     public boolean isSimpleMachine() {
         return true;
     }

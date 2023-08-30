@@ -79,6 +79,11 @@ public class TileHatchOutputBeamline extends TileHatchBeamlineConnector<BeamLine
     }
 
     @Override
+    public boolean isFacingValid(ForgeDirection facing) {
+    	return true;
+    }
+    
+    @Override
     public boolean isInputFacing(ForgeDirection aSide) {
         return false;
     }
