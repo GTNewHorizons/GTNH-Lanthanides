@@ -36,6 +36,10 @@ public enum Particle {
     public float getMass() {
         return this.restMass;
     }
+    
+    public float getCharge() {
+    	return this.charge;
+    }
 
     public boolean canAccelerate() {
         return this.canAcc;

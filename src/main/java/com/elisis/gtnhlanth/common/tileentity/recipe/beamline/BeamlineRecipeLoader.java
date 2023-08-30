@@ -1,7 +1,10 @@
 package com.elisis.gtnhlanth.common.tileentity.recipe.beamline;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+
+import java.util.HashMap;
 
 import com.elisis.gtnhlanth.common.beamline.Particle;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
@@ -14,15 +17,17 @@ import gtPlusPlus.core.material.ELEMENT;
 
 public class BeamlineRecipeLoader {
 
+    public static final HashMap<Fluid, Fluid> coolantMap = new HashMap<>();
+	
     public static void load() {
 
         /*
          * Coolant list
          */
 
-        LINAC.coolantMap.put(Materials.LiquidNitrogen.getGas(1L).getFluid(), Materials.Nitrogen.getGas(1L).getFluid());
-        LINAC.coolantMap.put(Materials.LiquidOxygen.getGas(1L).getFluid(), Materials.Oxygen.getGas(1L).getFluid());
-        LINAC.coolantMap.put(FluidRegistry.getFluid("ic2coolant"), FluidRegistry.getFluid("ic2hotcoolant"));
+        coolantMap.put(Materials.LiquidNitrogen.getGas(1L).getFluid(), Materials.Nitrogen.getGas(1L).getFluid());
+        coolantMap.put(Materials.LiquidOxygen.getGas(1L).getFluid(), Materials.Oxygen.getGas(1L).getFluid());
+        coolantMap.put(FluidRegistry.getFluid("ic2coolant"), FluidRegistry.getFluid("ic2hotcoolant"));
 
         /*
          * ELECTRON

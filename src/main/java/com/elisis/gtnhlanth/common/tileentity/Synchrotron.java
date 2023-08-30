@@ -2,14 +2,21 @@ package com.elisis.gtnhlanth.common.tileentity;
 
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAdder;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
+import static gregtech.api.enums.GT_Values.VN;
 import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
+import com.elisis.gtnhlanth.common.beamline.BeamInformation;
+import com.elisis.gtnhlanth.common.beamline.BeamLinePacket;
+import com.elisis.gtnhlanth.common.beamline.Particle;
 import com.elisis.gtnhlanth.common.block.AntennaCasing;
 import com.elisis.gtnhlanth.common.hatch.TileHatchInputBeamline;
 import com.elisis.gtnhlanth.common.hatch.TileHatchOutputBeamline;
 import com.elisis.gtnhlanth.common.register.LanthItemList;
+import com.elisis.gtnhlanth.common.tileentity.recipe.beamline.BeamlineRecipeLoader;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -20,10 +27,17 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMultiBlockBase;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
+import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchrotron> implements IConstructable {
 
@@ -61,7 +75,7 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
                 			"                                    ", 
                 			"  ccc                               ",
                 			" c---c                              ", 
-                        	" c---c                              ",
+                        	" c-v-c                              ",
                         	" c---c                              ", 
                         	"  ccc                               " 
                 		} 
@@ -73,9 +87,9 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
                     	{ 
                     		"                                    ", 
                     		"  ccc                               ",
-                    		" c---c       ccccccc                ", 
-                    		" c---c      cccc~cccc               ",
-                    		" c---c       ccccccc                ", 
+                    		" c---c       cjjjjjc                ", 
+                    		" c---c      cjjc~cjjc               ",
+                    		" c---c       cjjjjjc                ", 
                     		"  ccc                               ",
                     		"                                    " 
                     	},
@@ -100,9 +114,9 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
                     	{
                     		"         ccccccccccccccc            ", 
                     		"  ccc  cc---------------cc          ",
-                    		" c---c c-----------------c          ", 
+                    		" c---ccc-----------------c          ", 
                     		" c---ccc-----------------cc         ",
-                    		" c---c c-----------------c          ", 
+                    		" c---ccc-----------------c          ", 
                     		"  ccc  cc---------------cc          ",
                     		"         ccccccccccccccc            ",
                     		
@@ -359,7 +373,7 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
                     		"         ccccccccccccccccccc        ",
                     		"       cc-----------------cccccccccc",
                     		"       c----------------------------",
-                    		"      cc----------------------------",
+                    		"      cc---------------------------b",
                     		"       c----------------------------",
                     		"        c-----------------cccccccccc",
                     		"         ccccccccccccccccc          "
@@ -405,7 +419,15 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
                 .addElement('a', ofBlockAdder(Synchrotron::addAntenna, LanthItemList.ANTENNA_CASING_T1, 3)) //Antenna Casings
                 .addElement('i', ofHatchAdder(Synchrotron::addInputHatchToMachineList, CASING_INDEX, 2))
                 .addElement('o', ofHatchAdder(Synchrotron::addOutputHatchToMachineList, CASING_INDEX, 2))
-
+                .addElement('v', ofHatchAdder(Synchrotron::addBeamlineInputHatch, CASING_INDEX, 2))
+                .addElement('b', ofHatchAdder(Synchrotron::addBeamlineOutputHatch, CASING_INDEX, 2))
+                
+                .addElement(
+                		'j',
+                		ofChain(
+                			ofHatchAdder(Synchrotron::addMaintenanceToMachineList, CASING_INDEX, 2),
+                			ofBlock(LanthItemList.SHIELDED_ACCELERATOR_CASING, 0)))
+                
                 .build();
         
      
@@ -426,6 +448,11 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
   		= 292.718624222 * l^2 * B
      */
     
+    private float outputEnergy;
+    private int outputRate;
+    private int outputParticle;
+    private float outputFocus;
+    
     public Synchrotron(String aName) {
         super(aName);
     }
@@ -444,10 +471,42 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Particle Accelerator").addInfo("Controller block for the Synchrotron")
                 .addInfo("Torus-shaped, accelerates electrons to produce high-energy electromagnetic radiation")
-                .toolTipFinisher("GTNH: Lanthanides");;
+                .toolTipFinisher("GTNH: Lanthanides");
         return tt;
     }
 
+    private boolean addBeamlineInputHatch(IGregTechTileEntity te, int casingIndex) {
+    	
+    	if (te == null) return false;
+
+        IMetaTileEntity mte = te.getMetaTileEntity();
+
+        if (mte == null) return false;
+
+        if (mte instanceof TileHatchInputBeamline) {
+            return this.mInputBeamline.add((TileHatchInputBeamline) mte);
+        }
+
+        return false;
+    	
+    }
+    
+    private boolean addBeamlineOutputHatch(IGregTechTileEntity te, int casingIndex) {
+    	
+    	if (te == null) return false;
+
+        IMetaTileEntity mte = te.getMetaTileEntity();
+
+        if (mte == null) return false;
+
+        if (mte instanceof TileHatchOutputBeamline) {
+            return this.mOutputBeamline.add((TileHatchOutputBeamline) mte);
+        }
+
+        return false;
+    	
+    }
+    
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection aSide, ForgeDirection aFacing,
             int aColorIndex, boolean aActive, boolean aRedstone) {
@@ -457,6 +516,7 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
+    	buildPiece(STRUCTURE_PIECE_ENTRANCE, stackSize, hintsOnly, 16, 3, 1);
         buildPiece(STRUCTURE_PIECE_BASE, stackSize, hintsOnly, 16, 3, 0);
 
     }
@@ -523,25 +583,333 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
 
     @Override
     public boolean checkRecipe(ItemStack aStack) {
-        // TODO Auto-generated method stub
-        return false;
+        
+    	float inputEnergy = 0;
+    	float inputFocus = 0;
+    	float inputRate = 0;
+    	int inputParticleId = 0;
+    	
+    	outputEnergy = 0;
+    	outputFocus = 0;
+    	outputRate = 0;
+    	outputParticle = 0;
+    	
+    	float tempFactor = 0;
+    	
+    	float machineFocus = 0;
+    	
+    	float voltageFactor = 0;
+    	
+    	float machineEnergy = 0;
+    	
+    	ArrayList<FluidStack> fluidList = this.getStoredFluids();
+    	
+    	if (fluidList.size() == 0) return false;
+    	
+    	if (this.getInputInformation() == null) {
+    		return false;
+    	}
+    	
+    	if (this.getInputInformation().getEnergy() == 0) {
+            return false;
+        }
+    	
+    	if (this.getInputInformation().getFocus() < 25) {
+    		return false;
+    	}
+    	
+    	BeamInformation inputInformation = this.getInputInformation();
+    	
+    	inputParticleId = this.getInputInformation().getParticleId();
+    	
+    	Particle inputParticle = Particle.getParticleFromId(inputParticleId);
+    	
+    	if (!inputParticle.canAccelerate()) {
+    		stopMachine();
+    		GT_Log.out.print("Accelerate");
+    	}
+    	
+    	GT_Log.out.print("Got this far");
+    	
+    	mMaxProgresstime = 20;
+    	mEUt = (int) getMaxInputVoltage();
+    	//mEUt = (int) -getMaxInputVoltage() / 4;
+    	
+    	outputParticle = 1; // Photon 
+    	
+    	FluidStack primaryFluid = fluidList.get(0);
+    	
+    	if (primaryFluid.isFluidEqual(new FluidStack(FluidRegistry.getFluid("ic2coolant"), 1))) {
+            tempFactor = getTemperatureFactor(60); // Default temp of 300 is unreasonable
+        } else {
+            tempFactor = getTemperatureFactor(primaryFluid.getFluid().getTemperature());
+        }
+    	
+        machineFocus = (float) Math.max((((-0.9f) * tempFactor) * Math.pow(mEUt, 7.0/8.0) / 1024  + 95), 5); // minimum of 5
+        if (machineFocus >= 100) { // Max of 100
+        	machineFocus = 95;
+        }
+    	
+        
+        inputFocus = this.getInputInformation().getFocus();
+
+        outputFocus = (inputFocus > machineFocus) ? ((inputFocus + machineFocus) / 2)
+                : inputFocus * (machineFocus / 100); // If input focus > machine focus, take the average of both, else
+                                                     // weigh the former by the latter
+        
+        long voltage = this.getMaxInputVoltage();
+        voltageFactor = getVoltageFactor(voltage, this.antennaeTier);
+    	
+        inputEnergy = this.getInputInformation().getEnergy();
+        float mass = inputParticle.getMass();
+    	
+        //machineEnergy = (float) (Math.max(-600 * voltageFactor + 5000, 100) * 300 * Math.pow(inputEnergy / (mass * Math.pow(3e8, 2)), 2)); // Min of 100
+        // Perhaps divide by mass here too
+        machineEnergy = (float) Math.max(inputEnergy/100000.0 * voltageFactor, 1E-3);
+    	outputEnergy = machineEnergy; //TODO maybe adjust behaviour here
+    	
+    	
+    	inputRate = this.getInputInformation().getRate();
+    	outputRate = (int) (inputRate * getOutputRatetio(voltageFactor));
+    	
+    	GT_Log.out.print("Voltage factor " + voltageFactor);
+    	
+    	//outputAmount = inputParticle.getCharge() / Particle.ELECTRON.getCharge() * 100;
+    	
+    	int fluidConsumed = 32_000; // Amount of fluid consumed per operation
+    	
+    	if (primaryFluid.amount < fluidConsumed || (!primaryFluid.isFluidEqual(FluidRegistry.getFluidStack("ic2coolant", 1))
+                && primaryFluid.getFluid().getTemperature() > 200)) {
+
+    		GT_Log.out.print("Primary fluid amount: " + primaryFluid.amount);
+    		
+            stopMachine();
+            return false;
+        }
+    	
+    	primaryFluid.amount -= fluidConsumed;
+
+        FluidStack fluidOutput = null;
+        
+        fluidOutput = new FluidStack(BeamlineRecipeLoader.coolantMap.get(primaryFluid.getFluid()), fluidConsumed);
+
+        if (Objects.isNull(fluidOutput)) return false;
+
+        // GT_Log.out.print("Fluid out ok");
+
+        this.addFluidOutputs(new FluidStack[] { fluidOutput });
+
+        GT_Log.out.print("This far too");
+        
+        outputAfterRecipe();
+    	
+        return true;
+    }
+    
+    private void outputAfterRecipe() {
+
+        if (!mOutputBeamline.isEmpty()) {
+
+            BeamLinePacket packet = new BeamLinePacket(
+                    new BeamInformation(outputEnergy, outputRate, outputParticle, outputFocus));
+
+            for (TileHatchOutputBeamline o : mOutputBeamline) {
+
+                o.q = packet;
+            }
+        }
+    }
+    
+    @Override
+    public void stopMachine() {
+    	
+    	outputFocus = 0;
+        outputEnergy = 0;
+        outputParticle = 0;
+        outputRate = 0;
+        super.stopMachine();
+    
     }
 
+    private BeamInformation getInputInformation() {
+
+        for (TileHatchInputBeamline in : this.mInputBeamline) {
+
+            //if (in.q == null) return new BeamInformation(0, 0, 0, 0);
+            if (in.q == null) return new BeamInformation(10000, 10, 0, 90); // TODO temporary for testing purposes
+
+            return in.q.getContent();
+        }
+        return null;
+    }
+    
+    private static float getVoltageFactor(long mEU, int antennaTier) {
+    	
+    	//float factor = (float) Math.pow(1.00004, -mEU * Math.pow(antennaTier, 1.0/3.0) + 80000);
+    	float factor = (float) -Math.pow(1.1, -mEU/10 * Math.pow(antennaTier, 2.0/3.0)) + 1;
+    	return factor;
+    	
+    }
+    
+    private static float getTemperatureFactor(int temperature) {
+    	float factor = (float) Math.pow(1.11, 0.18 * temperature);
+		return factor;
+    }
+    
+    // Punny, right?
+    private static float getOutputRatetio(float voltageFactor) {
+    	return voltageFactor / 10; //TODO this is terrible
+    }
+    
+    @Override
+    public String[] getInfoData() {
+        int mPollutionReduction = 0;
+        for (GT_MetaTileEntity_Hatch_Muffler tHatch : mMufflerHatches) {
+            if (isValidMetaTileEntity(tHatch)) {
+                mPollutionReduction = Math.max(tHatch.calculatePollutionReduction(100), mPollutionReduction);
+            }
+        }
+
+        long storedEnergy = 0;
+        long maxEnergy = 0;
+        for (GT_MetaTileEntity_Hatch_Energy tHatch : mEnergyHatches) {
+            if (isValidMetaTileEntity(tHatch)) {
+                storedEnergy += tHatch.getBaseMetaTileEntity().getStoredEU();
+                maxEnergy += tHatch.getBaseMetaTileEntity().getEUCapacity();
+            }
+        }
+
+        BeamInformation information = this.getInputInformation();
+
+        return new String[] {
+                /* 1 */ StatCollector.translateToLocal("GT5U.multiblock.Progress") + ": "
+                        + EnumChatFormatting.GREEN
+                        + GT_Utility.formatNumbers(mProgresstime / 20)
+                        + EnumChatFormatting.RESET
+                        + " s / "
+                        + EnumChatFormatting.YELLOW
+                        + GT_Utility.formatNumbers(mMaxProgresstime / 20)
+                        + EnumChatFormatting.RESET
+                        + " s",
+                /* 2 */ StatCollector.translateToLocal("GT5U.multiblock.energy") + ": "
+                        + EnumChatFormatting.GREEN
+                        + GT_Utility.formatNumbers(storedEnergy)
+                        + EnumChatFormatting.RESET
+                        + " EU / "
+                        + EnumChatFormatting.YELLOW
+                        + GT_Utility.formatNumbers(maxEnergy)
+                        + EnumChatFormatting.RESET
+                        + " EU",
+                /* 3 */ StatCollector.translateToLocal("GT5U.multiblock.usage") + ": "
+                        + EnumChatFormatting.RED
+                        + GT_Utility.formatNumbers(getActualEnergyUsage())
+                        + EnumChatFormatting.RESET
+                        + " EU/t",
+                /* 4 */ StatCollector.translateToLocal("GT5U.multiblock.mei") + ": "
+                        + EnumChatFormatting.YELLOW
+                        + GT_Utility.formatNumbers(getMaxInputVoltage())
+                        + EnumChatFormatting.RESET
+                        + " EU/t(*2A) "
+                        + StatCollector.translateToLocal("GT5U.machines.tier")
+                        + ": "
+                        + EnumChatFormatting.YELLOW
+                        + VN[GT_Utility.getTier(getMaxInputVoltage())]
+                        + EnumChatFormatting.RESET,
+                /* 5 */ StatCollector.translateToLocal("GT5U.multiblock.problems") + ": "
+                        + EnumChatFormatting.RED
+                        + (getIdealStatus() - getRepairStatus())
+                        + EnumChatFormatting.RESET
+                        + " "
+                        + StatCollector.translateToLocal("GT5U.multiblock.efficiency")
+                        + ": "
+                        + EnumChatFormatting.YELLOW
+                        + Float.toString(mEfficiency / 100.0F)
+                        + EnumChatFormatting.RESET
+                        + " %",
+                /* 6 */ StatCollector.translateToLocal("GT5U.multiblock.pollution") + ": "
+                        + EnumChatFormatting.GREEN
+                        + mPollutionReduction
+                        + EnumChatFormatting.RESET
+                        + " %",
+
+                /* 7 */ EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.in_pre")
+                        + ": "
+                        + EnumChatFormatting.RESET,
+                StatCollector.translateToLocal("beamline.particle") + ": " // "Multiblock Beamline Input:"
+                        + EnumChatFormatting.GOLD
+                        + Particle.getParticleFromId(information.getParticleId()).getLocalisedName() // e.g. "Electron
+                                                                                                     // (e-)"
+                        + " "
+                        + EnumChatFormatting.RESET,
+                StatCollector.translateToLocal("beamline.energy") + ": " // "Energy:"
+                        + EnumChatFormatting.DARK_RED
+                        + information.getEnergy()
+                        + EnumChatFormatting.RESET
+                        + " keV", // e.g. "10240 keV"
+                StatCollector.translateToLocal("beamline.focus") + ": " // "Focus:"
+                        + EnumChatFormatting.BLUE
+                        + information.getFocus()
+                        + " "
+                        + EnumChatFormatting.RESET,
+                StatCollector.translateToLocal("beamline.amount") + ": " // "Amount:"
+                        + EnumChatFormatting.LIGHT_PURPLE
+                        + information.getRate(),
+                EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.out_pre") // "Multiblock Beamline
+                                                                                             // Output:"
+                        + ": "
+                        + EnumChatFormatting.RESET,
+                StatCollector.translateToLocal("beamline.particle") + ": "
+                        + EnumChatFormatting.GOLD
+                        + Particle.getParticleFromId(this.outputParticle).getLocalisedName()
+                        + " "
+                        + EnumChatFormatting.RESET,
+                StatCollector.translateToLocal("beamline.energy") + ": "
+                        + EnumChatFormatting.DARK_RED
+                        + this.outputEnergy
+                        + EnumChatFormatting.RESET
+                        + " keV",
+                StatCollector.translateToLocal("beamline.focus") + ": "
+                        + EnumChatFormatting.BLUE
+                        + this.outputFocus
+                        + " "
+                        + EnumChatFormatting.RESET,
+                StatCollector.translateToLocal("beamline.amount") + ": "
+                        + EnumChatFormatting.LIGHT_PURPLE
+                        + this.outputRate, };
+    }
+    
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        // TODO Auto-generated method stub
-        return false;
+        
+    	this.mInputBeamline.clear();
+        this.mOutputBeamline.clear();
+        
+        this.mAntennaCasings.clear();
+        
+        this.energyHatchTier = 0;
+        this.antennaeTier = 0;
+        
+        this.outputEnergy = 0;
+        this.outputRate = 0;
+        this.outputFocus = 0;
+        this.outputParticle = 0;
+    	
+        if (!checkPiece(STRUCTURE_PIECE_ENTRANCE, 16, 3, 1)) return false;
+        if (!checkPiece(STRUCTURE_PIECE_BASE, 16, 3, 0)) return false;
+        
+    	
+        return this.mInputBeamline.size() == 1 && this.mOutputBeamline.size() == 1
+                && this.mMaintenanceHatches.size() == 1
+                && this.mEnergyHatches.size() == 4;
     }
 
     @Override
     public int getMaxEfficiency(ItemStack aStack) {
-        // TODO Auto-generated method stub
-        return 0;
+        return 10000;
     }
 
     @Override
     public int getDamageToComponent(ItemStack aStack) {
-        // TODO Auto-generated method stub
         return 0;
     }
 
