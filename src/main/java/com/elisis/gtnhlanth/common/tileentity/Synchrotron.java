@@ -600,11 +600,13 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
     	
     	float voltageFactor = 0;
     	
-    	float machineEnergy = 0;
     	
     	ArrayList<FluidStack> fluidList = this.getStoredFluids();
     	
     	if (fluidList.size() == 0) return false;
+    	
+    	this.mEfficiency = (10000 - (this.getIdealStatus() - this.getRepairStatus()) * 1000);
+        this.mEfficiencyIncrease = 10000;
     	
     	if (this.getInputInformation() == null) {
     		return false;
@@ -632,10 +634,14 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
     	GT_Log.out.print("Got this far");
     	
     	mMaxProgresstime = 20;
-    	mEUt = (int) getMaxInputVoltage();
-    	//mEUt = (int) -getMaxInputVoltage() / 4;
+    	
+    	long voltage = this.getMaxInputVoltage();
+    	mEUt = (int) -voltage;
+    	
     	
     	outputParticle = 1; // Photon 
+    	
+    	GT_Log.out.print("euT " + mEUt);
     	
     	FluidStack primaryFluid = fluidList.get(0);
     	
@@ -645,8 +651,9 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
             tempFactor = getTemperatureFactor(primaryFluid.getFluid().getTemperature());
         }
     	
-        machineFocus = (float) Math.max((((-0.9f) * tempFactor) * Math.pow(mEUt, 7.0/8.0) / 1024  + 95), 5); // minimum of 5
-        if (machineFocus >= 100) { // Max of 100
+        machineFocus = (float) Math.max((((-0.9f) * tempFactor) * Math.pow(voltage, 7.0/8.0) / 1024  + 95), 5); // minimum of 5
+        
+        if (machineFocus >= 95) { // Max of 95
         	machineFocus = 95;
         }
     	
@@ -657,22 +664,23 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
                 : inputFocus * (machineFocus / 100); // If input focus > machine focus, take the average of both, else
                                                      // weigh the former by the latter
         
-        long voltage = this.getMaxInputVoltage();
+        
         voltageFactor = getVoltageFactor(voltage, this.antennaeTier);
     	
         inputEnergy = this.getInputInformation().getEnergy();
         float mass = inputParticle.getMass();
     	
-        //machineEnergy = (float) (Math.max(-600 * voltageFactor + 5000, 100) * 300 * Math.pow(inputEnergy / (mass * Math.pow(3e8, 2)), 2)); // Min of 100
-        // Perhaps divide by mass here too
-        machineEnergy = (float) Math.max(inputEnergy/100000.0 * voltageFactor, 1E-3);
-    	outputEnergy = machineEnergy; //TODO maybe adjust behaviour here
+        
+        // Perhaps divide by mass somehow here too
+    	outputEnergy = (float) calculateOutputParticleEnergy(voltage, inputEnergy, this.antennaeTier); //TODO maybe adjust behaviour here
+    	
+    	if (outputEnergy < 1e-5)
     	
     	
     	inputRate = this.getInputInformation().getRate();
     	outputRate = (int) (inputRate * getOutputRatetio(voltageFactor));
     	
-    	GT_Log.out.print("Voltage factor " + voltageFactor);
+    	//GT_Log.out.print("Voltage factor " + voltageFactor);
     	
     	//outputAmount = inputParticle.getCharge() / Particle.ELECTRON.getCharge() * 100;
     	
@@ -681,7 +689,7 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
     	if (primaryFluid.amount < fluidConsumed || (!primaryFluid.isFluidEqual(FluidRegistry.getFluidStack("ic2coolant", 1))
                 && primaryFluid.getFluid().getTemperature() > 200)) {
 
-    		GT_Log.out.print("Primary fluid amount: " + primaryFluid.amount);
+    		//GT_Log.out.print("Primary fluid amount: " + primaryFluid.amount);
     		
             stopMachine();
             return false;
@@ -692,14 +700,16 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
         FluidStack fluidOutput = null;
         
         fluidOutput = new FluidStack(BeamlineRecipeLoader.coolantMap.get(primaryFluid.getFluid()), fluidConsumed);
+        
+        //GT_Log.out.print(fluidOutput.getLocalizedName());
 
         if (Objects.isNull(fluidOutput)) return false;
 
-        // GT_Log.out.print("Fluid out ok");
+        //GT_Log.out.print("Fluid out ok");
 
         this.addFluidOutputs(new FluidStack[] { fluidOutput });
 
-        GT_Log.out.print("This far too");
+        //GT_Log.out.print("This far too");
         
         outputAfterRecipe();
     	
@@ -754,6 +764,24 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
     private static float getTemperatureFactor(int temperature) {
     	float factor = (float) Math.pow(1.11, 0.18 * temperature);
 		return factor;
+    }
+    
+    private static double calculateOutputParticleEnergy(long voltage, double inputParticleEnergy, int antennaTier) {
+    	
+    	/* Energy in general increases as input energy increases, with the relationship between the machine EUt and energy being an negative exponential, with a maximum depending on both input
+    	   particle energy and antenna tier. The extent to which the output depends on the former is determined by the cbrt of the latter, meaning that increases in antenna tier result in diminishing returns.
+    	   In the same way, the curve of the output energy vs. machine voltage exponential depends on antenna tier, with an increase in antenna tier resulting in a more shallow curve up.
+    	   The effect of this also increases with the tier.
+    	 
+    	 	LaTeX:
+    	 	-\frac{l^{1.11t^{\frac{1}{3}}}}{40000000}\cdot\left(0.15^{\frac{2}{t^{\frac{3}{2}}}}\right)^{\frac{x}{60768}}\ +\ \frac{l^{1.11t^{\frac{1}{3}}}}{40000000}
+    	*/
+    	
+    	double energy = (Math.pow(inputParticleEnergy, 1.11 * Math.pow(antennaTier, 1.0/3.0)) / 40_000_000) * (-Math.pow(Math.pow(0.15, 2.0/(Math.pow(antennaTier, 3.0/2.0))), voltage / 60768.0) + 1); // In keV
+    	
+    	GT_Log.out.print("Energy " + energy);
+    	return energy;
+    	
     }
     
     // Punny, right?
@@ -865,9 +893,9 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
                         + EnumChatFormatting.RESET,
                 StatCollector.translateToLocal("beamline.energy") + ": "
                         + EnumChatFormatting.DARK_RED
-                        + this.outputEnergy
+                        + this.outputEnergy * 1000
                         + EnumChatFormatting.RESET
-                        + " keV",
+                        + " eV",
                 StatCollector.translateToLocal("beamline.focus") + ": "
                         + EnumChatFormatting.BLUE
                         + this.outputFocus
@@ -902,6 +930,8 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
                 && this.mMaintenanceHatches.size() == 1
                 && this.mEnergyHatches.size() == 4;
     }
+    
+    
 
     @Override
     public int getMaxEfficiency(ItemStack aStack) {
