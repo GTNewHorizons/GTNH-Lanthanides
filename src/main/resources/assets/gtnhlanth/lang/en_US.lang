@@ -50,12 +50,15 @@ fluid.Diaminotoluene=Diaminotoluene
 fluid.Toluene Tetramethyl Diisocyanate=Toluene Tetramethyl Diisocyanate
 fluid.Diluted Acetone=Diluted Acetone
 
+beamline.info=Machine Information
 
 beamline.in_pre=Multiblock Beamline Input
 beamline.particle=Particle
 beamline.energy=Energy
 beamline.focus=Focus
 beamline.amount=Amount
+
+beamline.temperature=Temperature
 
 beamline.out_pre=Multiblock Beamline Output
 

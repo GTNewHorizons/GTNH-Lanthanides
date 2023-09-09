@@ -452,6 +452,9 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
     private int outputRate;
     private int outputParticle;
     private float outputFocus;
+    private float machineFocus;
+    
+    private int machineTemp;
     
     public Synchrotron(String aName) {
         super(aName);
@@ -589,14 +592,15 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
     	float inputRate = 0;
     	int inputParticleId = 0;
     	
+    	machineFocus = 0;
+    	machineTemp = 0;
+    	
     	outputEnergy = 0;
     	outputFocus = 0;
     	outputRate = 0;
     	outputParticle = 0;
     	
     	float tempFactor = 0;
-    	
-    	float machineFocus = 0;
     	
     	float voltageFactor = 0;
     	
@@ -628,10 +632,10 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
     	
     	if (!inputParticle.canAccelerate()) {
     		stopMachine();
-    		GT_Log.out.print("Accelerate");
+    		//GT_Log.out.print("Accelerate");
     	}
     	
-    	GT_Log.out.print("Got this far");
+    	//GT_Log.out.print("Got this far");
     	
     	mMaxProgresstime = 20;
     	
@@ -641,22 +645,21 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
     	
     	outputParticle = 1; // Photon 
     	
-    	GT_Log.out.print("euT " + mEUt);
+    	//GT_Log.out.print("euT " + mEUt);
     	
     	FluidStack primaryFluid = fluidList.get(0);
     	
+    	int fluidTemperature;
+    	
     	if (primaryFluid.isFluidEqual(new FluidStack(FluidRegistry.getFluid("ic2coolant"), 1))) {
-            tempFactor = getTemperatureFactor(60); // Default temp of 300 is unreasonable
+            fluidTemperature = 60; // Default temp of 300 is unreasonable
         } else {
-            tempFactor = getTemperatureFactor(primaryFluid.getFluid().getTemperature());
+            fluidTemperature = primaryFluid.getFluid().getTemperature();
         }
     	
-        machineFocus = (float) Math.max((((-0.9f) * tempFactor) * Math.pow(voltage, 7.0/8.0) / 1024  + 95), 5); // minimum of 5
-        
-        if (machineFocus >= 95) { // Max of 95
-        	machineFocus = 95;
-        }
+    	machineTemp = fluidTemperature; //Solely for tricorder info
     	
+        machineFocus = getMachineFocus(fluidTemperature);
         
         inputFocus = this.getInputInformation().getFocus();
 
@@ -673,8 +676,6 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
         
         // Perhaps divide by mass somehow here too
     	outputEnergy = (float) calculateOutputParticleEnergy(voltage, inputEnergy, this.antennaeTier); //TODO maybe adjust behaviour here
-    	
-    	if (outputEnergy < 1e-5)
     	
     	
     	inputRate = this.getInputInformation().getRate();
@@ -737,6 +738,8 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
         outputEnergy = 0;
         outputParticle = 0;
         outputRate = 0;
+        machineFocus = 0;
+        machineTemp = 0;
         super.stopMachine();
     
     }
@@ -745,8 +748,8 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
 
         for (TileHatchInputBeamline in : this.mInputBeamline) {
 
-            //if (in.q == null) return new BeamInformation(0, 0, 0, 0);
-            if (in.q == null) return new BeamInformation(10000, 10, 0, 90); // TODO temporary for testing purposes
+            if (in.q == null) return new BeamInformation(0, 0, 0, 0);
+            //if (in.q == null) return new BeamInformation(10000, 10, 0, 90); // TODO temporary for testing purposes
 
             return in.q.getContent();
         }
@@ -782,6 +785,11 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
     	GT_Log.out.print("Energy " + energy);
     	return energy;
     	
+    }
+    
+    private static float getMachineFocus(int temperature) {
+    	
+    	return (float) Math.max(Math.min(Math.pow(1.5, -1.0/40.0 * (temperature - 480)), 90), 10);
     }
     
     // Punny, right?
@@ -860,8 +868,22 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
                         + EnumChatFormatting.RESET
                         + " %",
 
-                /* 7 */ EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.in_pre")
+               /* 7 */    EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.info")
                         + ": "
+                        + EnumChatFormatting.RESET,
+                StatCollector.translateToLocal("beamline.focus") + ": " //Machine Focus:
+            			+ EnumChatFormatting.BLUE
+            			+ machineFocus
+            			+ " "
+            			+ EnumChatFormatting.RESET,
+            	StatCollector.translateToLocal("beamline.temperature") + ": " //Temperature:
+            			+ EnumChatFormatting.DARK_RED
+            			+ machineTemp
+            			+ EnumChatFormatting.RESET
+            			+ " K", // e.g. "137 K"
+                        
+                /* 8 */ EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.in_pre")
+                       + ": "
                         + EnumChatFormatting.RESET,
                 StatCollector.translateToLocal("beamline.particle") + ": " // "Multiblock Beamline Input:"
                         + EnumChatFormatting.GOLD
