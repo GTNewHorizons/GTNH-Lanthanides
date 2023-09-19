@@ -157,6 +157,11 @@ public class RecipeLoader {
                 400,
                 1920);
 
+        GT_Values.RA.stdBuilder().noItemInputs()
+        		.fluidInputs(Materials.Chloroform.getFluid(1000), Materials.HydrofluoricAcid.getFluid(3000))
+        		.noItemOutputs().fluidOutputs(WerkstoffMaterialPool.Fluoroform.getFluidOrGas(1000), Materials.HydrochloricAcid.getFluid(3000))
+        		.duration(15 * GT_RecipeBuilder.SECONDS).eut(1920).addTo(GT_Recipe.GT_Recipe_Map.sChemicalRecipes);
+        
         // NB: http://www.smfl.rit.edu/pdf/process/process_nitride_etch_paper.pdf
         // Reactive Ion Etchant
         GT_Values.RA.stdBuilder().noItemInputs()
@@ -233,6 +238,13 @@ public class RecipeLoader {
 
         // Etch pt. 2 with KOH
         GT_Values.RA.stdBuilder()
+        		.fluidInputs(Materials.Argon.getGas(1000)).noFluidOutputs()
+        		.itemInputs(new ItemStack(LanthItemList.MASKED_MASK), MyMaterial.lithiumChloride.get(OrePrefixes.dust, 2), GT_ModHandler.getModItem("dreamcraft", "item.PotassiumHydroxideDust", 4))
+        		.itemOutputs(new ItemStack(LanthItemList.maskMap.get(MaskList.BLANK2)))
+        		.duration(25 * GT_RecipeBuilder.SECONDS).eut(1920).specialValue(2400)
+        		.addTo(GT_Recipe.GT_Recipe_Map.sBlastRecipes);
+        
+        GT_Values.RA.stdBuilder()
                 .itemInputs(
                         new ItemStack(LanthItemList.ETCHED_MASK_1),
                         Materials.Sodium.getDust(1),
@@ -281,7 +293,7 @@ public class RecipeLoader {
             }
 
             else {
-                // TODO Copyamount
+            	
                 for (ItemStack lens : OreDictionary.getOres("craftingLens" + lensColour.mName.replace(" ", ""))) {
 
                     if (lens == null) continue;

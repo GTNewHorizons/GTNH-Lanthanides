@@ -19,12 +19,12 @@ public class PhotolithographicMask extends Item {
         this.setMaxStackSize(1);
         this.setMaxDamage(maxDamage);
     }
-
+/*
     @Override
     public String getUnlocalizedName() {
         return "item.photomask." + this.name;
     }
-
+*/
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool) {
