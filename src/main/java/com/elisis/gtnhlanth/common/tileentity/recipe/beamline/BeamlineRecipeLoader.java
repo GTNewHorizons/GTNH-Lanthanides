@@ -1,19 +1,17 @@
 package com.elisis.gtnhlanth.common.tileentity.recipe.beamline;
 
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-
 import java.util.HashMap;
 
 import com.elisis.gtnhlanth.common.beamline.Particle;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
-import com.elisis.gtnhlanth.common.tileentity.LINAC;
 
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GT_OreDictUnificator;
 import gtPlusPlus.core.material.ELEMENT;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 
 public class BeamlineRecipeLoader {
 
@@ -28,6 +26,7 @@ public class BeamlineRecipeLoader {
         coolantMap.put(Materials.LiquidNitrogen.getGas(1L).getFluid(), Materials.Nitrogen.getGas(1L).getFluid());
         coolantMap.put(Materials.LiquidOxygen.getGas(1L).getFluid(), Materials.Oxygen.getGas(1L).getFluid());
         coolantMap.put(FluidRegistry.getFluid("ic2coolant"), FluidRegistry.getFluid("ic2hotcoolant"));
+        coolantMap.put(Materials.SuperCoolant.getFluid(1L).getFluid(), Materials.Water.getFluid(1L).getFluid());
 
         /*
          * ELECTRON
@@ -37,11 +36,22 @@ public class BeamlineRecipeLoader {
                 null,
                 Particle.ELECTRON.ordinal(),
                 20,
-                5000,
+                1000,
                 98,
-                0.5f,
-                1920);
+                0.1f,
+                7680);
 
+        BeamlineRecipeAdder.instance.addSourceChamberRecipe(
+        		new ItemStack[] {WerkstoffMaterialPool.LanthanumHexaboride.get(OrePrefixes.stickLong, 1)}, 
+        		null, 
+        		Particle.ELECTRON.ordinal(), 
+        		60, 
+        		5000,
+        		99, 
+        		0.3f, 
+        		7680
+        		);
+        
         /*
          * NEUTRON
          */

@@ -763,12 +763,12 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
     	return factor;
     	
     }
-    
+    /*
     private static float getTemperatureFactor(int temperature) {
     	float factor = (float) Math.pow(1.11, 0.18 * temperature);
 		return factor;
     }
-    
+    */
     private static double calculateOutputParticleEnergy(long voltage, double inputParticleEnergy, int antennaTier) {
     	
     	/* Energy in general increases as input energy increases, with the relationship between the machine EUt and energy being an negative exponential, with a maximum depending on both input

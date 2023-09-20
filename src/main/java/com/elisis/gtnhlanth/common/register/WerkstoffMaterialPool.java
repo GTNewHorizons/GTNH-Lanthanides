@@ -1028,6 +1028,54 @@ public class WerkstoffMaterialPool implements Runnable {
             new Werkstoff.GenerationFeatures().disable().addCells(),
             offsetID4 + 5,
             TextureSet.SET_FLUID);
+    
+    
+    public static final Werkstoff BoronTrioxide = new Werkstoff(
+    		new short[] {238, 222, 209},
+    		"Boron Trioxide",
+    		subscriptNumbers("B2O3"),
+    		new Werkstoff.Stats().setElektrolysis(true),
+    		Werkstoff.Types.COMPOUND,
+    		new Werkstoff.GenerationFeatures().disable().onlyDust(),
+    		offsetID4 + 6,
+    		TextureSet.SET_DULL,
+    		new Pair<>(Materials.Boron, 2),
+    		new Pair<>(Materials.Oxygen, 3)
+    		);
+    
+    public static final Werkstoff BoronTrichloride = new Werkstoff(
+    		new short[] {154, 96, 208},
+    		"Boron Trichloride",
+    		subscriptNumbers("BCl3"),
+    		new Werkstoff.Stats().setElektrolysis(true),
+    		Werkstoff.Types.COMPOUND,
+    		new Werkstoff.GenerationFeatures().disable().addCells(),
+    		offsetID4 + 7,
+    		TextureSet.SET_FLUID,
+    		new Pair<>(Materials.Boron, 1),
+    		new Pair<>(Materials.Chlorine, 3)
+    		);
+    
+    public static final Werkstoff LanthanumHexaboride = new Werkstoff(
+    		new short[] {140, 110, 120},
+    		"Lanthanum Hexaboride",
+    		subscriptNumbers("LaB6"),
+    		new Werkstoff.Stats(),
+    		Werkstoff.Types.COMPOUND,
+    		new Werkstoff.GenerationFeatures().disable().addGems().addSimpleMetalWorkingItems(),
+    		offsetID4 + 8,
+    		TextureSet.SET_GEM_HORIZONTAL);
+    
+    public static final Werkstoff LanthanumOxide = new Werkstoff(
+    		new short[] {105, 209, 180},
+    		"Lanthanum Oxide",
+    		subscriptNumbers("La2O3"),
+    		new Werkstoff.Stats(),
+    		Werkstoff.Types.COMPOUND,
+    		new Werkstoff.GenerationFeatures().disable().onlyDust(),
+    		offsetID4 + 9,
+    		TextureSet.SET_DULL
+    		);
 
     public static void runInit() {
         addSubTags();
