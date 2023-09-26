@@ -2,10 +2,6 @@ package com.elisis.gtnhlanth.common.register;
 
 import java.util.HashMap;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
 import com.elisis.gtnhlanth.common.beamline.TileBeamline;
 import com.elisis.gtnhlanth.common.block.AntennaCasing;
 import com.elisis.gtnhlanth.common.block.Casing;
@@ -19,9 +15,13 @@ import com.elisis.gtnhlanth.common.tileentity.DissolutionTank;
 import com.elisis.gtnhlanth.common.tileentity.LINAC;
 import com.elisis.gtnhlanth.common.tileentity.SourceChamber;
 import com.elisis.gtnhlanth.common.tileentity.Synchrotron;
+import com.elisis.gtnhlanth.common.tileentity.TargetChamber;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.util.GT_LanguageManager;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public final class LanthItemList {
 
@@ -33,6 +33,8 @@ public final class LanthItemList {
 
     public static ItemStack SYNCHROTRON;
 
+    public static ItemStack TARGET_CHAMBER;
+    
     public static ItemStack BEAMLINE_PIPE;
 
     public static ItemStack LUV_BEAMLINE_INPUT_HATCH;
@@ -64,6 +66,13 @@ public final class LanthItemList {
     //public static final Block ANTENNA_CASING_T1 = new Casing("antenna_t1");
     public static final Block ANTENNA_CASING_T1 = new AntennaCasing(1);
     public static final Block ANTENNA_CASING_T2 = new AntennaCasing(2);
+    
+    
+    public static final Block FOCUS_MANIPULATION_CASING = new Casing("focus_manipulator");
+    public static final Block FOCUS_HOLDER = new Casing("focus_holder");
+    
+    public static final Block TARGET_RECEPTACLE_CASING = new Casing("target_receptacle");
+    public static final Block TARGET_HOLDER = new Casing("target_holder");
 
     public static HashMap<MaskList, Item> maskMap = new HashMap<>();
 
@@ -89,6 +98,8 @@ public final class LanthItemList {
         SOURCE_CHAMBER = new SourceChamber(10506, "Source Chamber", "Source Chamber").getStackForm(1L);
 
         SYNCHROTRON = new Synchrotron(10507, "Synchrotron", "Synchrotron").getStackForm(1L);
+        
+        TARGET_CHAMBER = new TargetChamber(10508, "Target Chamber", "Target Chamber").getStackForm(1L);
     }
 
     public static void registerTypical() {
@@ -118,6 +129,15 @@ public final class LanthItemList {
         GameRegistry.registerBlock(ANTENNA_CASING_T1, ANTENNA_CASING_T1.getUnlocalizedName());
 
         GameRegistry.registerBlock(ANTENNA_CASING_T2, ANTENNA_CASING_T2.getUnlocalizedName());
+        
+        GameRegistry.registerBlock(FOCUS_MANIPULATION_CASING, FOCUS_MANIPULATION_CASING.getUnlocalizedName());
+        
+        GameRegistry.registerBlock(FOCUS_HOLDER, FOCUS_HOLDER.getUnlocalizedName());
+        
+        GameRegistry.registerBlock(TARGET_RECEPTACLE_CASING, TARGET_RECEPTACLE_CASING.getUnlocalizedName());
+        
+        GameRegistry.registerBlock(TARGET_HOLDER, TARGET_HOLDER.getUnlocalizedName());
+
 
         for (MaskList mask : MaskList.values()) {
 
