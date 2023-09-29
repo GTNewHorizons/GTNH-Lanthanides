@@ -151,7 +151,7 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
            
         if (tRecipe == null || !tRecipe.isRecipeInputEqual(false, new FluidStack[] {}, tItems)) return false; // Does not consume input item(s)
         
-        //ItemStack focusItem = tRecipe.focusItem;
+        ItemStack focusItem = tRecipe.focusItem;
         
         this.mEfficiency = (10000 - (this.getIdealStatus() - this.getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
@@ -180,6 +180,28 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
         
         mEUt = (int) -tVoltage;
         if (this.mEUt > 0) this.mEUt = (-this.mEUt);
+        
+        ItemStack focusStackReference = null;
+        
+        for (ItemStack item : tItems) {
+        	if (item.getItem().equals(focusItem.getItem())) { //Not the target item
+        		focusStackReference = item;
+        		break;
+        	}
+        }
+        
+        if (focusStackReference == null) {
+        	return false; //Something went wrong
+        }
+        
+        if (focusStackReference.attemptDamageItem(1, null)) {
+        	focusStackReference.stackSize--;
+        	
+        	if (focusStackReference.stackSize < 0)
+            {
+        		focusStackReference.stackSize = 0;
+            }
+        }
         
         this.mOutputItems = tRecipe.mOutputs;
         this.updateSlots();

@@ -2,6 +2,7 @@ package com.elisis.gtnhlanth.common.tileentity.recipe.beamline;
 
 import java.util.HashSet;
 
+import gregtech.api.gui.modularui.GT_UITextures;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 
@@ -26,7 +27,7 @@ public class BeamlineRecipeAdder {
             false,
             false);
     
-    public final LanthRecipeMap TargetChamberRecipes = new LanthRecipeMap(
+    public final LanthRecipeMap TargetChamberRecipes = (LanthRecipeMap) new LanthRecipeMap(
     		new HashSet<>(500),
     		"gtnhlanth.recipe.tc",
     		StatCollector.translateToLocal("tile.recipe.sc"),
@@ -41,7 +42,7 @@ public class BeamlineRecipeAdder {
     		1,
     		null,
     		false,
-    		false);
+    		false).setProgressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE);
 
     /***
      *

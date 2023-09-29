@@ -18,8 +18,8 @@ public class WerkstoffMaterialPool implements Runnable {
 
     private static final int offsetID = 11_000;
     private static final int offsetID2 = 11_100;
-    private static final int offsetID3 = 11_300;
-    private static final int offsetID4 = 11_400;
+    private static final int offsetID3 = 11_300; // Do not go above 11_317
+    private static final int offsetID4 = 11_350;
 
     /*
      * public static final Werkstoff __ = new Werkstoff( new short[] {_, _, _}, "__", new Werkstoff.Stats(),

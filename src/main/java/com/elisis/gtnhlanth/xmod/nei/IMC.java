@@ -9,9 +9,11 @@ public class IMC {
     public static void IMCSender() {
         sendHandler("gtnhlanth.recipe.digester", "gregtech:gt.blockmachines:10500");
         sendHandler("gtnhlanth.recipe.disstank", "gregtech:gt.blockmachines:10501");
+        sendHandler("gtnhlanth.recipe.tc", "gregtech:gt.blockmachines:10508");
 
         sendCatalyst("gtnhlanth.recipe.digester", "gregtech:gt.blockmachines:10500");
         sendCatalyst("gtnhlanth.recipe.disstank", "gregtech:gt.blockmachines:10501");
+        sendCatalyst("gtnhlanth.recipe.tc", "gregtech:gt.blockmachines:10508");
     }
 
     private static void sendHandler(String aName, String aBlock) {

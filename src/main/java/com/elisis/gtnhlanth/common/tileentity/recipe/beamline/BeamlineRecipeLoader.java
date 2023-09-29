@@ -3,11 +3,16 @@ package com.elisis.gtnhlanth.common.tileentity.recipe.beamline;
 import java.util.HashMap;
 
 import com.elisis.gtnhlanth.common.beamline.Particle;
+import com.elisis.gtnhlanth.common.item.MaskList;
+import com.elisis.gtnhlanth.common.register.LanthItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 
+import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Utility;
 import gtPlusPlus.core.material.ELEMENT;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -77,5 +82,19 @@ public class BeamlineRecipeLoader {
                 90,
                 999,
                 512);
+        
+        
+        BeamlineRecipeAdder.instance.addTargetChamberRecipe(
+        		ItemList.Circuit_Silicon_Wafer3.get(1), 
+        		ItemList.Circuit_Wafer_CPU.get(1), 
+        		GT_Utility.copyAmount(0, new ItemStack(LanthItemList.maskMap.get(MaskList.CPU))), 
+        		0, 
+        		200, 
+        		1, 
+        		100, 
+        		50, 
+        		1, 
+        		1920
+        	);
     }
 }
