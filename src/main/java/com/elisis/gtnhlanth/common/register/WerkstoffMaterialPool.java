@@ -19,7 +19,7 @@ public class WerkstoffMaterialPool implements Runnable {
     private static final int offsetID = 11_000;
     private static final int offsetID2 = 11_100;
     private static final int offsetID3 = 11_300; // Do not go above 11_317
-    private static final int offsetID4 = 11_350;
+    private static final int offsetID3b = 11_350;
 
     /*
      * public static final Werkstoff __ = new Werkstoff( new short[] {_, _, _}, "__", new Werkstoff.Stats(),
@@ -969,7 +969,7 @@ public class WerkstoffMaterialPool implements Runnable {
             Werkstoff.Types.MIXTURE,
             new Werkstoff.GenerationFeatures().disable().onlyDust().addMetalItems().addMixerRecipes((short) 3)
                     .enforceUnification(),
-            offsetID4,
+            offsetID3b,
             TextureSet.SET_DULL,
             new Pair<>(Materials.Nickel, 4),
             new Pair<>(Materials.Iron, 1),
@@ -983,7 +983,7 @@ public class WerkstoffMaterialPool implements Runnable {
             Werkstoff.Types.MIXTURE,
             new Werkstoff.GenerationFeatures().disable().onlyDust().addMetalItems().addMultipleIngotMetalWorkingItems()
                     .addSimpleMetalWorkingItems().addCraftingMetalWorkingItems().enforceUnification(),
-            offsetID4 + 1,
+            offsetID3b + 1,
             TextureSet.SET_METALLIC);
 
     public static final Werkstoff Thorium234 = new Werkstoff(
@@ -993,7 +993,7 @@ public class WerkstoffMaterialPool implements Runnable {
             new Werkstoff.Stats().setBlastFurnace(true).setRadioactive(true),
             Werkstoff.Types.ISOTOPE,
             new Werkstoff.GenerationFeatures().disable().onlyDust(),
-            offsetID4 + 2,
+            offsetID3b + 2,
             TextureSet.SET_DULL);
 
     public static final Werkstoff SiliconNitride = new Werkstoff(
@@ -1003,7 +1003,7 @@ public class WerkstoffMaterialPool implements Runnable {
             new Werkstoff.Stats(),
             Werkstoff.Types.COMPOUND,
             new Werkstoff.GenerationFeatures().disable().onlyDust().addMetalItems().enforceUnification(),
-            offsetID4 + 3,
+            offsetID3b + 3,
             TextureSet.SET_DULL);
 
     public static final Werkstoff Fluoroform = new Werkstoff(
@@ -1013,7 +1013,7 @@ public class WerkstoffMaterialPool implements Runnable {
             new Werkstoff.Stats().setElektrolysis(true),
             Werkstoff.Types.COMPOUND,
             new Werkstoff.GenerationFeatures().disable().addCells(),
-            offsetID4 + 4,
+            offsetID3b + 4,
             TextureSet.SET_FLUID,
             new Pair<>(Materials.Carbon, 1),
             new Pair<>(Materials.Hydrogen, 1),
@@ -1026,7 +1026,7 @@ public class WerkstoffMaterialPool implements Runnable {
             new Werkstoff.Stats().setCentrifuge(true),
             Werkstoff.Types.MIXTURE,
             new Werkstoff.GenerationFeatures().disable().addCells(),
-            offsetID4 + 5,
+            offsetID3b + 5,
             TextureSet.SET_FLUID);
     
     
@@ -1037,7 +1037,7 @@ public class WerkstoffMaterialPool implements Runnable {
     		new Werkstoff.Stats().setElektrolysis(true),
     		Werkstoff.Types.COMPOUND,
     		new Werkstoff.GenerationFeatures().disable().onlyDust(),
-    		offsetID4 + 6,
+    		offsetID3b + 6,
     		TextureSet.SET_DULL,
     		new Pair<>(Materials.Boron, 2),
     		new Pair<>(Materials.Oxygen, 3)
@@ -1050,7 +1050,7 @@ public class WerkstoffMaterialPool implements Runnable {
     		new Werkstoff.Stats().setElektrolysis(true),
     		Werkstoff.Types.COMPOUND,
     		new Werkstoff.GenerationFeatures().disable().addCells(),
-    		offsetID4 + 7,
+    		offsetID3b + 7,
     		TextureSet.SET_FLUID,
     		new Pair<>(Materials.Boron, 1),
     		new Pair<>(Materials.Chlorine, 3)
@@ -1063,7 +1063,7 @@ public class WerkstoffMaterialPool implements Runnable {
     		new Werkstoff.Stats(),
     		Werkstoff.Types.COMPOUND,
     		new Werkstoff.GenerationFeatures().disable().addGems().addSimpleMetalWorkingItems(),
-    		offsetID4 + 8,
+    		offsetID3b + 8,
     		TextureSet.SET_GEM_HORIZONTAL);
     
     public static final Werkstoff LanthanumOxide = new Werkstoff(
@@ -1073,7 +1073,7 @@ public class WerkstoffMaterialPool implements Runnable {
     		new Werkstoff.Stats(),
     		Werkstoff.Types.COMPOUND,
     		new Werkstoff.GenerationFeatures().disable().onlyDust(),
-    		offsetID4 + 9,
+    		offsetID3b + 9,
     		TextureSet.SET_DULL
     		);
 
