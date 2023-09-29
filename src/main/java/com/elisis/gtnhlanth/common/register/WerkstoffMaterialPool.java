@@ -1734,8 +1734,6 @@ public class WerkstoffMaterialPool implements Runnable {
     // new Pair<>(Oxygen, 3),
     // new Pair<>(Hydrogen, 35));
 
-    public static void runInit() {
-
     // Beamline fuckery
     public static final Werkstoff Permalloy = new Werkstoff(
             new short[] { 195, 230, 225 },
