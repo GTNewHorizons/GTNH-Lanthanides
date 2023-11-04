@@ -178,26 +178,30 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
         
         ItemStack[] tItemsArray = tItems.toArray(new ItemStack[0]);
         
-        GT_Log.out.print("tItemsArray: " +  Arrays.toString(tItemsArray));
+        //GT_Log.out.print("tItemsArray: " +  Arrays.toString(tItemsArray));
         
+        /*
         for (GT_Recipe tRecipe : BeamlineRecipeAdder.instance.TargetChamberRecipes.mRecipeList) {
         	GT_Log.out.print(Arrays.toString(tRecipe.mInputs) + "\n");
         }
+        */
         
         RecipeTC tRecipe = (RecipeTC) BeamlineRecipeAdder.instance.TargetChamberRecipes.findRecipe(
         		this.getBaseMetaTileEntity(), false, tVoltage, null, tItemsArray);
         
-        if (tRecipe == null) {
+        /*if (tRecipe == null) {
         	GT_Log.out.print("Recipe null!");
-        }
+        }*/
         
-        GT_Log.out.print("Focus in machine " + tFocusItem.getItem().getUnlocalizedName());
-        GT_Log.out.print("Focus in recipe " + tRecipe.focusItem.getItem().getUnlocalizedName());
+        //GT_Log.out.print("Focus in machine " + tFocusItem.getItem().getUnlocalizedName());
+        //GT_Log.out.print("Focus in recipe " + tRecipe.focusItem.getItem().getUnlocalizedName());
+        
+        
+           
+        if (tRecipe == null || !tRecipe.isRecipeInputEqual(true, new FluidStack[] {}, tItemsArray)) return false;
         
         if (tRecipe.focusItem.getItem() != tFocusItem.getItem())
         	return false;
-           
-        if (tRecipe == null || !tRecipe.isRecipeInputEqual(true, new FluidStack[] {}, tItemsArray)) return false;
         
         this.mEfficiency = (10000 - (this.getIdealStatus() - this.getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
