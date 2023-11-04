@@ -5,13 +5,16 @@ import com.elisis.gtnhlanth.common.item.ICanFocus;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.objects.GT_RenderedTexture;
 import gtPlusPlus.api.objects.data.AutoMap;
 import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.nbthandlers.GT_MetaTileEntity_Hatch_NbtConsumable;
+import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileBusInputFocus extends GT_MetaTileEntity_Hatch_NbtConsumable {
 
-	private static final int INPUT_SLOTS = 16;
+	private static final int INPUT_SLOTS = 4;
 	
 	public TileBusInputFocus(int id, String name, String nameRegional) {
 		super(id, name, nameRegional, 0, INPUT_SLOTS, "Input Bus for Foci", false);	
@@ -25,6 +28,11 @@ public class TileBusInputFocus extends GT_MetaTileEntity_Hatch_NbtConsumable {
 	public int getInputSlotCount() {
 		return INPUT_SLOTS;
 	}
+	
+	@Override
+    public boolean isFacingValid(ForgeDirection facing) {
+        return true;
+    }
 
 	@Override
 	public AutoMap<ItemStack> getItemsValidForUsageSlots() {
@@ -33,7 +41,14 @@ public class TileBusInputFocus extends GT_MetaTileEntity_Hatch_NbtConsumable {
 	
 	@Override
     public boolean isItemValidForUsageSlot(ItemStack aStack) {
-        return aStack.getItem() instanceof ICanFocus;
+        
+		if (this.getContentUsageSlots().size() == 0) {
+        	return aStack.getItem() instanceof ICanFocus;
+        }
+        else { 
+        	return false;
+        }
+        
     }
 
 	@Override
@@ -42,15 +57,13 @@ public class TileBusInputFocus extends GT_MetaTileEntity_Hatch_NbtConsumable {
 	}
 
 	@Override
-	public ITexture[] getTexturesActive(ITexture arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	public ITexture[] getTexturesActive(ITexture aBaseTexture) {
+		return new ITexture[] { aBaseTexture, new GT_RenderedTexture(TexturesGtBlock.Overlay_Bus_Catalyst) };
 	}
 
 	@Override
-	public ITexture[] getTexturesInactive(ITexture arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	public ITexture[] getTexturesInactive(ITexture aBaseTexture) {
+		return new ITexture[] { aBaseTexture, new GT_RenderedTexture(TexturesGtBlock.Overlay_Bus_Catalyst) };
 	}
 
 	@Override
