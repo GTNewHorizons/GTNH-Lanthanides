@@ -996,7 +996,7 @@ public class WerkstoffMaterialPool implements Runnable {
 
     public static final Werkstoff ImpureSamariumOxalate = new Werkstoff(
             new short[] { 248, 248, 180 },
-            "Samarium Oxalate Enriched",
+            "Impure Samarium Oxalate",
             subscriptNumbers("?Sm2(C2O4)3"),
             new Werkstoff.Stats(),
             Werkstoff.Types.MIXTURE,
@@ -1649,7 +1649,7 @@ public class WerkstoffMaterialPool implements Runnable {
     public static final Werkstoff ErbiumOreConcentrate = new Werkstoff(
             new short[] { 233, 170, 100 },
             "Erbium Ore Concentrate",
-            subscriptNumbers("??Eb??"),
+            subscriptNumbers("??Er??"),
             new Werkstoff.Stats(),
             Werkstoff.Types.MIXTURE,
             new Werkstoff.GenerationFeatures().disable().onlyDust(),
