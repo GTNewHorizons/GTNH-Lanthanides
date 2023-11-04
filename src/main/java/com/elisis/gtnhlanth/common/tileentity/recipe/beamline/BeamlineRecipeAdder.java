@@ -96,7 +96,7 @@ public class BeamlineRecipeAdder {
     public boolean addTargetChamberRecipe(ItemStack itemInput, ItemStack itemOutput, ItemStack itemFocus, int particleId, int amount, 
     		float minEnergy, float maxEnergy, float minFocus, float energyRatio, int minEUt) {
     	
-    	return (SourceChamberRecipes.addRecipe(
+    	return (TargetChamberRecipes.addRecipe(
     			new RecipeTC(
     					false, 
     					itemInput, 

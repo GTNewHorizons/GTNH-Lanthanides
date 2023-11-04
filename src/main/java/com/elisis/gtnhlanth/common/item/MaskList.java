@@ -16,7 +16,7 @@ public enum MaskList {
     RAM("ram", "Random Access Memory", 200, "", BLANK1, Dyes.dyeCyan),
     NAND("nand", "NAND", 200, "", BLANK2, Dyes._NULL), // NAND uses only Ender Pearl lens, don't ask me why
     NOR("nor", "NOR", 100, "", BLANK2, Dyes._NULL), // Same as above, but with ender eye
-    CPU("cpu", "Central Processing Unit", 80, "", BLANK2, Dyes.dyeWhite),
+    CPU("cpu", "Central Processing Unit", 10, "", BLANK2, Dyes.dyeWhite),
     SOC("soc", "SoC", 150, "", BLANK2, Dyes.dyeYellow),
     ASOC("asoc", "Advanced SoC", 120, "", BLANK2, Dyes.dyeGreen),
     PIC("pic", "Power IC", 100, "", BLANK2, Dyes.dyeBlue),

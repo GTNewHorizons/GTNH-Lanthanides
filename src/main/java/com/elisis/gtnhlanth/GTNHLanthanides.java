@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.logging.Logger;
 
 import com.elisis.gtnhlanth.common.CommonProxy;
+import com.elisis.gtnhlanth.common.item.MaskList;
 import com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool;
 import com.elisis.gtnhlanth.common.register.LanthItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
@@ -22,6 +23,7 @@ import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import gregtech.api.util.GT_Log;
+import net.minecraft.item.ItemStack;
 
 @Mod(
         modid = Tags.MODID,
@@ -90,7 +92,7 @@ public class GTNHLanthanides {
 
     @EventHandler
     public static void onModLoadingComplete(FMLLoadCompleteEvent e) {
-        // GT_Log.out.print("AAAAAAAAAAAAAA");
+        GT_Log.out.print("AAAAAAAAAAAAAA " + new ItemStack(LanthItemList.maskMap.get(MaskList.CPU)).getUnlocalizedName());
         //
         // GT_Log.out.print("We are done loading");
         BotRecipes.removeRecipes();

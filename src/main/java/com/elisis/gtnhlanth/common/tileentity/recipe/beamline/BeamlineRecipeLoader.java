@@ -87,11 +87,11 @@ public class BeamlineRecipeLoader {
         BeamlineRecipeAdder.instance.addTargetChamberRecipe(
         		ItemList.Circuit_Silicon_Wafer3.get(1), 
         		ItemList.Circuit_Wafer_CPU.get(1), 
-        		GT_Utility.copyAmount(0, new ItemStack(LanthItemList.maskMap.get(MaskList.CPU))), 
+        		new ItemStack(LanthItemList.maskMap.get(MaskList.CPU), 1), 
         		0, 
-        		200, 
         		1, 
-        		100, 
+        		1, 
+        		10000000, 
         		50, 
         		1, 
         		1920

@@ -8,8 +8,10 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.elisis.gtnhlanth.common.beamline.BeamInformation;
+import com.elisis.gtnhlanth.common.hatch.TileBusInputFocus;
 import com.elisis.gtnhlanth.common.hatch.TileHatchInputBeamline;
 import com.elisis.gtnhlanth.common.register.LanthItemList;
 import com.elisis.gtnhlanth.common.tileentity.recipe.beamline.BeamlineRecipeAdder;
@@ -25,7 +27,9 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMultiBlockBase;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
+import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.GT_Recipe;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -36,6 +40,8 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
 	private static final IStructureDefinition<TargetChamber> STRUCTURE_DEFINITION;
 
     private ArrayList<TileHatchInputBeamline> mInputBeamline = new ArrayList<>();
+    
+    private ArrayList<TileBusInputFocus> mInputFocus = new ArrayList<>();
 
     private static final int CASING_INDEX = 49;
     
@@ -62,7 +68,9 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
     			.addElement('j', ofBlockAdder(TargetChamber::addGlass, ItemRegistry.bw_glasses[0], 1))
     			.addElement('b', ofHatchAdder(TargetChamber::addBeamLineInputHatch, CASING_INDEX, 1))
     			.addElement('c', ofBlock(LanthItemList.SHIELDED_ACCELERATOR_CASING, 0))
-    			.addElement('l', ofHatchAdder(GT_MetaTileEntity_MultiBlockBase::addInputBusToMachineList, CASING_INDEX, 1))
+    			
+    			.addElement('l', ofHatchAdder(TargetChamber::addFocusInputHatch, CASING_INDEX, 1))
+    			
     			.addElement('t', ofHatchAdder(GT_MetaTileEntity_MultiBlockBase::addInputBusToMachineList, CASING_INDEX, 1))
     			.addElement('s', ofBlock(LanthItemList.SHIELDED_ACCELERATOR_GLASS, 0))
     			.addElement('r', ofBlock(LanthItemList.FOCUS_MANIPULATION_CASING, 0))
@@ -89,6 +97,21 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
 
         if (mte instanceof TileHatchInputBeamline) {
             return this.mInputBeamline.add((TileHatchInputBeamline) mte);
+        }
+
+        return false;
+    }
+    
+    private boolean addFocusInputHatch(IGregTechTileEntity te, int casingIndex) {
+
+        if (te == null) return false;
+
+        IMetaTileEntity mte = te.getMetaTileEntity();
+
+        if (mte == null) return false;
+
+        if (mte instanceof TileBusInputFocus) {
+            return this.mInputFocus.add((TileBusInputFocus) mte);
         }
 
         return false;
@@ -142,16 +165,39 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
 		float inputFocus = 0;
 		
 		
-		ItemStack[] tItems = this.getStoredInputs().toArray(new ItemStack[0]);
-        // GT_Log.out.print(Arrays.toString(tItems));
+		ArrayList<ItemStack> tItems = this.getStoredInputs();
+		ItemStack tFocusItem = this.getFocusItemStack();
+		
+		if (tFocusItem == null)
+			return false;
+        
+		// GT_Log.out.print(Arrays.toString(tItems));
         long tVoltage = this.getMaxInputVoltage();
         
-        RecipeTC tRecipe = (RecipeTC) BeamlineRecipeAdder.instance.TargetChamberRecipes.findRecipe(
-        		this.getBaseMetaTileEntity(), false, tVoltage, null, tItems);
-           
-        if (tRecipe == null || !tRecipe.isRecipeInputEqual(false, new FluidStack[] {}, tItems)) return false; // Does not consume input item(s)
+        //tItems.add(tFocusItem);
         
-        ItemStack focusItem = tRecipe.focusItem;
+        ItemStack[] tItemsArray = tItems.toArray(new ItemStack[0]);
+        
+        GT_Log.out.print("tItemsArray: " +  Arrays.toString(tItemsArray));
+        
+        for (GT_Recipe tRecipe : BeamlineRecipeAdder.instance.TargetChamberRecipes.mRecipeList) {
+        	GT_Log.out.print(Arrays.toString(tRecipe.mInputs) + "\n");
+        }
+        
+        RecipeTC tRecipe = (RecipeTC) BeamlineRecipeAdder.instance.TargetChamberRecipes.findRecipe(
+        		this.getBaseMetaTileEntity(), false, tVoltage, null, tItemsArray);
+        
+        if (tRecipe == null) {
+        	GT_Log.out.print("Recipe null!");
+        }
+        
+        GT_Log.out.print("Focus in machine " + tFocusItem.getItem().getUnlocalizedName());
+        GT_Log.out.print("Focus in recipe " + tRecipe.focusItem.getItem().getUnlocalizedName());
+        
+        if (tRecipe.focusItem.getItem() != tFocusItem.getItem())
+        	return false;
+           
+        if (tRecipe == null || !tRecipe.isRecipeInputEqual(true, new FluidStack[] {}, tItemsArray)) return false;
         
         this.mEfficiency = (10000 - (this.getIdealStatus() - this.getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
@@ -175,35 +221,17 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
         if (inputParticle != tRecipe.particleId)
         	return false;
         
-        this.mMaxProgresstime =  Math.round((tRecipe.amount / inputRate) * 10 * 20); // 5 seconds per integer multiple over the rate. E.g., 100a, 10r would equal 50 seconds
+        this.mMaxProgresstime =  Math.round((tRecipe.amount / inputRate * 10 * 20)); // 10 seconds per integer multiple over the rate. E.g., 100a, 10r would equal 100 seconds
         if (this.mMaxProgresstime == Integer.MAX_VALUE - 1 && this.mEUt == Integer.MAX_VALUE - 1) return false;
         
         mEUt = (int) -tVoltage;
         if (this.mEUt > 0) this.mEUt = (-this.mEUt);
         
-        ItemStack focusStackReference = null;
-        
-        for (ItemStack item : tItems) {
-        	if (item.getItem().equals(focusItem.getItem())) { //Not the target item
-        		focusStackReference = item;
-        		break;
-        	}
-        }
-        
-        if (focusStackReference == null) {
-        	return false; //Something went wrong
-        }
-        
-        if (focusStackReference.attemptDamageItem(1, null)) {
-        	focusStackReference.stackSize--;
-        	
-        	if (focusStackReference.stackSize < 0)
-            {
-        		focusStackReference.stackSize = 0;
-            }
-        }
         
         this.mOutputItems = tRecipe.mOutputs;
+        
+        mInputFocus.get(0).depleteFocusDurability(1);
+        
         this.updateSlots();
         
         return true;
@@ -221,11 +249,22 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
         return null;
     }
 	
+	private ItemStack getFocusItemStack() {
+		
+		for (TileBusInputFocus hatch : this.mInputFocus) {
+			return hatch.getContentUsageSlots().get(0);
+		}
+		
+		return null;
+		
+	}
+	
 
 	@Override
 	public boolean checkMachine(IGregTechTileEntity arg0, ItemStack arg1) {
 		
 		mInputBeamline.clear();
+		mInputFocus.clear();
 		
 		return checkPiece("base", 2, 4, 0);
 	}

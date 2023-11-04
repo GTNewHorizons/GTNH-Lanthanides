@@ -1,6 +1,7 @@
 package com.elisis.gtnhlanth.common.hatch;
 
 import com.elisis.gtnhlanth.common.item.ICanFocus;
+import com.elisis.gtnhlanth.util.Util;
 
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -26,7 +27,7 @@ public class TileBusInputFocus extends GT_MetaTileEntity_Hatch_NbtConsumable {
 
 	@Override
 	public int getInputSlotCount() {
-		return INPUT_SLOTS;
+		return INPUT_SLOTS;	
 	}
 	
 	@Override
@@ -54,6 +55,14 @@ public class TileBusInputFocus extends GT_MetaTileEntity_Hatch_NbtConsumable {
 	@Override
 	public String getNameGUI() {
 		return "Focus Input Bus";
+	}
+	
+	public void depleteFocusDurability(int damage) {
+		
+		ItemStack stack = this.getContentUsageSlots().toArray()[0];
+		
+		Util.depleteDurabilityOfStack(stack, damage);
+		
 	}
 
 	@Override
