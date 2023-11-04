@@ -6,6 +6,7 @@ import com.elisis.gtnhlanth.common.beamline.TileBeamline;
 import com.elisis.gtnhlanth.common.block.AntennaCasing;
 import com.elisis.gtnhlanth.common.block.Casing;
 import com.elisis.gtnhlanth.common.block.ShieldedAccGlass;
+import com.elisis.gtnhlanth.common.hatch.TileBusInputFocus;
 import com.elisis.gtnhlanth.common.hatch.TileHatchInputBeamline;
 import com.elisis.gtnhlanth.common.hatch.TileHatchOutputBeamline;
 import com.elisis.gtnhlanth.common.item.MaskList;
@@ -39,6 +40,8 @@ public final class LanthItemList {
 
     public static ItemStack LUV_BEAMLINE_INPUT_HATCH;
     public static ItemStack LUV_BEAMLINE_OUTPUT_HATCH;
+    
+    public static ItemStack BEAMLINE_FOCUS_INPUT_BUS;
 
     public static Item CAPILLARY_EXCHANGE = new Item().setUnlocalizedName("capillary_exchange");
 
@@ -92,6 +95,8 @@ public final class LanthItemList {
                 "LuV Beamline Output Hatch",
                 "LuV Beamline Output Hatch",
                 6).getStackForm(1L);
+        
+        BEAMLINE_FOCUS_INPUT_BUS = new TileBusInputFocus(10509, "Focus Input Bus", "Focus Input Bus").getStackForm(1L);
 
         LINAC = new LINAC(10505, "Linear Accelerator", "Linear Accelerator").getStackForm(1L);
 
