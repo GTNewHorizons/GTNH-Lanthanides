@@ -95,15 +95,40 @@ public class BeamlineRecipeLoader {
          * TARGET CHAMBER
          */
         
-        int index = 0;
-        for (ItemList wafer : VIABLE_WAFERS) {
-        		
-        	index++;
+        for (MaskList mask : MaskList.values()) {
+    		
+        	if (mask.getProducedItem() == null) //Blank or error
+    			continue;
+        	
+        	int index = 0;
+            for (ItemList wafer : VIABLE_WAFERS) {
+            		
+            	index++;    	
+    		
+            	if (!Arrays.asList(mask.getForbiddenWafers()).contains(wafer)) {
+    			
+            		BeamlineRecipeAdder.instance.addTargetChamberRecipe(
+            				wafer.get(1), 
+	                		GT_Utility.copyAmountUnsafe((int) Math.pow(2, index + 2), mask.getProducedItem()),
+	                		new ItemStack(LanthItemList.maskMap.get(mask), 0),
+	                		0, 
+	                		mask.getBaselineAmount() * (int) Math.pow(2, index - 1),
+	                		mask.getMinEnergy(),
+	                		mask.getMaxEnergy(),
+	                		mask.getMinFocus(),
+	                		1, 
+	                		1920
+	                	);
+    			
+            	}
+            	
+            }
+        
+        
+        	
+        	
         	
         	/*
-        	 * CPU
-        	 */
-        	
     		if (!Arrays.asList(MaskList.CPU.getForbiddenWafers()).contains(wafer)) {
     			
     			BeamlineRecipeAdder.instance.addTargetChamberRecipe(
@@ -124,7 +149,7 @@ public class BeamlineRecipeLoader {
     		 * PPIC
     		 */
     		
-    		
+    		/*
     		if (!Arrays.asList(MaskList.PPIC.getForbiddenWafers()).contains(wafer)) {
     			
     			GT_Log.out.print("Adding recipe for PPIC with " + wafer.get(1).getUnlocalizedName() + " amount: " + 40 * (int) Math.pow(2, index - 1));
@@ -141,7 +166,7 @@ public class BeamlineRecipeLoader {
                 		1, 
                 		1920
                 	);
-    		}
+    		}*/
     		
     		
     		

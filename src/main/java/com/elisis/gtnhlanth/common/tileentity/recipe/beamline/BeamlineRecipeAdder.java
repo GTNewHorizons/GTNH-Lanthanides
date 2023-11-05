@@ -32,9 +32,9 @@ public class BeamlineRecipeAdder {
     		"gtnhlanth.recipe.tc",
     		StatCollector.translateToLocal("tile.recipe.sc"),
     		null,
-    		"",
+    		"gtnhlanth:textures/gui/Digester",
     		2,
-    		1,
+    		4,
     		0,
     		0,
     		1,
@@ -42,7 +42,7 @@ public class BeamlineRecipeAdder {
     		1,
     		null,
     		false,
-    		false).setProgressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE);
+    		true).setProgressBar(GT_UITextures.PROGRESSBAR_ASSEMBLY_LINE_1);
 
     /***
      *
