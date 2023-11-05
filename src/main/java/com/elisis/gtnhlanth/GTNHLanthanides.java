@@ -81,8 +81,8 @@ public class GTNHLanthanides {
         proxy.postInit(e);
         // GT_Log.out.print(FluidRegistry.getFluid("Sodium Tungstate").getName());
 
-        GT_Log.out.print(Arrays.toString(Werkstoff.werkstoffNameHashMap.keySet().toArray()));
-        GT_Log.out.print(Arrays.toString(Werkstoff.werkstoffHashMap.keySet().toArray()));
+        //GT_Log.out.print(Arrays.toString(Werkstoff.werkstoffNameHashMap.keySet().toArray()));
+        //GT_Log.out.print(Arrays.toString(Werkstoff.werkstoffHashMap.keySet().toArray()));
 
         /*
          * GT_Log.out.print("HMMM " + Arrays.toString(OreDictionary.getOreIDs(
@@ -92,7 +92,7 @@ public class GTNHLanthanides {
 
     @EventHandler
     public static void onModLoadingComplete(FMLLoadCompleteEvent e) {
-        GT_Log.out.print("AAAAAAAAAAAAAA " + new ItemStack(LanthItemList.maskMap.get(MaskList.CPU)).getUnlocalizedName());
+        //GT_Log.out.print("AAAAAAAAAAAAAA " + new ItemStack(LanthItemList.maskMap.get(MaskList.CPU)).getUnlocalizedName());
         //
         // GT_Log.out.print("We are done loading");
         BotRecipes.removeRecipes();

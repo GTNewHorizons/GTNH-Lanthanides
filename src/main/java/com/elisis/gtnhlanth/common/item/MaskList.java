@@ -46,8 +46,8 @@ public enum MaskList {
     MaskList precursor;
     Dyes lensColour;
     
-    int minEnergy;
-    int maxEnergy;
+    float minEnergy;
+    float maxEnergy;
     
     float minFocus;
     int baselineAmount;
@@ -56,7 +56,7 @@ public enum MaskList {
     
     ItemList[] forbiddenWafers;
 
-    MaskList(String name, String englishName, int maxDamage, String spectrum, MaskList precursor, Dyes lensColour, int minEnergy, int maxEnergy, float minFocus, int baselineAmount, ItemStack producedItem, ItemList... forbiddenWafers) {
+    MaskList(String name, String englishName, int maxDamage, String spectrum, MaskList precursor, Dyes lensColour, float minEnergy, float maxEnergy, float minFocus, int baselineAmount, ItemStack producedItem, ItemList... forbiddenWafers) {
         this.name = name;
         this.englishName = englishName;
         this.spectrum = spectrum;
@@ -64,6 +64,8 @@ public enum MaskList {
         this.precursor = precursor;
         this.lensColour = lensColour;
         this.minEnergy = minEnergy;
+        this.maxEnergy = maxEnergy;
+        this.baselineAmount = baselineAmount;
         this.producedItem = producedItem;
         this.forbiddenWafers = forbiddenWafers;
     }
@@ -92,11 +94,11 @@ public enum MaskList {
         return this.lensColour;
     }
     
-    public int getMinEnergy() {
+    public float getMinEnergy() {
     	return this.minEnergy;
     }
     
-    public int getMaxEnergy() {
+    public float getMaxEnergy() {
     	return this.maxEnergy;
     }
     

@@ -195,11 +195,11 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
         
         RecipeTC tRecipe = (RecipeTC) BeamlineRecipeAdder.instance.TargetChamberRecipes.findRecipe(
         		this.getBaseMetaTileEntity(), false, tVoltage, null, tItemsWithFocusItemArray);
-        
-        /*if (tRecipe == null) {
+        /*
+        if (tRecipe == null) {
         	GT_Log.out.print("Recipe null!");
-        }*/
-        
+        }
+        */
         //GT_Log.out.print("Focus in machine " + tFocusItem.getItem().getUnlocalizedName());
         //GT_Log.out.print("Focus in recipe " + tRecipe.focusItem.getItem().getUnlocalizedName());
         
@@ -209,6 +209,8 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
         
         if (tRecipe.focusItem.getItem() != tFocusItem.getItem())
         	return false;
+        
+        //GT_Log.out.print("Items are the same!");
         
         this.mEfficiency = (10000 - (this.getIdealStatus() - this.getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
@@ -223,14 +225,22 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
         inputParticle = inputInfo.getParticleId();
         inputFocus = inputInfo.getFocus();
 
+        //GT_Log.out.print("Min energy: " + tRecipe.minEnergy + " Max energy: " + tRecipe.maxEnergy);
+        
         if (inputEnergy < tRecipe.minEnergy || inputEnergy > tRecipe.maxEnergy)
             return false;
+        
+        //GT_Log.out.print("This far!");
         
         if (inputFocus < tRecipe.minFocus)
         	return false;
         
+        //GT_Log.out.print("This far too!");
+        
         if (inputParticle != tRecipe.particleId)
         	return false;
+        
+        //GT_Log.out.print("Passed beamline requirements");
         
         this.mMaxProgresstime =  Math.round((tRecipe.amount / inputRate * 10 * 20)); // 10 seconds per integer multiple over the rate. E.g., 100a, 10r would equal 100 seconds
         if (this.mMaxProgresstime == Integer.MAX_VALUE - 1 && this.mEUt == Integer.MAX_VALUE - 1) return false;
