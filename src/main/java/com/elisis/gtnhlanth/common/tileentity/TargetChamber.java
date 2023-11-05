@@ -8,7 +8,6 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import com.elisis.gtnhlanth.common.beamline.BeamInformation;
 import com.elisis.gtnhlanth.common.hatch.TileBusInputFocus;
@@ -27,9 +26,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMultiBlockBase;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
-import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Recipe;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -170,6 +167,15 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
 		
 		if (tFocusItem == null)
 			return false;
+		
+		ItemStack tFocusItemZeroDamage = tFocusItem.copy();
+		tFocusItemZeroDamage.setItemDamage(0);
+		
+		ArrayList<ItemStack> tItemsWithFocusItem = new ArrayList<>();
+		tItemsWithFocusItem.add(tFocusItemZeroDamage);
+		tItemsWithFocusItem.addAll(tItems);
+		
+		
         
 		// GT_Log.out.print(Arrays.toString(tItems));
         long tVoltage = this.getMaxInputVoltage();
@@ -178,6 +184,7 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
         
         ItemStack[] tItemsArray = tItems.toArray(new ItemStack[0]);
         
+        ItemStack[] tItemsWithFocusItemArray = tItemsWithFocusItem.toArray(new ItemStack[0]);        
         //GT_Log.out.print("tItemsArray: " +  Arrays.toString(tItemsArray));
         
         /*
@@ -187,7 +194,7 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
         */
         
         RecipeTC tRecipe = (RecipeTC) BeamlineRecipeAdder.instance.TargetChamberRecipes.findRecipe(
-        		this.getBaseMetaTileEntity(), false, tVoltage, null, tItemsArray);
+        		this.getBaseMetaTileEntity(), false, tVoltage, null, tItemsWithFocusItemArray);
         
         /*if (tRecipe == null) {
         	GT_Log.out.print("Recipe null!");
@@ -198,7 +205,7 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
         
         
            
-        if (tRecipe == null || !tRecipe.isRecipeInputEqual(true, new FluidStack[] {}, tItemsArray)) return false;
+        if (tRecipe == null || !tRecipe.isRecipeInputEqual(true, new FluidStack[] {}, tItemsWithFocusItemArray)) return false;
         
         if (tRecipe.focusItem.getItem() != tFocusItem.getItem())
         	return false;

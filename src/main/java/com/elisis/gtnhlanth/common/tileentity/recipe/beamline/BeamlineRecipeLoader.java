@@ -13,6 +13,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Utility;
 import gtPlusPlus.core.material.ELEMENT;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -107,8 +108,8 @@ public class BeamlineRecipeLoader {
     			
     			BeamlineRecipeAdder.instance.addTargetChamberRecipe(
                 		wafer.get(1), 
-                		ItemList.Circuit_Wafer_CPU.get((int) Math.pow(2, index + 2)), //Varies
-                		new ItemStack(LanthItemList.maskMap.get(MaskList.CPU), 1), // Varies 
+                		GT_Utility.copyAmountUnsafe((int) Math.pow(2, index + 2), ItemList.Circuit_Wafer_CPU.get(1)), //Varies
+                		new ItemStack(LanthItemList.maskMap.get(MaskList.CPU), 0), // Varies 
                 		0, 
                 		10 * (int) Math.pow(2, index - 1),  // Varies
                 		1, //Varies
@@ -131,7 +132,7 @@ public class BeamlineRecipeLoader {
     			BeamlineRecipeAdder.instance.addTargetChamberRecipe(
                 		wafer.get(1), 
                 		ItemList.Circuit_Wafer_PPIC.get((int) Math.pow(2, index + 2)), //Varies
-                		new ItemStack(LanthItemList.maskMap.get(MaskList.PPIC), 1), // Varies 
+                		new ItemStack(LanthItemList.maskMap.get(MaskList.PPIC), 0), // Varies 
                 		0, 
                 		40 * (int) Math.pow(2, index - 1),  // Varies
                 		1, //Varies
