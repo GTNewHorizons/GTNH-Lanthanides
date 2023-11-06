@@ -62,6 +62,8 @@ beamline.temperature=Temperature
 
 beamline.out_pre=Multiblock Beamline Output
 
+beamline.particleinput=Input Particle Info:
+
 beamline.pipe.desc.0=Transport for particles
 beamline.pipe.desc.1=Does not auto-connect or bend
 

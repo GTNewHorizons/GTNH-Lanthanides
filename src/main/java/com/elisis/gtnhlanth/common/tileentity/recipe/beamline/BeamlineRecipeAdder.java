@@ -1,8 +1,17 @@
 package com.elisis.gtnhlanth.common.tileentity.recipe.beamline;
 
+import java.util.Arrays;
 import java.util.HashSet;
 
+import com.elisis.gtnhlanth.common.beamline.Particle;
+
+import gregtech.GT_Mod;
 import gregtech.api.gui.modularui.GT_UITextures;
+import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Utility;
+import gregtech.common.power.Power;
+import gregtech.common.power.UnspecifiedEUPower;
+import gregtech.nei.NEIRecipeInfo;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 
@@ -25,7 +34,7 @@ public class BeamlineRecipeAdder {
             1,
             null,
             false,
-            false);
+            true);
     
     public final LanthRecipeMap TargetChamberRecipes = (LanthRecipeMap) new LanthRecipeMap(
     		new HashSet<>(500),
@@ -42,7 +51,77 @@ public class BeamlineRecipeAdder {
     		1,
     		null,
     		false,
-    		true).setProgressBar(GT_UITextures.PROGRESSBAR_ASSEMBLY_LINE_1);
+    		true) {
+    	
+	    		@Override
+	    		public void drawNEIDescription(NEIRecipeInfo recipeInfo) {
+		            drawNEIEnergyInfo(recipeInfo);
+		            //drawNEIDurationInfo(recipeInfo);
+		            drawNEISpecialInfo(recipeInfo);
+		            drawNEIRecipeOwnerInfo(recipeInfo);
+		        }
+	    		
+	    		// Literally only removed the total power value
+	    		@Override
+	    		protected void drawNEIEnergyInfo(NEIRecipeInfo recipeInfo) {
+	                GT_Recipe recipe = recipeInfo.recipe;
+	                Power power = recipeInfo.power;
+	                if (power.getEuPerTick() > 0) {
+
+	                    String amperage = power.getAmperageString();
+	                    String powerUsage = power.getPowerUsageString();
+	                    if (amperage == null || amperage.equals("unspecified") || powerUsage.contains("(OC)")) {
+	                        drawNEIText(recipeInfo, GT_Utility.trans("153", "Usage: ") + powerUsage);
+	                        if (GT_Mod.gregtechproxy.mNEIOriginalVoltage) {
+	                            Power originalPower = getPowerFromRecipeMap();
+	                            if (!(originalPower instanceof UnspecifiedEUPower)) {
+	                                originalPower.computePowerUsageAndDuration(recipe.mEUt, recipe.mDuration);
+	                                drawNEIText(
+	                                    recipeInfo,
+	                                    GT_Utility.trans("275", "Original voltage: ") + originalPower.getVoltageString());
+	                            }
+	                        }
+	                        if (amperage != null && !amperage.equals("unspecified") && !amperage.equals("1")) {
+	                            drawNEIText(recipeInfo, GT_Utility.trans("155", "Amperage: ") + amperage);
+	                        }
+	                    } else if (amperage.equals("1")) {
+	                        drawNEIText(recipeInfo, GT_Utility.trans("154", "Voltage: ") + power.getVoltageString());
+	                    } else {
+	                        drawNEIText(recipeInfo, GT_Utility.trans("153", "Usage: ") + powerUsage);
+	                        drawNEIText(recipeInfo, GT_Utility.trans("154", "Voltage: ") + power.getVoltageString());
+	                        drawNEIText(recipeInfo, GT_Utility.trans("155", "Amperage: ") + amperage);
+	                    }
+	                }
+	            }
+	    	}
+    		.setProgressBar(GT_UITextures.PROGRESSBAR_ASSEMBLY_LINE_1)
+    		.setNEISpecialInfoFormatter((recipeInfo, applyPrefixAndSuffix) -> {
+    			float minEnergy = ((RecipeTC) recipeInfo.recipe).minEnergy;
+    			float maxEnergy = ((RecipeTC) recipeInfo.recipe).maxEnergy;
+    			
+    			float minFocus = ((RecipeTC) recipeInfo.recipe).minFocus;
+    			
+    			float amount = ((RecipeTC) recipeInfo.recipe).amount;
+    			
+    			Particle particle = Particle.getParticleFromId( ((RecipeTC) recipeInfo.recipe).particleId);
+    			
+    			return Arrays.asList(
+    					//String.join("\u0332", StatCollector.translateToLocal("beamline.particleinput")),
+    					//String.join("", Collections.nCopies((int) StatCollector.translateToLocal("beamline.particleinput").codePoints().count(), "-")),
+    					//StatCollector.translateToLocal("beamline.particleinput"),
+    					"",
+    					
+    					StatCollector.translateToLocal("beamline.particle") + ": " + particle.getLocalisedName(),
+    					
+    					StatCollector.translateToLocal("beamline.energy") + ": " + GT_Utility.formatNumbers(minEnergy * 1000) + "-" + GT_Utility.formatNumbers(maxEnergy * 1000) + " eV",
+    					
+    					StatCollector.translateToLocal("beamline.focus") + ": " + ">= " + GT_Utility.formatNumbers(minFocus),
+    					
+    					StatCollector.translateToLocal("beamline.amount") + ": " + GT_Utility.formatNumbers(amount)
+    								
+    				);
+    			}
+    		);
 
     /***
      *

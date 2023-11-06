@@ -63,6 +63,7 @@ public enum MaskList {
         this.maxDamage = maxDamage;
         this.precursor = precursor;
         this.lensColour = lensColour;
+        this.minFocus = minFocus;
         this.minEnergy = minEnergy;
         this.maxEnergy = maxEnergy;
         this.baselineAmount = baselineAmount;

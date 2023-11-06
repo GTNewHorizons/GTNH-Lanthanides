@@ -10,6 +10,7 @@ import com.elisis.gtnhlanth.common.hatch.TileBusInputFocus;
 import com.elisis.gtnhlanth.common.hatch.TileHatchInputBeamline;
 import com.elisis.gtnhlanth.common.hatch.TileHatchOutputBeamline;
 import com.elisis.gtnhlanth.common.item.MaskList;
+import com.elisis.gtnhlanth.common.item.ParticleItem;
 import com.elisis.gtnhlanth.common.item.PhotolithographicMask;
 import com.elisis.gtnhlanth.common.tileentity.Digester;
 import com.elisis.gtnhlanth.common.tileentity.DissolutionTank;
@@ -58,6 +59,9 @@ public final class LanthItemList {
     public static Item ETCHED_MASK_1 = new Item().setUnlocalizedName("etched_mask1");
 
     public static Item SILICON_NITRIDE_MEMBRANE = new Item().setUnlocalizedName("nitride_gold_membrane");
+    
+    
+    public static Item PARTICLE_ITEM = new ParticleItem().setUnlocalizedName("particle");
 
     public static final Block SHIELDED_ACCELERATOR_CASING = new Casing("shielded_accelerator");
     public static final Block SHIELDED_ACCELERATOR_GLASS = new ShieldedAccGlass();
@@ -122,6 +126,8 @@ public final class LanthItemList {
         GameRegistry.registerItem(SUBSTRATE_PRECURSOR, SUBSTRATE_PRECURSOR.getUnlocalizedName());
 
         GameRegistry.registerItem(MASKED_MASK, MASKED_MASK.getUnlocalizedName());
+        
+        GameRegistry.registerItem(PARTICLE_ITEM, "particle");
 
         GameRegistry.registerBlock(SHIELDED_ACCELERATOR_CASING, SHIELDED_ACCELERATOR_CASING.getUnlocalizedName());
 

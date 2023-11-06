@@ -111,7 +111,7 @@ public class BeamlineRecipeLoader {
             				wafer.get(1), 
 	                		GT_Utility.copyAmountUnsafe((int) Math.pow(2, index + 2), mask.getProducedItem()),
 	                		new ItemStack(LanthItemList.maskMap.get(mask), 0),
-	                		0, 
+	                		1, 
 	                		mask.getBaselineAmount() * (int) Math.pow(2, index - 1),
 	                		mask.getMinEnergy(),
 	                		mask.getMaxEnergy(),

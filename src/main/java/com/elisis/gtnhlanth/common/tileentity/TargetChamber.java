@@ -278,7 +278,7 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
         for (TileHatchInputBeamline in : this.mInputBeamline) {
 
             //if (in.q == null) return new BeamInformation(0, 0, 0, 0);
-            if (in.q == null) return new BeamInformation(10000, 10, 0, 90); // TODO temporary for testing purposes
+            if (in.q == null) return new BeamInformation(10000, 10, 1, 90); // TODO temporary for testing purposes
 
             return in.q.getContent();
         }
