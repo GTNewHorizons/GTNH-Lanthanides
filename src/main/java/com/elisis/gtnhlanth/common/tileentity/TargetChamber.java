@@ -5,11 +5,13 @@ package com.elisis.gtnhlanth.common.tileentity;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAdder;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
+import static gregtech.api.enums.GT_Values.VN;
 import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
 import java.util.ArrayList;
 
 import com.elisis.gtnhlanth.common.beamline.BeamInformation;
+import com.elisis.gtnhlanth.common.beamline.Particle;
 import com.elisis.gtnhlanth.common.hatch.TileBusInputFocus;
 import com.elisis.gtnhlanth.common.hatch.TileHatchInputBeamline;
 import com.elisis.gtnhlanth.common.register.LanthItemList;
@@ -25,10 +27,15 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMultiBlockBase;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -42,6 +49,13 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
 
     private static final int CASING_INDEX = 49;
     
+    private float inputEnergy;
+	private float inputRate;
+	private int inputParticle;
+	private float inputFocus;
+    
+	
+	//spotless:off
     static {
     	STRUCTURE_DEFINITION = StructureDefinition.<TargetChamber>builder()
     			.addShape(
@@ -78,6 +92,7 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
     			
     			.build();
     }
+    //spotless:on
     
     
     private boolean addGlass(Block block, int meta) {
@@ -156,10 +171,10 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
 	@Override
 	public boolean checkRecipe(ItemStack itemStack) {
 		
-		float inputEnergy = 0;
-		float inputRate = 0;
-		int inputParticle = 0;
-		float inputFocus = 0;
+		inputEnergy = 0;
+		inputRate = 0;
+		inputParticle = 0;
+		inputFocus = 0;
 		
 		
 		ArrayList<ItemStack> tItems = this.getStoredInputs();
@@ -309,5 +324,101 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
 	public boolean isCorrectMachinePart(ItemStack arg0) {
 		return true;
 	}
+	
+	@Override
+    public String[] getInfoData() {
+        int mPollutionReduction = 0;
+        for (GT_MetaTileEntity_Hatch_Muffler tHatch : mMufflerHatches) {
+            if (isValidMetaTileEntity(tHatch)) {
+                mPollutionReduction = Math.max(tHatch.calculatePollutionReduction(100), mPollutionReduction);
+            }
+        }
+
+        long storedEnergy = 0;
+        long maxEnergy = 0;
+        for (GT_MetaTileEntity_Hatch_Energy tHatch : mEnergyHatches) {
+            if (isValidMetaTileEntity(tHatch)) {
+                storedEnergy += tHatch.getBaseMetaTileEntity().getStoredEU();
+                maxEnergy += tHatch.getBaseMetaTileEntity().getEUCapacity();
+            }
+        }
+
+        BeamInformation information = this.getInputInformation();
+        
+        return new String[] {
+                /* 1 */ StatCollector.translateToLocal("GT5U.multiblock.Progress") + ": "
+                        + EnumChatFormatting.GREEN
+                        + GT_Utility.formatNumbers(mProgresstime / 20)
+                        + EnumChatFormatting.RESET
+                        + " s / "
+                        + EnumChatFormatting.YELLOW
+                        + GT_Utility.formatNumbers(mMaxProgresstime / 20)
+                        + EnumChatFormatting.RESET
+                        + " s",
+                /* 2 */ StatCollector.translateToLocal("GT5U.multiblock.energy") + ": "
+                        + EnumChatFormatting.GREEN
+                        + GT_Utility.formatNumbers(storedEnergy)
+                        + EnumChatFormatting.RESET
+                        + " EU / "
+                        + EnumChatFormatting.YELLOW
+                        + GT_Utility.formatNumbers(maxEnergy)
+                        + EnumChatFormatting.RESET
+                        + " EU",
+                /* 3 */ StatCollector.translateToLocal("GT5U.multiblock.usage") + ": "
+                        + EnumChatFormatting.RED
+                        + GT_Utility.formatNumbers(getActualEnergyUsage())
+                        + EnumChatFormatting.RESET
+                        + " EU/t",
+                /* 4 */ StatCollector.translateToLocal("GT5U.multiblock.mei") + ": "
+                        + EnumChatFormatting.YELLOW
+                        + GT_Utility.formatNumbers(getMaxInputVoltage())
+                        + EnumChatFormatting.RESET
+                        + " EU/t(*2A) "
+                        + StatCollector.translateToLocal("GT5U.machines.tier")
+                        + ": "
+                        + EnumChatFormatting.YELLOW
+                        + VN[GT_Utility.getTier(getMaxInputVoltage())]
+                        + EnumChatFormatting.RESET,
+                /* 5 */ StatCollector.translateToLocal("GT5U.multiblock.problems") + ": "
+                        + EnumChatFormatting.RED
+                        + (getIdealStatus() - getRepairStatus())
+                        + EnumChatFormatting.RESET
+                        + " "
+                        + StatCollector.translateToLocal("GT5U.multiblock.efficiency")
+                        + ": "
+                        + EnumChatFormatting.YELLOW
+                        + Float.toString(mEfficiency / 100.0F)
+                        + EnumChatFormatting.RESET
+                        + " %",
+                /* 6 */ StatCollector.translateToLocal("GT5U.multiblock.pollution") + ": "
+                        + EnumChatFormatting.GREEN
+                        + mPollutionReduction
+                        + EnumChatFormatting.RESET
+                        + " %",
+
+                /* 7 */ EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.in_pre")
+                        + ": "
+                        + EnumChatFormatting.RESET,
+                StatCollector.translateToLocal("beamline.particle") + ": " // "Multiblock Beamline Input:"
+                        + EnumChatFormatting.GOLD
+                        + Particle.getParticleFromId(information.getParticleId()).getLocalisedName() // e.g. "Electron
+                                                                                                     // (e-)"
+                        + " "
+                        + EnumChatFormatting.RESET,
+                StatCollector.translateToLocal("beamline.energy") + ": " // "Energy:"
+                        + EnumChatFormatting.DARK_RED
+                        + information.getEnergy() * 1000 // In line with the synchrotron's output
+                        + EnumChatFormatting.RESET
+                        + " eV", // e.g. "10240 eV"
+                StatCollector.translateToLocal("beamline.focus") + ": " // "Focus:"
+                        + EnumChatFormatting.BLUE
+                        + information.getFocus()
+                        + " "
+                        + EnumChatFormatting.RESET,
+                StatCollector.translateToLocal("beamline.amount") + ": " // "Amount:"
+                        + EnumChatFormatting.LIGHT_PURPLE
+                        + information.getRate(),
+                };
+    }
 
 }
