@@ -42,7 +42,7 @@ public class BeamlineRecipeAdder {
     		StatCollector.translateToLocal("tile.recipe.sc"),
     		null,
     		"gtnhlanth:textures/gui/Digester",
-    		2,
+    		3,
     		4,
     		0,
     		0,
