@@ -28,4 +28,16 @@ public class LanthRecipeMap extends GT_Recipe_Map {
                 aShowVoltageAmperageInNEI,
                 aNEIAllowed);
     }
+    
+    public GT_Recipe addRecipe(GT_Recipe aRecipe, boolean aCheckForCollisions, boolean aFakeRecipe,
+            boolean aHidden) {
+            aRecipe.mHidden = aHidden;
+            aRecipe.mFakeRecipe = aFakeRecipe;
+            if (aRecipe.mFluidInputs.length < mMinimalInputFluids && aRecipe.mInputs.length < mMinimalInputItems)
+                return null;
+            if (aCheckForCollisions
+                && findRecipe(null, false, true, Long.MAX_VALUE, aRecipe.mFluidInputs, aRecipe.mInputs) != null)
+                return null;
+            return add(aRecipe);
+        }
 }

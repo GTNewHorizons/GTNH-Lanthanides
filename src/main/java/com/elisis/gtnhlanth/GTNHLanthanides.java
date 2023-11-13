@@ -4,16 +4,15 @@ import java.util.Arrays;
 import java.util.logging.Logger;
 
 import com.elisis.gtnhlanth.common.CommonProxy;
-import com.elisis.gtnhlanth.common.item.MaskList;
 import com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool;
 import com.elisis.gtnhlanth.common.register.LanthItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
+import com.elisis.gtnhlanth.common.tileentity.recipe.beamline.BeamlineRecipeAdder;
 import com.elisis.gtnhlanth.common.tileentity.recipe.beamline.BeamlineRecipeLoader;
 import com.elisis.gtnhlanth.loader.BotRecipes;
 import com.elisis.gtnhlanth.loader.RecipeLoader;
 import com.elisis.gtnhlanth.xmod.nei.IMC;
 import com.github.bartimaeusnek.bartworks.API.WerkstoffAdderRegistry;
-import com.github.bartimaeusnek.bartworks.system.material.Werkstoff;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -22,8 +21,9 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.util.GT_Log;
-import net.minecraft.item.ItemStack;
+import gregtech.api.util.GT_Recipe;
 
 @Mod(
         modid = Tags.MODID,
@@ -97,6 +97,14 @@ public class GTNHLanthanides {
         // GT_Log.out.print("We are done loading");
         BotRecipes.removeRecipes();
         RecipeLoader.removeCeriumSources();
+        for (GT_ItemStack stack : BeamlineRecipeAdder.instance.TargetChamberRecipes.mRecipeItemMap.keySet()) {
+        	GT_Log.out.print(" Recipes for: " + stack.mItem.getUnlocalizedName() + ": ");
+        	
+        	for (GT_Recipe recipe : BeamlineRecipeAdder.instance.TargetChamberRecipes.mRecipeItemMap.get(stack)) {
+        		GT_Log.out.print(Arrays.toString(recipe.mOutputs));
+        	}
+        }
+        
 
         // GT_Log.out.print("blah blah " +
         // WerkstoffMaterialPool.PTMEGElastomer.hasGenerationFeature(OrePrefixes.ingot));

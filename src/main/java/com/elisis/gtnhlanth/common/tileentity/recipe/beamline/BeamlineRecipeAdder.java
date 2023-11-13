@@ -1,14 +1,19 @@
 package com.elisis.gtnhlanth.common.tileentity.recipe.beamline;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 
 import com.elisis.gtnhlanth.common.beamline.Particle;
+import com.elisis.gtnhlanth.util.Util;
+import com.gtnewhorizons.modularui.api.math.Pos2d;
 
 import gregtech.GT_Mod;
 import gregtech.api.gui.modularui.GT_UITextures;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.gui.modularui.UIHelper;
 import gregtech.common.power.Power;
 import gregtech.common.power.UnspecifiedEUPower;
 import gregtech.nei.NEIRecipeInfo;
@@ -61,6 +66,27 @@ public class BeamlineRecipeAdder {
 		            drawNEIRecipeOwnerInfo(recipeInfo);
 		        }
 	    		
+	    		@Override
+	            public List<Pos2d> getItemInputPositions(int itemInputCount) {
+	                
+	    			/*
+	    			Pos2d posParticle = new Pos2d(8, 28); // Particle item
+	                
+	                ArrayList<Pos2d> posList = new ArrayList<>();
+	                posList.add(posParticle);
+	                posList.addAll(UIHelper.getGridPositions(itemInputCount - 1, 36, 28, 3));
+	                
+	    			*/
+	    			
+	    			List<Pos2d> posList = Util.getGridPositions(itemInputCount, 8, 20, 3, 1, 20);
+	    			return posList;
+	            }
+
+	    		@Override
+	            public List<Pos2d> getItemOutputPositions(int itemOutputCount) {
+	                return UIHelper.getGridPositions(itemOutputCount, 128, 24, 1, 3); // Make output items display vertically, not in a square
+	            }
+	    		
 	    		// Literally only removed the total power value
 	    		@Override
 	    		protected void drawNEIEnergyInfo(NEIRecipeInfo recipeInfo) {
@@ -95,27 +121,27 @@ public class BeamlineRecipeAdder {
 	            }
 	    	}
     		.setProgressBar(GT_UITextures.PROGRESSBAR_ASSEMBLY_LINE_1)
+    		.setProgressBarPos(108, 22)
     		.setNEISpecialInfoFormatter((recipeInfo, applyPrefixAndSuffix) -> {
-    			float minEnergy = ((RecipeTC) recipeInfo.recipe).minEnergy;
-    			float maxEnergy = ((RecipeTC) recipeInfo.recipe).maxEnergy;
     			
-    			float minFocus = ((RecipeTC) recipeInfo.recipe).minFocus;
+    			RecipeTC recipe = (RecipeTC) recipeInfo.recipe;
     			
-    			float amount = ((RecipeTC) recipeInfo.recipe).amount;
+    			float minEnergy = recipe.minEnergy;
+    			float maxEnergy = recipe.maxEnergy;
     			
-    			Particle particle = Particle.getParticleFromId( ((RecipeTC) recipeInfo.recipe).particleId);
+    			float minFocus = recipe.minFocus;
+    			
+    			float amount = recipe.amount;
+    			
+    			Particle particle = Particle.getParticleFromId(recipe.particleId);
     			
     			return Arrays.asList(
-    					//String.join("\u0332", StatCollector.translateToLocal("beamline.particleinput")),
-    					//String.join("", Collections.nCopies((int) StatCollector.translateToLocal("beamline.particleinput").codePoints().count(), "-")),
-    					//StatCollector.translateToLocal("beamline.particleinput"),
-    					"",
     					
     					StatCollector.translateToLocal("beamline.particle") + ": " + particle.getLocalisedName(),
     					
-    					StatCollector.translateToLocal("beamline.energy") + ": " + GT_Utility.formatNumbers(minEnergy * 1000) + "-" + GT_Utility.formatNumbers(maxEnergy * 1000) + " eV",
+    					StatCollector.translateToLocal("beamline.energy") + ": " + GT_Utility.formatNumbers(minEnergy * 1000) + "-" + GT_Utility.formatNumbers(maxEnergy * 1000) + " eV", //Note the eV unit
     					
-    					StatCollector.translateToLocal("beamline.focus") + ": " + ">= " + GT_Utility.formatNumbers(minFocus),
+    					StatCollector.translateToLocal("beamline.focus") + ": >= " + GT_Utility.formatNumbers(minFocus),
     					
     					StatCollector.translateToLocal("beamline.amount") + ": " + GT_Utility.formatNumbers(amount)
     								
@@ -187,7 +213,7 @@ public class BeamlineRecipeAdder {
     					maxEnergy, 
     					minFocus, 
     					energyRatio, 
-    					minEUt)
+    					minEUt), false, false, false
     			) != null);
     	
     }

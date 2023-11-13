@@ -15,6 +15,7 @@ import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
 import gtPlusPlus.core.material.ELEMENT;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -168,67 +169,33 @@ public class BeamlineRecipeLoader {
                 	);
     		}*/
     		
-    		
-    		
-        		
-        	
-        	
-        	
-        	
         }
-        /*
+        
         BeamlineRecipeAdder.instance.addTargetChamberRecipe(
-        		ItemList.Circuit_Silicon_Wafer2.get(1), 
-        		ItemList.Circuit_Wafer_CPU.get(16), 
-        		new ItemStack(LanthItemList.maskMap.get(MaskList.CPU), 1), 
-        		0, 
-        		10, 
+        		new ItemStack(Items.coal, 1), 
+        		new ItemStack(Items.diamond, 1), 
+        		null, 
         		1, 
-        		10000000, 
-        		50, 
+        		20, 
+        		100, 
+        		1000, 
+        		60, 
         		1, 
         		1920
         	);
         
         BeamlineRecipeAdder.instance.addTargetChamberRecipe(
-        		ItemList.Circuit_Silicon_Wafer3.get(1), 
-        		ItemList.Circuit_Wafer_CPU.get(32), 
-        		new ItemStack(LanthItemList.maskMap.get(MaskList.CPU), 1), 
-        		0, 
+        		new ItemStack(Items.coal, 1), 
+        		new ItemStack(Items.cooked_chicken, 1), 
+        		null, 
+        		1, 
         		20, 
         		1, 
-        		10000000, 
-        		50, 
+        		10, 
+        		60, 
         		1, 
         		1920
         	);
-        
-        BeamlineRecipeAdder.instance.addTargetChamberRecipe(
-        		ItemList.Circuit_Silicon_Wafer4.get(1), 
-        		ItemList.Circuit_Wafer_CPU.get(64), 
-        		new ItemStack(LanthItemList.maskMap.get(MaskList.CPU), 1), 
-        		0, 
-        		40, 
-        		1, 
-        		10000000, 
-        		50, 
-        		1, 
-        		1920
-        	);
-        
-        BeamlineRecipeAdder.instance.addTargetChamberRecipe(
-        		ItemList.Circuit_Silicon_Wafer5.get(1), 
-        		ItemList.Circuit_Wafer_CPU.get(128), 
-        		new ItemStack(LanthItemList.maskMap.get(MaskList.CPU), 1), 
-        		0, 
-        		80, 
-        		1, 
-        		10000000, 
-        		50, 
-        		1, 
-        		1920
-        	);*/
-        
         
     }
 }
