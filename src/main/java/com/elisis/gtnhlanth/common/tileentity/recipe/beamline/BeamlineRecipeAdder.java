@@ -1,5 +1,6 @@
 package com.elisis.gtnhlanth.common.tileentity.recipe.beamline;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -122,6 +123,11 @@ public class BeamlineRecipeAdder {
 	    	}
     		.setProgressBar(GT_UITextures.PROGRESSBAR_ASSEMBLY_LINE_1)
     		.setProgressBarPos(108, 22)
+    		.setNEITransferRect(new Rectangle(
+                    100,
+                    22,
+                    28,
+                    18))
     		.setNEISpecialInfoFormatter((recipeInfo, applyPrefixAndSuffix) -> {
     			
     			RecipeTC recipe = (RecipeTC) recipeInfo.recipe;
