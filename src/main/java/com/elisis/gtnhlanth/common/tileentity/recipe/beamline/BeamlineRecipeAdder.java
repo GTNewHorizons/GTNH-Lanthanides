@@ -1,7 +1,6 @@
 package com.elisis.gtnhlanth.common.tileentity.recipe.beamline;
 
 import java.awt.Rectangle;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -25,14 +24,14 @@ public class BeamlineRecipeAdder {
 
     public static final BeamlineRecipeAdder instance = new BeamlineRecipeAdder();
 
-    public final LanthRecipeMap SourceChamberRecipes = new LanthRecipeMap(
+    public final LanthRecipeMap SourceChamberRecipes = (LanthRecipeMap) new LanthRecipeMap(
             new HashSet<>(200),
             "gtnhlanth.recipe.sc",
             StatCollector.translateToLocal("tile.recipe.sc"),
             null,
-            "",
+            "gtnhlanth:textures/gui/Digester",
             1,
-            1,
+            2,
             0,
             0,
             1,
@@ -40,12 +39,39 @@ public class BeamlineRecipeAdder {
             1,
             null,
             false,
-            true);
+            true)
+    		.setProgressBar(GT_UITextures.PROGRESSBAR_ASSEMBLY_LINE_1)
+    		.setNEISpecialInfoFormatter((recipeInfo, applyPrefixAndSuffix) -> {
+    			
+    			RecipeSC recipe = (RecipeSC) recipeInfo.recipe;
+    			
+    			float focus = recipe.focus;
+    			float maxEnergy = recipe.maxEnergy;
+    			
+    			int amount = recipe.rate;
+    			
+    			//Particle particle = Particle.getParticleFromId(recipe.particleId);
+    			
+    			return Arrays.asList(
+    					
+    					//StatCollector.translateToLocal("beamline.particle") + ": " + particle.getLocalisedName(),
+    					
+    					StatCollector.translateToLocal("beamline.energy") + ": <=" + GT_Utility.formatNumbers(maxEnergy) + " keV",
+    					
+    					StatCollector.translateToLocal("beamline.focus") + ": " + GT_Utility.formatNumbers(focus),
+    					
+    					StatCollector.translateToLocal("beamline.rate") + ": " + GT_Utility.formatNumbers(amount)
+    								
+    				);
+    			}
+    		)
+    		
+    		;
     
     public final LanthRecipeMap TargetChamberRecipes = (LanthRecipeMap) new LanthRecipeMap(
     		new HashSet<>(500),
     		"gtnhlanth.recipe.tc",
-    		StatCollector.translateToLocal("tile.recipe.sc"),
+    		StatCollector.translateToLocal("tile.recipe.tc"),
     		null,
     		"gtnhlanth:textures/gui/Digester",
     		3,

@@ -57,6 +57,7 @@ beamline.particle=Particle
 beamline.energy=Energy
 beamline.focus=Focus
 beamline.amount=Amount
+beamline.rate=Rate
 
 beamline.temperature=Temperature
 
