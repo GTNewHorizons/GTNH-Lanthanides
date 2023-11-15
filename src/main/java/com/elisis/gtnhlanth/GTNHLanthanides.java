@@ -97,13 +97,15 @@ public class GTNHLanthanides {
         // GT_Log.out.print("We are done loading");
         BotRecipes.removeRecipes();
         RecipeLoader.removeCeriumSources();
+        
+        /*
         for (GT_ItemStack stack : BeamlineRecipeAdder.instance.TargetChamberRecipes.mRecipeItemMap.keySet()) {
         	GT_Log.out.print(" Recipes for: " + stack.mItem.getUnlocalizedName() + ": ");
         	
         	for (GT_Recipe recipe : BeamlineRecipeAdder.instance.TargetChamberRecipes.mRecipeItemMap.get(stack)) {
         		GT_Log.out.print(Arrays.toString(recipe.mOutputs));
         	}
-        }
+        }*/
         
 
         // GT_Log.out.print("blah blah " +

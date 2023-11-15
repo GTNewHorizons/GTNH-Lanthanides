@@ -9,7 +9,6 @@ import static gregtech.api.enums.GT_Values.VN;
 import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import com.elisis.gtnhlanth.common.beamline.BeamInformation;
 import com.elisis.gtnhlanth.common.beamline.Particle;
@@ -32,7 +31,6 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energ
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.recipe.check.FindRecipeResult;
-import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
@@ -156,8 +154,8 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
 	@Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-        tt.addMachineType("Collision Chamber").addInfo("Controller block for the Target Chamber\nHitting things with other things")
-                .toolTipFinisher("GTNH: Lanthanides");;
+        tt.addMachineType("Collision Chamber").addInfo("Controller block for the Target Chamber").addInfo("Hitting things with other things")
+                .toolTipFinisher("GTNH: Lanthanides");
         return tt;
     }
 
@@ -221,14 +219,14 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
         	
         	RecipeTC recipeTc = (RecipeTC) recipe;
         	
-        	GT_Log.out.print(Arrays.toString(recipeTc.mOutputs));
+        	//GT_Log.out.print(Arrays.toString(recipeTc.mOutputs));
         	
         	
         	BeamInformation inputInfo = this.getInputInformation();
         	
         	int particle = recipeTc.particleId;
         	
-        	GT_Log.out.print(particle + " Particle");
+        	//GT_Log.out.print(particle + " Particle");
         	
         	return (particle == inputInfo.getParticleId() && !(inputInfo.getEnergy() < recipeTc.minEnergy || inputInfo.getEnergy() > recipeTc.maxEnergy));
         	
@@ -285,23 +283,23 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
         inputParticle = inputInfo.getParticleId();
         inputFocus = inputInfo.getFocus();
 
-        GT_Log.out.print("Min energy: " + tRecipe.minEnergy + " Max energy: " + tRecipe.maxEnergy);
-        GT_Log.out.print("Energy: " + inputEnergy);
+        //GT_Log.out.print("Min energy: " + tRecipe.minEnergy + " Max energy: " + tRecipe.maxEnergy);
+        //GT_Log.out.print("Energy: " + inputEnergy);
         
         if (inputEnergy < tRecipe.minEnergy || inputEnergy > tRecipe.maxEnergy)
             return false;
         
-        GT_Log.out.print("This far!");
+        //GT_Log.out.print("This far!");
         
         if (inputFocus < tRecipe.minFocus)
         	return false;
         
-        GT_Log.out.print("This far too!");
+        //GT_Log.out.print("This far too!");
         
         if (inputParticle != tRecipe.particleId)
         	return false;
         
-        GT_Log.out.print("Passed beamline requirements");
+        //GT_Log.out.print("Passed beamline requirements");
         
         this.mMaxProgresstime =  Math.round((tRecipe.amount / inputRate * 10 * 20)); // 10 seconds per integer multiple over the rate. E.g., 100a, 10r would equal 100 seconds
         if (this.mMaxProgresstime == Integer.MAX_VALUE - 1 && this.mEUt == Integer.MAX_VALUE - 1) return false;
@@ -309,6 +307,8 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
         mEUt = (int) -tVoltage;
         if (this.mEUt > 0) this.mEUt = (-this.mEUt);
         
+        
+        //GT_Log.out.print(Arrays.toString(tRecipe.mOutputs));
         
         this.mOutputItems = tRecipe.mOutputs;
         
@@ -326,7 +326,7 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
         for (TileHatchInputBeamline in : this.mInputBeamline) {
 
             //if (in.q == null) return new BeamInformation(0, 0, 0, 0);
-            if (in.q == null) return new BeamInformation(10, 10, 1, 90); // TODO temporary for testing purposes
+            if (in.q == null) return new BeamInformation(10, 10, Particle.PHOTON.ordinal(), 90); // TODO temporary for testing purposes
 
             return in.q.getContent();
         }

@@ -41,13 +41,10 @@ public class RecipeSC extends GT_Recipe {
     	
     	ItemStack particleStack = new ItemStack(LanthItemList.PARTICLE_ITEM);
     	
-    	GT_Log.out.print("Particle " + particleStack.getDisplayName());
-    	
     	Items.ender_pearl.setDamage(particleStack, this.particleId);
     	
     	mOutputsWithParticle.addAll(Arrays.asList(mOutputs));
     	mOutputsWithParticle.add(particleStack);
-    	
     	
     	ItemStack[] mOutputsWithParticleArray = mOutputsWithParticle.toArray(new ItemStack[0]);
     	

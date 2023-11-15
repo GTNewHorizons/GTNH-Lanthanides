@@ -39,7 +39,51 @@ public class BeamlineRecipeAdder {
             1,
             null,
             false,
-            true)
+            true) {
+
+    	@Override
+		public void drawNEIDescription(NEIRecipeInfo recipeInfo) {
+            drawNEIEnergyInfo(recipeInfo);
+            //drawNEIDurationInfo(recipeInfo);
+            drawNEISpecialInfo(recipeInfo);
+            drawNEIRecipeOwnerInfo(recipeInfo);
+        }
+    	
+    	
+    	// Literally only removed the total power value
+		@Override
+		protected void drawNEIEnergyInfo(NEIRecipeInfo recipeInfo) {
+            GT_Recipe recipe = recipeInfo.recipe;
+            Power power = recipeInfo.power;
+            if (power.getEuPerTick() > 0) {
+
+                String amperage = power.getAmperageString();
+                String powerUsage = power.getPowerUsageString();
+                if (amperage == null || amperage.equals("unspecified") || powerUsage.contains("(OC)")) {
+                    drawNEIText(recipeInfo, GT_Utility.trans("153", "Usage: ") + powerUsage);
+                    if (GT_Mod.gregtechproxy.mNEIOriginalVoltage) {
+                        Power originalPower = getPowerFromRecipeMap();
+                        if (!(originalPower instanceof UnspecifiedEUPower)) {
+                            originalPower.computePowerUsageAndDuration(recipe.mEUt, recipe.mDuration);
+                            drawNEIText(
+                                recipeInfo,
+                                GT_Utility.trans("275", "Original voltage: ") + originalPower.getVoltageString());
+                        }
+                    }
+                    if (amperage != null && !amperage.equals("unspecified") && !amperage.equals("1")) {
+                        drawNEIText(recipeInfo, GT_Utility.trans("155", "Amperage: ") + amperage);
+                    }
+                } else if (amperage.equals("1")) {
+                    drawNEIText(recipeInfo, GT_Utility.trans("154", "Voltage: ") + power.getVoltageString());
+                } else {
+                    drawNEIText(recipeInfo, GT_Utility.trans("153", "Usage: ") + powerUsage);
+                    drawNEIText(recipeInfo, GT_Utility.trans("154", "Voltage: ") + power.getVoltageString());
+                    drawNEIText(recipeInfo, GT_Utility.trans("155", "Amperage: ") + amperage);
+                }
+            }
+        }
+    	
+    }
     		.setProgressBar(GT_UITextures.PROGRESSBAR_ASSEMBLY_LINE_1)
     		.setNEISpecialInfoFormatter((recipeInfo, applyPrefixAndSuffix) -> {
     			
@@ -50,13 +94,13 @@ public class BeamlineRecipeAdder {
     			
     			int amount = recipe.rate;
     			
-    			//Particle particle = Particle.getParticleFromId(recipe.particleId);
+    			Particle particle = Particle.getParticleFromId(recipe.particleId);
     			
     			return Arrays.asList(
     					
     					//StatCollector.translateToLocal("beamline.particle") + ": " + particle.getLocalisedName(),
     					
-    					StatCollector.translateToLocal("beamline.energy") + ": <=" + GT_Utility.formatNumbers(maxEnergy) + " keV",
+    					StatCollector.translateToLocal("beamline.energy") + ": <=" + GT_Utility.formatNumbers(Math.min(maxEnergy, particle.maxSourceEnergy()))  + " keV",
     					
     					StatCollector.translateToLocal("beamline.focus") + ": " + GT_Utility.formatNumbers(focus),
     					
@@ -169,11 +213,11 @@ public class BeamlineRecipeAdder {
     			
     			return Arrays.asList(
     					
-    					StatCollector.translateToLocal("beamline.particle") + ": " + particle.getLocalisedName(),
+    					//StatCollector.translateToLocal("beamline.particle") + ": " + particle.getLocalisedName(),
     					
     					StatCollector.translateToLocal("beamline.energy") + ": " + GT_Utility.formatNumbers(minEnergy * 1000) + "-" + GT_Utility.formatNumbers(maxEnergy * 1000) + " eV", //Note the eV unit
     					
-    					StatCollector.translateToLocal("beamline.focus") + ": >= " + GT_Utility.formatNumbers(minFocus),
+    					StatCollector.translateToLocal("beamline.focus") + ": >=" + GT_Utility.formatNumbers(minFocus),
     					
     					StatCollector.translateToLocal("beamline.amount") + ": " + GT_Utility.formatNumbers(amount)
     								
