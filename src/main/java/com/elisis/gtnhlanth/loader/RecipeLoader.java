@@ -376,36 +376,37 @@ public class RecipeLoader {
 
         // CHAIN BEGIN
         // MONAZITE
-        RecipeAdder.instance.DigesterRecipes.addDigesterRecipe(
-                new FluidStack[] { Materials.NitricAcid.getFluid(700) },
-                new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.crushed, Materials.Monazite, 2) },
-                WerkstoffMaterialPool.MuddyRareEarthMonaziteSolution.getFluidOrGas(400),
-                new ItemStack[] { Materials.SiliconDioxide.getDust(1) },
-                1920,
-                400,
-                800);
+        GT_Values.RA.stdBuilder().fluidInputs(Materials.NitricAcid.getFluid(700))
+                .itemInputs(GT_OreDictUnificator.get(OrePrefixes.crushed, Materials.Monazite, 2))
+                .fluidOutputs(WerkstoffMaterialPool.MuddyRareEarthMonaziteSolution.getFluidOrGas(400))
+                .itemOutputs(Materials.SiliconDioxide.getDust(1)).eut(1920).duration(400).specialValue(800)
+                .addTo(RecipeAdder.instance.DigesterRecipes);
 
-        RecipeAdder.instance.DissolutionTankRecipes.addDissolutionTankRecipe(
-                new FluidStack[] { Materials.Water.getFluid(10000),
-                        WerkstoffMaterialPool.MuddyRareEarthMonaziteSolution.getFluidOrGas(1000) },
-                new ItemStack[] { GT_Utility.getIntegratedCircuit(1), Materials.Saltpeter.getDust(1) },
-                WerkstoffMaterialPool.DilutedRareEarthMonaziteMud.getFluidOrGas(11000),
-                new ItemStack[] { WerkstoffMaterialPool.HafniaZirconiaBlend.get(OrePrefixes.dustTiny, 4),
-                        WerkstoffLoader.Thorianit.get(OrePrefixes.dust, 1), Materials.Monazite.getDustTiny(2) },
-                480,
-                900,
-                10);
+        GT_Values.RA.stdBuilder()
+                .fluidInputs(
+                        Materials.Water.getFluid(10000),
+                        WerkstoffMaterialPool.MuddyRareEarthMonaziteSolution.getFluidOrGas(1000))
+                .itemInputs(GT_Utility.getIntegratedCircuit(1), Materials.Saltpeter.getDust(1))
+                .fluidOutputs(WerkstoffMaterialPool.DilutedRareEarthMonaziteMud.getFluidOrGas(11000))
+                .itemOutputs(
+                        WerkstoffMaterialPool.HafniaZirconiaBlend.get(OrePrefixes.dustTiny, 4),
+                        WerkstoffLoader.Thorianit.get(OrePrefixes.dust, 1),
+                        Materials.Monazite.getDustTiny(2))
+                .eut(480).duration(900).specialValue(10).noOptimize()
+                .addTo(RecipeAdder.instance.DissolutionTankRecipes);
 
-        RecipeAdder.instance.DissolutionTankRecipes.addDissolutionTankRecipe(
-                new FluidStack[] { Materials.Water.getFluid(90000),
-                        WerkstoffMaterialPool.MuddyRareEarthMonaziteSolution.getFluidOrGas(9000) },
-                new ItemStack[] { GT_Utility.getIntegratedCircuit(9), Materials.Saltpeter.getDust(9) },
-                WerkstoffMaterialPool.DilutedRareEarthMonaziteMud.getFluidOrGas(99000),
-                new ItemStack[] { WerkstoffMaterialPool.HafniaZirconiaBlend.get(OrePrefixes.dust, 4),
-                        WerkstoffLoader.Thorianit.get(OrePrefixes.dust, 9), Materials.Monazite.getDust(2) },
-                480,
-                8100,
-                10);
+        GT_Values.RA.stdBuilder()
+                .fluidInputs(
+                        Materials.Water.getFluid(90000),
+                        WerkstoffMaterialPool.MuddyRareEarthMonaziteSolution.getFluidOrGas(9000))
+                .itemInputs(GT_Utility.getIntegratedCircuit(9), Materials.Saltpeter.getDust(9))
+                .fluidOutputs(WerkstoffMaterialPool.DilutedRareEarthMonaziteMud.getFluidOrGas(99000))
+                .itemOutputs(
+                        WerkstoffMaterialPool.HafniaZirconiaBlend.get(OrePrefixes.dust, 4),
+                        WerkstoffLoader.Thorianit.get(OrePrefixes.dust, 9),
+                        Materials.Monazite.getDust(2))
+                .eut(480).duration(8100).specialValue(10).noOptimize()
+                .addTo(RecipeAdder.instance.DissolutionTankRecipes);
 
         GT_Recipe.GT_Recipe_Map.sSifterRecipes.addRecipe(
                 false,
@@ -740,14 +741,11 @@ public class RecipeLoader {
                 1920);
 
         // BASTNASITE (god help me)
-        RecipeAdder.instance.DigesterRecipes.addDigesterRecipe(
-                new FluidStack[] { Materials.NitricAcid.getFluid(700) },
-                new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.crushed, Materials.Bastnasite, 2) },
-                WerkstoffMaterialPool.MuddyRareEarthBastnasiteSolution.getFluidOrGas(400),
-                new ItemStack[] { Materials.SiliconDioxide.getDust(1) },
-                1920,
-                400,
-                800);
+        GT_Values.RA.stdBuilder().fluidInputs(Materials.NitricAcid.getFluid(700))
+                .itemInputs(GT_OreDictUnificator.get(OrePrefixes.crushed, Materials.Bastnasite, 2))
+                .fluidOutputs(WerkstoffMaterialPool.MuddyRareEarthBastnasiteSolution.getFluidOrGas(400))
+                .itemOutputs(Materials.SiliconDioxide.getDust(1)).eut(1920).duration(400).specialValue(800)
+                .addTo(RecipeAdder.instance.DigesterRecipes);
 
         GT_Values.RA.addCrackingRecipe(
                 1,
@@ -768,15 +766,14 @@ public class RecipeLoader {
                 800,
                 120);
 
-        RecipeAdder.instance.DissolutionTankRecipes.addDissolutionTankRecipe(
-                new FluidStack[] { Materials.Water.getFluid(10000),
-                        WerkstoffMaterialPool.ConditionedBastnasiteMud.getFluidOrGas(1000) },
-                new ItemStack[] { Materials.Saltpeter.getDust(1) },
-                WerkstoffMaterialPool.DiltedRareEarthBastnasiteMud.getFluidOrGas(11000),
-                new ItemStack[] { WerkstoffMaterialPool.Gangue.get(OrePrefixes.dust, 1) },
-                1920,
-                1000,
-                10);
+        GT_Values.RA.stdBuilder()
+                .fluidInputs(
+                        Materials.Water.getFluid(10000),
+                        WerkstoffMaterialPool.ConditionedBastnasiteMud.getFluidOrGas(1000))
+                .itemInputs(Materials.Saltpeter.getDust(1))
+                .fluidOutputs(WerkstoffMaterialPool.DiltedRareEarthBastnasiteMud.getFluidOrGas(11000))
+                .itemOutputs(WerkstoffMaterialPool.Gangue.get(OrePrefixes.dust, 1)).eut(1920).duration(1000)
+                .specialValue(10).noOptimize().addTo(RecipeAdder.instance.DissolutionTankRecipes);
 
         GT_Recipe.GT_Recipe_Map.sSifterRecipes.addRecipe(
                 false,

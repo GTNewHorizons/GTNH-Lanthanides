@@ -32,6 +32,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMultiBlockBase;
+import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
@@ -85,6 +86,11 @@ public class DissolutionTank extends GT_MetaTileEntity_EnhancedMultiBlockBase<Di
 
     private boolean addGlass(Block block, int meta) {
         return block == ItemRegistry.bw_glasses[0];
+    }
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return RecipeAdder.instance.DissolutionTankRecipes;
     }
 
     @Override

@@ -30,6 +30,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMultiBlockBase;
+import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
@@ -88,6 +89,11 @@ public class Digester extends GT_MetaTileEntity_EnhancedMultiBlockBase<Digester>
 
     public void setCoilLevel(HeatingCoilLevel level) {
         this.heatLevel = level;
+    }
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return RecipeAdder.instance.DigesterRecipes;
     }
 
     @Override
