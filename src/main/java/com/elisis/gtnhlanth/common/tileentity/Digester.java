@@ -18,7 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.elisis.gtnhlanth.loader.RecipeAdder;
+import com.elisis.gtnhlanth.api.recipe.LanthanidesRecipeMaps;
 import com.elisis.gtnhlanth.util.DescTextLocalization;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -93,7 +93,7 @@ public class Digester extends GT_MetaTileEntity_EnhancedMultiBlockBase<Digester>
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return RecipeAdder.instance.DigesterRecipes;
+        return LanthanidesRecipeMaps.digesterRecipes;
     }
 
     @Override
@@ -107,8 +107,7 @@ public class Digester extends GT_MetaTileEntity_EnhancedMultiBlockBase<Digester>
 
         // GT_Log.out.print("Digester: " + Arrays.toString(mInventory));
 
-        // Collection<GT_Recipe> tRecipes = RecipeAdder.instance.DigesterRecipes.mRecipeList;
-        GT_Recipe tRecipe = RecipeAdder.instance.DigesterRecipes
+        GT_Recipe tRecipe = LanthanidesRecipeMaps.digesterRecipes
                 .findRecipe(getBaseMetaTileEntity(), false, tVoltage, tFluidInputArray, tItems);
 
         if (tRecipe == null || !tRecipe.isRecipeInputEqual(true, tFluidInputArray, tItems)) return false;

@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.elisis.gtnhlanth.loader.RecipeAdder;
+import com.elisis.gtnhlanth.api.recipe.LanthanidesRecipeMaps;
 import com.elisis.gtnhlanth.util.DescTextLocalization;
 import com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -90,7 +90,7 @@ public class DissolutionTank extends GT_MetaTileEntity_EnhancedMultiBlockBase<Di
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return RecipeAdder.instance.DissolutionTankRecipes;
+        return LanthanidesRecipeMaps.dissolutionTankRecipes;
     }
 
     @Override
@@ -102,7 +102,7 @@ public class DissolutionTank extends GT_MetaTileEntity_EnhancedMultiBlockBase<Di
         ItemStack[] tItems = this.getStoredInputs().toArray(new ItemStack[0]);
         long tVoltage = this.getMaxInputVoltage();
 
-        GT_Recipe tRecipe = RecipeAdder.instance.DissolutionTankRecipes
+        GT_Recipe tRecipe = LanthanidesRecipeMaps.dissolutionTankRecipes
                 .findRecipe(getBaseMetaTileEntity(), false, tVoltage, tFluidInputArray, tItems);
 
         if (tRecipe == null || !tRecipe.isRecipeInputEqual(true, tFluidInputArray, tItems)) return false;
