@@ -33,7 +33,7 @@ import gregtech.api.util.GT_Recipe;
                 + "required-after:bartworks; "
                 + "required-after:GoodGenerator; "
                 + "before:miscutils; "
-                + "required-after:dreamcraft; ")
+                )
 public class GTNHLanthanides {
 
     public static Logger LOG = Logger.getLogger("GTNH:Lanthanides");
