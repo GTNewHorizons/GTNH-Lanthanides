@@ -2,7 +2,6 @@ package com.elisis.gtnhlanth.common.tileentity.recipe.beamline;
 
 import java.awt.Rectangle;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 import com.elisis.gtnhlanth.common.beamline.Particle;
@@ -11,11 +10,14 @@ import com.gtnewhorizons.modularui.api.math.Pos2d;
 
 import gregtech.GT_Mod;
 import gregtech.api.gui.modularui.GT_UITextures;
+import gregtech.api.recipe.BasicUIProperties;
+import gregtech.api.recipe.RecipeMap;
+import gregtech.api.recipe.RecipeMapBackend;
+import gregtech.api.recipe.RecipeMapBuilder;
+import gregtech.api.recipe.RecipeMapFrontend;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.gui.modularui.UIHelper;
-import gregtech.common.power.Power;
-import gregtech.common.power.UnspecifiedEUPower;
 import gregtech.nei.NEIRecipeInfo;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
@@ -24,6 +26,8 @@ public class BeamlineRecipeAdder {
 
     public static final BeamlineRecipeAdder instance = new BeamlineRecipeAdder();
 
+    
+    /*
     public final LanthRecipeMap SourceChamberRecipes = (LanthRecipeMap) new LanthRecipeMap(
             new HashSet<>(200),
             "gtnhlanth.recipe.sc",
@@ -110,8 +114,36 @@ public class BeamlineRecipeAdder {
     			}
     		)
     		
-    		;
-    
+    		;*/
+    		
+    public final RecipeMap<RecipeMapBackend> SourceChamberRecipes = RecipeMapBuilder.of("gtnhlanth.recipe.sc")
+    		.maxIO(1, 2, 0, 0).minInputs(0, 0).progressBar(GT_UITextures.PROGRESSBAR_ASSEMBLY_LINE_1)
+    		.neiSpecialInfoFormatter((recipeInfo) -> {
+    			
+    			RecipeSC recipe = (RecipeSC) recipeInfo.recipe;
+    			
+    			float focus = recipe.focus;
+    			float maxEnergy = recipe.maxEnergy;
+    			
+    			int amount = recipe.rate;
+    			
+    			Particle particle = Particle.getParticleFromId(recipe.particleId);
+    			
+    			return Arrays.asList(
+    					
+    					//StatCollector.translateToLocal("beamline.particle") + ": " + particle.getLocalisedName(),
+    					
+    					StatCollector.translateToLocal("beamline.energy") + ": <=" + GT_Utility.formatNumbers(Math.min(maxEnergy, particle.maxSourceEnergy()))  + " keV",
+    					
+    					StatCollector.translateToLocal("beamline.focus") + ": " + GT_Utility.formatNumbers(focus),
+    					
+    					StatCollector.translateToLocal("beamline.rate") + ": " + GT_Utility.formatNumbers(amount)
+    								
+    				);
+    			}
+    		).build();
+    		
+    /*
     public final LanthRecipeMap TargetChamberRecipes = (LanthRecipeMap) new LanthRecipeMap(
     		new HashSet<>(500),
     		"gtnhlanth.recipe.tc",
@@ -148,7 +180,7 @@ public class BeamlineRecipeAdder {
 	                posList.addAll(UIHelper.getGridPositions(itemInputCount - 1, 36, 28, 3));
 	                
 	    			*/
-	    			
+	    			/*
 	    			List<Pos2d> posList = Util.getGridPositions(itemInputCount, 8, 20, 3, 1, 20);
 	    			return posList;
 	            }
@@ -223,7 +255,48 @@ public class BeamlineRecipeAdder {
     								
     				);
     			}
-    		);
+    		);*/
+    		
+    public final RecipeMap<RecipeMapBackend> TargetChamberRecipes = RecipeMapBuilder.of("gtnhlanth.recipe.tc")
+    		.maxIO(3, 4, 0, 0).minInputs(0, 0)
+    		.progressBar(GT_UITextures.PROGRESSBAR_ASSEMBLY_LINE_1)
+    		.progressBarPos(108, 22)
+    		.neiTransferRect(new Rectangle(
+    				100,
+    				22,
+    				28,
+    				18))
+    		.neiSpecialInfoFormatter((recipeInfo) -> {
+    			RecipeTC recipe = (RecipeTC) recipeInfo.recipe;
+    			
+    			float minEnergy = recipe.minEnergy;
+    			float maxEnergy = recipe.maxEnergy;
+    			
+    			float minFocus = recipe.minFocus;
+    			
+    			float amount = recipe.amount;
+    			
+    			Particle particle = Particle.getParticleFromId(recipe.particleId);
+    			
+    			return Arrays.asList(
+    					
+    					//StatCollector.translateToLocal("beamline.particle") + ": " + particle.getLocalisedName(),
+    					
+    					StatCollector.translateToLocal("beamline.energy") + ": " + GT_Utility.formatNumbers(minEnergy * 1000) + "-" + GT_Utility.formatNumbers(maxEnergy * 1000) + " eV", //Note the eV unit
+    					
+    					StatCollector.translateToLocal("beamline.focus") + ": >=" + GT_Utility.formatNumbers(minFocus),
+    					
+    					StatCollector.translateToLocal("beamline.amount") + ": " + GT_Utility.formatNumbers(amount)
+    								
+    				);
+    			}
+    		
+    		)
+    				
+    				
+    				.build();
+    		
+    		
 
     /***
      *
