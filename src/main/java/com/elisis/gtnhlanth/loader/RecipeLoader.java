@@ -40,6 +40,7 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -47,16 +48,20 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 
+import com.dreammaster.gthandler.CustomItemList;
 import com.elisis.gtnhlanth.Tags;
+import com.elisis.gtnhlanth.common.item.MaskList;
 import com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool;
 import com.elisis.gtnhlanth.common.register.LanthItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
+import com.github.bartimaeusnek.bartworks.system.material.BW_GT_MaterialReference;
 import com.github.bartimaeusnek.bartworks.system.material.GT_Enhancement.PlatinumSludgeOverHaul;
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import goodgenerator.items.MyMaterial;
+import gregtech.api.enums.Dyes;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
@@ -66,11 +71,274 @@ import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_RecipeBuilder;
 import gregtech.api.util.GT_Utility;
 
 public class RecipeLoader {
 
-    private static final Materials[] BLACKLIST = null;
+    // private static final Materials[] BLACKLIST = null;
+
+    @SuppressWarnings("deprecation")
+    public static void loadAccelerator() {
+
+        /*
+         * //Permalloy GT_Values.RA.addMixerRecipe( GT_Utility.getIntegratedCircuit(4), Materials.Nickel.getDust(4),
+         * Materials.Iron.getDust(1), Materials.Molybdenum.getDust(1), null, null,
+         * WerkstoffMaterialPool.Permalloy.get(OrePrefixes.dust, 6), 1920, 200 );
+         */
+        // Mu-metal
+        GT_Values.RA.addBlastRecipe(
+                GT_Utility.getIntegratedCircuit(2),
+                WerkstoffMaterialPool.Permalloy.get(OrePrefixes.dust, 9),
+                Materials.Copper.getDust(1),
+                Materials.Chrome.getDust(1),
+                null,
+                null,
+                WerkstoffMaterialPool.MuMetal.get(OrePrefixes.ingot, 9),
+                null,
+                null,
+                null,
+                400,
+                1920,
+                4500);
+
+        // Shielded Accelerator Casing -- Maybe assline recipe
+        GT_Values.RA.addAssemblerRecipe(
+                new ItemStack[] { ItemList.Casing_RadiationProof.get(1L),
+                        WerkstoffMaterialPool.MuMetal.get(OrePrefixes.plateDense, 6),
+                        GT_Utility.getIntegratedCircuit(6) },
+                Materials.SolderingAlloy.getMolten(144),
+                new ItemStack(LanthItemList.SHIELDED_ACCELERATOR_CASING, 1),
+                800,
+                7980);
+
+        // Accelerator Electrode Casing
+        GT_Values.RA.addAssemblerRecipe(
+                new ItemStack[] { BW_GT_MaterialReference.Silver.get(blockCasingAdvanced, 1),
+                        GT_OreDictUnificator.get(OrePrefixes.wireGt02, Materials.Silver, 12),
+                        GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Gold, 6),
+                        GT_Utility.getIntegratedCircuit(6) },
+                Materials.SolderingAlloy.getMolten(288),
+                new ItemStack(LanthItemList.ELECTRODE_CASING, 1),
+                800,
+                7680);
+
+        // Coolant Delivery Casing
+        GT_Values.RA.addAssemblylineRecipe(
+                ItemList.Casing_Pipe_TungstenSteel.get(1L),
+                72000,
+                new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Aluminium, 1),
+                        Materials.Copper.getPlates(6),
+                        GT_OreDictUnificator.get(OrePrefixes.pipeLarge, Materials.Naquadah, 2),
+                        ItemList.Electric_Pump_LuV.get(3L), new ItemStack(LanthItemList.CAPILLARY_EXCHANGE, 1),
+                        new ItemStack(LanthItemList.CAPILLARY_EXCHANGE, 1),
+                        new ItemStack(LanthItemList.CAPILLARY_EXCHANGE, 1), CustomItemList.MicaInsulatorSheet.get(2),
+                        CustomItemList.MicaInsulatorSheet.get(2), CustomItemList.MicaInsulatorSheet.get(2),
+                        GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Tungsten, 1) },
+                new FluidStack[] { Materials.SolderingAlloy.getMolten(288), Materials.Lubricant.getFluid(1152) },
+                new ItemStack(LanthItemList.COOLANT_DELIVERY_CASING),
+                1000,
+                7680);
+
+        // Capillary Exchange
+        GT_Values.RA.addAssemblerRecipe(
+                new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.pipeTiny, Materials.TungstenSteel, 8),
+                        GT_OreDictUnificator.get(OrePrefixes.plateDouble, Materials.Copper, 2),
+                        Materials.Titanium.getPlates(6), CustomItemList.MicaInsulatorFoil.get(4),
+                        ItemList.Electric_Pump_LuV.get(1), Materials.Silver.getDust(2) },
+                Materials.Silicone.getMolten(288L),
+                new ItemStack(LanthItemList.CAPILLARY_EXCHANGE, 1),
+                400,
+                7680);
+
+        // Mu-metal lattice
+        GT_Values.RA.addAssemblerRecipe(
+                new ItemStack[] { WerkstoffMaterialPool.MuMetal.get(OrePrefixes.wireFine, 12),
+                        GT_OreDictUnificator.get(OrePrefixes.stick, Materials.TungstenSteel, 4) },
+                Materials.SolderingAlloy.getMolten(144),
+                new ItemStack(LanthItemList.MM_LATTICE, 1),
+                300,
+                1920);
+
+        // Shielded Accelerator Glass
+        GT_Values.RA.addFluidSolidifierRecipe(
+                new ItemStack(LanthItemList.MM_LATTICE, 4),
+                Materials.BorosilicateGlass.getMolten(144),
+                new ItemStack(LanthItemList.SHIELDED_ACCELERATOR_GLASS, 1),
+                500,
+                1920);
+
+        // Beamline Pipe
+        GT_Values.RA.addAssemblerRecipe(
+                new ItemStack[] { WerkstoffMaterialPool.MuMetal.get(OrePrefixes.plate, 4),
+                        GT_OreDictUnificator.get(OrePrefixes.stickLong, Materials.TungstenCarbide, 4),
+                        GT_OreDictUnificator.get(OrePrefixes.stick, Materials.TungstenCarbide, 8),
+                        GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Osmiridium, 4),
+                        GT_Utility.getIntegratedCircuit(7)
+
+                },
+                Materials.SolderingAlloy.getMolten(144),
+                LanthItemList.BEAMLINE_PIPE,
+                400,
+                1920);
+
+        GT_Values.RA.stdBuilder().noItemInputs()
+        		.fluidInputs(Materials.Chloroform.getFluid(1000), Materials.HydrofluoricAcid.getFluid(3000))
+        		.noItemOutputs().fluidOutputs(WerkstoffMaterialPool.Fluoroform.getFluidOrGas(1000), Materials.HydrochloricAcid.getFluid(3000))
+        		.duration(15 * GT_RecipeBuilder.SECONDS).eut(1920).addTo(GT_Recipe.GT_Recipe_Map.sChemicalRecipes);
+        
+        // NB: http://www.smfl.rit.edu/pdf/process/process_nitride_etch_paper.pdf
+        // Reactive Ion Etchant
+        GT_Values.RA.stdBuilder().noItemInputs()
+                .fluidInputs(WerkstoffMaterialPool.Fluoroform.getFluidOrGas(3000), Materials.Oxygen.getGas(4000))
+                .noItemOutputs().fluidOutputs(WerkstoffMaterialPool.FluoroformOxygenMix.getFluidOrGas(5000))
+                .duration(15 * GT_RecipeBuilder.SECONDS).eut(1920).addTo(GT_Recipe.GT_Recipe_Map.sMixerRecipes);
+
+        // Boring but makes a lot more sense than needing to make it in an assembler or something similar
+        GameRegistry.addShapelessRecipe(
+                new ItemStack(LanthItemList.IRON_COATED_QUARTZ),
+                Materials.Iron.getDust(2),
+                Materials.NetherQuartz.getPlates(1));
+
+        // Masks
+        // Quartz + Fe2O3 T1
+        // " + Cr T2
+        //
+        GT_Values.RA.addAutoclaveRecipe(
+                new ItemStack(LanthItemList.IRON_COATED_QUARTZ),
+                null,
+                Materials.Oxygen.getGas(1000),
+                new ItemStack(LanthItemList.maskMap.get(MaskList.BLANK1)),
+                10000,
+                240,
+                1920,
+                true);
+
+        GT_Values.RA.addAutoclaveRecipe(
+                new ItemStack(LanthItemList.IRON_COATED_QUARTZ),
+                Materials.Chrome.getDust(1),
+                Materials.Oxygen.getGas(1000),
+                new ItemStack(LanthItemList.maskMap.get(MaskList.BLANK2)),
+                10000,
+                240,
+                7980,
+                true);
+
+        // Grow the first silicon
+        GT_Values.RA.stdBuilder().itemInputs(Materials.Glass.getPlates(1)).fluidInputs(Materials.Silane.getGas(4000))
+                .noFluidOutputs().itemOutputs(new ItemStack(LanthItemList.SUBSTRATE_PRECURSOR))
+                .duration(60 * GT_RecipeBuilder.SECONDS).eut(480).requiresCleanRoom()
+                .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
+
+        // Now to deposit nitride
+        GT_Values.RA.stdBuilder()
+                .itemInputs(new ItemStack(LanthItemList.SUBSTRATE_PRECURSOR), Materials.Silane.getCells(2))
+                .fluidInputs(Materials.Nitrogen.getPlasma(4000)).fluidOutputs(Materials.Nitrogen.getGas(3000))
+                .itemOutputs(new ItemStack(LanthItemList.MASK_SUBSTRATE), Materials.Empty.getCells(2))
+                .duration(30 * GT_RecipeBuilder.SECONDS).eut(TierEU.EV).specialValue(3200).requiresCleanRoom()
+                .addTo(GT_Recipe.GT_Recipe_Map.sBlastRecipes);
+
+        /*
+         * GT_Values.RA.stdBuilder().itemInputs(GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Silicon, 1))
+         * .fluidInputs(Materials.SiliconTetrachloride.getFluid(3000), Materials.Ammonia.getFluid(4000))
+         * .fluidOutputs(Materials.HydrochloricAcid.getFluid(12000))
+         * .itemOutputs(WerkstoffMaterialPool.SiliconNitride.get(OrePrefixes.plate)) .duration(GT_RecipeBuilder.SECONDS
+         * * 30) .eut(TierEU.EV) .addTo(GT_Recipe.GT_Recipe_Map.sPlasmaArcFurnaceRecipes);
+         */
+
+        for (ItemStack lens : OreDictionary.getOres("craftingLensYellow")) {
+
+            GT_Values.RA.stdBuilder()
+                    .itemInputs(GT_Utility.copyAmount(0, lens), new ItemStack(LanthItemList.MASK_SUBSTRATE))
+                    .noFluidInputs().noFluidOutputs().itemOutputs(new ItemStack(LanthItemList.MASKED_MASK))
+                    .duration(60 * GT_RecipeBuilder.SECONDS).eut(1920).requiresCleanRoom()
+                    .addTo(GT_Recipe.GT_Recipe_Map.sLaserEngraverRecipes);
+
+        }
+
+        GT_Values.RA.stdBuilder().itemInputs(new ItemStack(LanthItemList.MASKED_MASK))
+                .fluidInputs(WerkstoffMaterialPool.FluoroformOxygenMix.getFluidOrGas(4000)).noFluidOutputs()
+                .itemOutputs(new ItemStack(LanthItemList.ETCHED_MASK_1)).duration(60 * GT_RecipeBuilder.SECONDS)
+                .eut(1920).requiresCleanRoom().addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
+
+        // Etch pt. 2 with KOH
+        GT_Values.RA.stdBuilder()
+        		.fluidInputs(Materials.Argon.getGas(1000)).noFluidOutputs()
+        		.itemInputs(new ItemStack(LanthItemList.MASKED_MASK), MyMaterial.lithiumChloride.get(OrePrefixes.dust, 2), GT_ModHandler.getModItem("dreamcraft", "item.PotassiumHydroxideDust", 4))
+        		.itemOutputs(new ItemStack(LanthItemList.maskMap.get(MaskList.BLANK2)))
+        		.duration(25 * GT_RecipeBuilder.SECONDS).eut(1920).specialValue(2400)
+        		.addTo(GT_Recipe.GT_Recipe_Map.sBlastRecipes);
+        
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        new ItemStack(LanthItemList.ETCHED_MASK_1),
+                        Materials.Sodium.getDust(1),
+                        Materials.Chrome.getPlates(1),
+                        Materials.Gold.getPlates(2))
+                .fluidInputs(Materials.Hydrogen.getGas(1000)).noFluidOutputs()
+                .itemOutputs(new ItemStack(LanthItemList.maskMap.get(MaskList.BLANK3)))
+                .duration(10 * GT_RecipeBuilder.SECONDS).eut(1920).specialValue(3600)
+                .addTo(GT_Recipe.GT_Recipe_Map.sBlastRecipes);
+
+        for (MaskList mask : MaskList.values()) {
+
+            MaskList maskIngredient = mask.getPrecursor();
+            Dyes lensColour = mask.getLensColour();
+
+            if (maskIngredient == null) continue;
+
+            if (mask.getLensColour() == null) continue;
+
+            if (mask == MaskList.NAND) {
+
+                // Very copy-paste heavy, could possibly offload most of this into one case and just assign an
+                // otherIngredient variable or something, wouldn't save much space though. Plus: lazy
+                GT_Values.RA.addLaserEngraverRecipe(
+                        new ItemStack[] { new ItemStack(LanthItemList.maskMap.get(maskIngredient)), GT_Utility
+                                .copyAmount(0, GT_OreDictUnificator.get(OrePrefixes.lens, Materials.EnderPearl, 1)) },
+                        null,
+                        new ItemStack[] { new ItemStack(LanthItemList.maskMap.get(mask)) },
+                        null,
+                        2400,
+                        1920,
+                        true);
+
+            } else if (mask == MaskList.NOR) {
+
+                GT_Values.RA.addLaserEngraverRecipe(
+                        new ItemStack[] { new ItemStack(LanthItemList.maskMap.get(maskIngredient)), GT_Utility
+                                .copyAmount(0, GT_OreDictUnificator.get(OrePrefixes.lens, Materials.EnderEye, 1)) },
+                        null,
+                        new ItemStack[] { new ItemStack(LanthItemList.maskMap.get(mask)) },
+                        null,
+                        2400,
+                        1920,
+                        true);
+
+            }
+
+            else {
+            	
+                for (ItemStack lens : OreDictionary.getOres("craftingLens" + lensColour.mName.replace(" ", ""))) {
+
+                    if (lens == null) continue;
+
+                    GT_Values.RA.addLaserEngraverRecipe(
+                            new ItemStack[] { new ItemStack(LanthItemList.maskMap.get(maskIngredient)),
+                                    GT_Utility.copyAmount(0, lens) // Do not consume lens
+                    },
+                            null,
+                            new ItemStack[] { new ItemStack(LanthItemList.maskMap.get(mask)) },
+                            null,
+                            2400,
+                            1920,
+                            true);
+
+                }
+            }
+        }
+
+    }
 
     public static void loadGeneral() {
 
@@ -101,7 +369,8 @@ public class RecipeLoader {
                 GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Magnesium, 2),
                 WerkstoffMaterialPool.ZirconiumTetrachlorideSolution.getFluidOrGas(1000),
                 null, // No fluid output
-                WerkstoffMaterialPool.Zirconium.get(OrePrefixes.ingotHot, 1),
+                // WerkstoffMaterialPool.Zirconium.get(OrePrefixes.ingotHot, 1),
+                WerkstoffLoader.Zirconium.get(OrePrefixes.ingotHot, 1),
                 GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Magnesiumchloride, 6),
                 600,
                 1920,
@@ -319,6 +588,42 @@ public class RecipeLoader {
                 Materials.HydrochloricAcid.getCells(2),
                 600,
                 450);
+        
+        // Lanthanum Oxide
+        GT_Values.RA.stdBuilder()
+        		.fluidInputs(Materials.Water.getFluid(3000))
+        		.fluidOutputs(Materials.HydrochloricAcid.getFluid(6000))
+        		.itemInputs(WerkstoffMaterialPool.LanthaniumChloride.get(OrePrefixes.dust, 4))
+        		.itemOutputs(WerkstoffMaterialPool.LanthanumOxide.get(OrePrefixes.dust, 1))
+        		.duration(10 * GT_RecipeBuilder.SECONDS).eut(480)
+        		.addTo(GT_Recipe.GT_Recipe_Map.sChemicalRecipes);
+        
+        // Boron Trioxide
+        GT_Values.RA.stdBuilder()
+        		.fluidInputs(FluidRegistry.getFluidStack("boricacid", 2000))
+        		.fluidOutputs(new FluidStack(FluidRegistry.WATER, 3000))
+        		.noItemInputs().itemOutputs(WerkstoffMaterialPool.BoronTrioxide.get(OrePrefixes.dust, 1))
+        		.duration(15 * GT_RecipeBuilder.SECONDS).eut(1920)
+        		.addTo(GT_Recipe.GT_Recipe_Map.sFluidHeaterRecipes);
+        
+        // Boron Trichloride
+        GT_Values.RA.stdBuilder()
+        		.fluidInputs(BotWerkstoffMaterialPool.Phosgene.getFluidOrGas(3000))
+        		.fluidOutputs(WerkstoffMaterialPool.BoronTrichloride.getFluidOrGas(2000))
+        		.itemInputs(WerkstoffMaterialPool.BoronTrioxide.get(OrePrefixes.dust, 1), Materials.Empty.getCells(3))
+        		.itemOutputs(Materials.CarbonMonoxide.getCells(3))
+        		.duration(10 * GT_RecipeBuilder.SECONDS).eut(480)
+        		.addTo(GT_Recipe.GT_Recipe_Map.sChemicalRecipes);
+        
+        // Lanthanum Hexaboride
+        GT_Values.RA.stdBuilder()
+        		.fluidInputs(WerkstoffMaterialPool.BoronTrichloride.getFluidOrGas(8000))
+        		.fluidOutputs(FluidRegistry.getFluidStack("boricacid", 1000))
+        		.itemInputs(WerkstoffMaterialPool.LanthanumOxide.get(OrePrefixes.dust, 1))
+        		.itemOutputs(WerkstoffMaterialPool.LanthanumHexaboride.get(OrePrefixes.gemChipped))
+        		.duration(60 * GT_RecipeBuilder.SECONDS).eut(7980)
+        		.addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
+        
     }
 
     public static void loadLanthanideRecipes() {
@@ -533,10 +838,10 @@ public class RecipeLoader {
 
         GT_Values.RA.addSifterRecipe(
                 WerkstoffMaterialPool.NeutralizedUraniumFiltrate.get(OrePrefixes.dust, 1),
-                new ItemStack[] { Materials.Uranium.getDust(1), Materials.Uranium.getDust(1),
-                        Materials.Uranium.getDust(1), Materials.Uranium235.getDust(1),
+                new ItemStack[] { Materials.Fluorite.getDust(1), Materials.Uranium.getDust(1),
+                        Materials.Uranium.getDust(1), Materials.Uranium.getDust(1), Materials.Uranium235.getDust(1),
                         Materials.Uranium235.getDust(1), },
-                new int[] { 4500, 4000, 3000, 3000, 2000 },
+                new int[] { 9500, 4500, 4000, 3000, 3000, 2000 },
                 1000,
                 30);
 
@@ -2270,6 +2575,26 @@ public class RecipeLoader {
                 300,
                 120);
 
+        GT_Values.RA.addChemicalRecipe(
+                Materials.Molybdenite.getDust(1),
+                null,
+                Materials.Oxygen.getGas(7000),
+                Materials.SulfurDioxide.getGas(2000),
+                WerkstoffMaterialPool.MolybdenumTrioxide.get(OrePrefixes.dust, 1),
+                null,
+                480,
+                120);
+
+        GT_Values.RA.addChemicalRecipe(
+                WerkstoffMaterialPool.MolybdenumTrioxide.get(OrePrefixes.dust, 1),
+                null,
+                Materials.Hydrogen.getGas(6000),
+                Materials.Water.getFluid(3000),
+                WerkstoffMaterialPool.MolybdenumIVOxide.get(OrePrefixes.dust, 1),
+                null,
+                480,
+                120);
+
         // Tungstophosphoric Acid
         GT_Values.RA.addChemicalRecipe(
                 Materials.PhosphoricAcid.getCells(1),
@@ -2509,7 +2834,7 @@ public class RecipeLoader {
                 for (int oreDictID : oreDict) {
                     if ((OreDictionary.getOreName(oreDictID).startsWith("ore") || OreDictionary.getOreName(oreDictID)
                             .startsWith("crushed")) /* && OreDictionary.getOreName(oreDictID).contains("Cerium") */) {
-                        GT_Log.out.print(OreDictionary.getOreName(oreDictID));
+                        // GT_Log.out.print(OreDictionary.getOreName(oreDictID));
                         GT_Recipe tRecipe = recipe.copy();
                         boolean modified = false;
                         for (int i = 0; i < tRecipe.mOutputs.length; i++) {
@@ -3034,7 +3359,7 @@ public class RecipeLoader {
         for (GT_Recipe recipe : chemicalBathRecipes.getAllRecipes()) {
             // ItemStack input = recipe.mInputs[0];
             for (ItemStack input : recipe.mInputs) {
-                GT_Log.out.print(input.getDisplayName() + "\n");
+                // GT_Log.out.print(input.getDisplayName() + "\n");
                 if (GT_Utility.isStackValid(input)) {
                     int[] oreDict = OreDictionary.getOreIDs(input);
                     for (int oreDictID : oreDict) {
