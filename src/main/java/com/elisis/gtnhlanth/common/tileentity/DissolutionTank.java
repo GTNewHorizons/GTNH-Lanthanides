@@ -14,12 +14,7 @@ import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
-
-import com.elisis.gtnhlanth.loader.RecipeAdder;
+import com.elisis.gtnhlanth.api.recipe.LanthanidesRecipeMaps;
 import com.elisis.gtnhlanth.util.DescTextLocalization;
 import com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -32,9 +27,14 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMultiBlockBase;
+import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
 
 public class DissolutionTank extends GT_MetaTileEntity_EnhancedMultiBlockBase<DissolutionTank>
         implements IConstructable, ISecondaryDescribable {
@@ -96,7 +96,7 @@ public class DissolutionTank extends GT_MetaTileEntity_EnhancedMultiBlockBase<Di
         ItemStack[] tItems = this.getStoredInputs().toArray(new ItemStack[0]);
         long tVoltage = this.getMaxInputVoltage();
 
-        GT_Recipe tRecipe = RecipeAdder.instance.DissolutionTankRecipes
+        GT_Recipe tRecipe = LanthanidesRecipeMaps.dissolutionTankRecipes
                 .findRecipe(getBaseMetaTileEntity(), false, tVoltage, tFluidInputArray, tItems);
 
         if (tRecipe == null || !tRecipe.isRecipeInputEqual(true, tFluidInputArray, tItems)) return false;
@@ -167,6 +167,11 @@ public class DissolutionTank extends GT_MetaTileEntity_EnhancedMultiBlockBase<Di
         return majorAmount / tRecipe.mSpecialValue == minorAmount;
     }
 
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+    	return LanthanidesRecipeMaps.dissolutionTankRecipes;
+    }
+    
     @Override
     public int getMaxEfficiency(ItemStack itemStack) {
         return 10000;

@@ -41,7 +41,7 @@ public class BeamlineRecipeLoader {
         /*
          * ELECTRON
          */
-        BeamlineRecipeAdder.instance.addSourceChamberRecipe(
+        BeamlineRecipeAdder2.instance.addSourceChamberRecipe(
                 new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Tungsten, 1) },
                 null,
                 Particle.ELECTRON.ordinal(),
@@ -51,7 +51,7 @@ public class BeamlineRecipeLoader {
                 0.1f,
                 7680);
 
-        BeamlineRecipeAdder.instance.addSourceChamberRecipe(
+        BeamlineRecipeAdder2.instance.addSourceChamberRecipe(
         		new ItemStack[] {WerkstoffMaterialPool.LanthanumHexaboride.get(OrePrefixes.stickLong, 1)}, 
         		null, 
         		Particle.ELECTRON.ordinal(), 
@@ -65,7 +65,7 @@ public class BeamlineRecipeLoader {
         /*
          * NEUTRON
          */
-        BeamlineRecipeAdder.instance.addSourceChamberRecipe(
+        BeamlineRecipeAdder2.instance.addSourceChamberRecipe(
                 new ItemStack[] { ELEMENT.getInstance().CALIFORNIUM.getDust(1) },
                 null,
                 Particle.NEUTRON.ordinal(),
@@ -78,7 +78,7 @@ public class BeamlineRecipeLoader {
         /*
          * ALPHA
          */
-        BeamlineRecipeAdder.instance.addSourceChamberRecipe(
+        BeamlineRecipeAdder2.instance.addSourceChamberRecipe(
                 new ItemStack[] { Materials.Uranium.getDustTiny(1) },
                 new ItemStack[] { WerkstoffMaterialPool.Thorium234.get(OrePrefixes.dustTiny, 1) },
                 Particle.ALPHA.ordinal(),
@@ -107,7 +107,7 @@ public class BeamlineRecipeLoader {
     		
             	if (!Arrays.asList(mask.getForbiddenWafers()).contains(wafer)) {
     			
-            		BeamlineRecipeAdder.instance.addTargetChamberRecipe(
+            		BeamlineRecipeAdder2.instance.addTargetChamberRecipe(
             				wafer.get(1), 
 	                		GT_Utility.copyAmountUnsafe((int) Math.pow(2, index + 2), mask.getProducedItem()),
 	                		new ItemStack(LanthItemList.maskMap.get(mask), 0),
@@ -170,7 +170,7 @@ public class BeamlineRecipeLoader {
     		
         }
         
-        BeamlineRecipeAdder.instance.addTargetChamberRecipe(
+        BeamlineRecipeAdder2.instance.addTargetChamberRecipe(
         		new ItemStack(Items.coal, 1), 
         		new ItemStack(Items.diamond, 1), 
         		null, 
@@ -183,7 +183,7 @@ public class BeamlineRecipeLoader {
         		1920
         	);
         
-        BeamlineRecipeAdder.instance.addTargetChamberRecipe(
+        BeamlineRecipeAdder2.instance.addTargetChamberRecipe(
         		new ItemStack(Items.coal, 1), 
         		new ItemStack(Items.cooked_chicken, 1), 
         		null, 

@@ -15,7 +15,8 @@ import com.elisis.gtnhlanth.common.beamline.Particle;
 import com.elisis.gtnhlanth.common.hatch.TileBusInputFocus;
 import com.elisis.gtnhlanth.common.hatch.TileHatchInputBeamline;
 import com.elisis.gtnhlanth.common.register.LanthItemList;
-import com.elisis.gtnhlanth.common.tileentity.recipe.beamline.BeamlineRecipeAdder;
+import com.elisis.gtnhlanth.common.tileentity.recipe.beamline.BeamlineRecipeAdder2;
+import com.elisis.gtnhlanth.common.tileentity.recipe.beamline.EUNoDurationOverclockDescriber;
 import com.elisis.gtnhlanth.common.tileentity.recipe.beamline.RecipeTC;
 import com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -30,7 +31,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMul
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
-import gregtech.api.recipe.check.FindRecipeResult;
+import gregtech.api.objects.overclockdescriber.OverclockDescriber;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
@@ -151,6 +152,11 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
 		return null;
 	}
 	
+	/*
+	protected OverclockDescriber createOverclockDescriber() {
+        return new EUNoDurationOverclockDescriber((byte) 4, 1);
+    }*/
+	
 	@Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
@@ -215,7 +221,27 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
         }
         */
         
-        FindRecipeResult result = BeamlineRecipeAdder.instance.TargetChamberRecipes.findRecipeWithResult(null, (GT_Recipe recipe) -> {
+        
+        RecipeTC tRecipe = (RecipeTC) BeamlineRecipeAdder2.instance.TargetChamberRecipes.findRecipeQuery().items(tItemsWithFocusItemArray).voltage(tVoltage).filter((GT_Recipe recipe) -> {
+        
+        	RecipeTC recipeTc = (RecipeTC) recipe;
+        	
+        	//GT_Log.out.print(Arrays.toString(recipeTc.mOutputs));
+        	
+        	
+        	BeamInformation inputInfo = this.getInputInformation();
+        	
+        	int particle = recipeTc.particleId;
+        	
+        	//GT_Log.out.print(particle + " Particle");
+        	
+        	return (particle == inputInfo.getParticleId() && !(inputInfo.getEnergy() < recipeTc.minEnergy || inputInfo.getEnergy() > recipeTc.maxEnergy));
+        
+        }).find();
+        
+        
+        /*
+        FindRecipeResult result = BeamlineRecipeAdder2.instance.TargetChamberRecipes.findRecipeWithResult(null, (GT_Recipe recipe) -> {
         	
         	RecipeTC recipeTc = (RecipeTC) recipe;
         	
@@ -240,7 +266,7 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
         } else {
         	return false;
         }
-        
+        */
         /*
         
         RecipeTC tRecipe = (RecipeTC) BeamlineRecipeAdder.instance.TargetChamberRecipes.findRecipe(

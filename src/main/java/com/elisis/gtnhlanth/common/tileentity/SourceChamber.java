@@ -7,18 +7,13 @@ import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
 import java.util.ArrayList;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
-
 import com.elisis.gtnhlanth.common.beamline.BeamInformation;
 import com.elisis.gtnhlanth.common.beamline.BeamLinePacket;
 import com.elisis.gtnhlanth.common.beamline.Particle;
 import com.elisis.gtnhlanth.common.hatch.TileHatchOutputBeamline;
 import com.elisis.gtnhlanth.common.register.LanthItemList;
-import com.elisis.gtnhlanth.common.tileentity.recipe.beamline.BeamlineRecipeAdder;
+import com.elisis.gtnhlanth.common.tileentity.recipe.beamline.BeamlineRecipeAdder2;
+import com.elisis.gtnhlanth.common.tileentity.recipe.beamline.EUNoTotalOverclockDescriber;
 import com.elisis.gtnhlanth.common.tileentity.recipe.beamline.RecipeSC;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -31,8 +26,14 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMul
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
+import gregtech.api.objects.overclockdescriber.OverclockDescriber;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Utility;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
 
 public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<SourceChamber> implements IConstructable {
 
@@ -105,7 +106,11 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
 
         return false;
     }
-
+/*
+    protected OverclockDescriber createOverclockDescriber() {
+        return new EUNoTotalOverclockDescriber((byte) 4, 1);
+    }*/
+    
     // TODO: Variable recipe duration
     @Override
     public boolean checkRecipe(ItemStack itemStack) {
@@ -128,7 +133,7 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
          * GT_Log.out.print("Recipe item " + Arrays.toString(stack.mInputs)); }
          */
 
-        RecipeSC tRecipe = (RecipeSC) BeamlineRecipeAdder.instance.SourceChamberRecipes
+        RecipeSC tRecipe = (RecipeSC) BeamlineRecipeAdder2.instance.SourceChamberRecipes
                 .findRecipe(this.getBaseMetaTileEntity(), false, tVoltage, new FluidStack[] {}, tItems);
 
         if (tRecipe == null || !tRecipe.isRecipeInputEqual(true, new FluidStack[] {}, tItems)) return false; // Consumes
