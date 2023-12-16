@@ -91,6 +91,11 @@ public class Digester extends GT_MetaTileEntity_EnhancedMultiBlockBase<Digester>
     }
 
     @Override
+    public RecipeMap<?> getRecipeMap() {
+        return LanthanidesRecipeMaps.digesterRecipes;
+    }
+
+    @Override
     public boolean checkRecipe(ItemStack itemStack) {
         // GT_Log.out.print("Digester: in checkRecipe\n");
 
