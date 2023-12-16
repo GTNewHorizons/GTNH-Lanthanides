@@ -1,6 +1,5 @@
 package com.elisis.gtnhlanth.common.tileentity.recipe.beamline;
 
-import java.awt.Rectangle;
 import java.util.Arrays;
 
 import com.elisis.gtnhlanth.common.beamline.Particle;
