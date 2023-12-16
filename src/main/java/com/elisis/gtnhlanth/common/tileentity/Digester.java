@@ -130,11 +130,6 @@ public class Digester extends GT_MetaTileEntity_EnhancedMultiBlockBase<Digester>
         this.updateSlots();
         return true;
     }
-    
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-    	return LanthanidesRecipeMaps.digesterRecipes;
-    }
 
     @Override
     public int getMaxEfficiency(ItemStack itemStack) {
