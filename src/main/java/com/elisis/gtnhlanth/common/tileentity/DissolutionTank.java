@@ -88,6 +88,11 @@ public class DissolutionTank extends GT_MetaTileEntity_EnhancedMultiBlockBase<Di
     }
 
     @Override
+    public RecipeMap<?> getRecipeMap() {
+        return LanthanidesRecipeMaps.dissolutionTankRecipes;
+    }
+
+    @Override
     public boolean checkRecipe(ItemStack itemStack) {
         // GT_Log.out.print("in checkRecipe");
 

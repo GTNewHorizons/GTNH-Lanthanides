@@ -442,7 +442,7 @@ public class RecipeLoader {
                 200);
 
         // Zr
-        // ZrCl4·H2O + 2Mg = Zr + 2MgCl2
+        // ZrCl4ï¿½H2O + 2Mg = Zr + 2MgCl2
         GT_Values.RA.addBlastRecipe(
                 GT_Utility.getIntegratedCircuit(2),
                 GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Magnesium, 2),
@@ -763,7 +763,7 @@ public class RecipeLoader {
                         WerkstoffLoader.Thorianit.get(OrePrefixes.dust, 1),
                         Materials.Monazite.getDustTiny(2))
                 .eut(480).duration(900).specialValue(10).noOptimize().addTo(dissolutionTankRecipes);
-
+      
         GT_Values.RA.stdBuilder()
                 .fluidInputs(
                         Materials.Water.getFluid(90000),
@@ -775,7 +775,6 @@ public class RecipeLoader {
                         WerkstoffLoader.Thorianit.get(OrePrefixes.dust, 9),
                         Materials.Monazite.getDust(2))
                 .eut(480).duration(8100).specialValue(10).noOptimize().addTo(dissolutionTankRecipes);
-
         sifterRecipes.addRecipe(
                 false,
                 null,
