@@ -102,6 +102,7 @@ import static gregtech.api.recipe.RecipeMaps.oreWasherRecipes;
 import static gregtech.api.recipe.RecipeMaps.sifterRecipes;
 import static gregtech.api.recipe.RecipeMaps.thermalCentrifugeRecipes;
 import static gregtech.api.recipe.RecipeMaps.vacuumFreezerRecipes;
+import static gregtech.api.util.GT_RecipeConstants.UniversalChemical;
 import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
 import static gregtech.common.items.GT_MetaGenerated_Item_01.registerCauldronCleaningFor;
 import static gtPlusPlus.api.recipe.GTPPRecipeMaps.chemicalDehydratorRecipes;
@@ -666,6 +667,41 @@ public class RecipeLoader {
                 Materials.HydrochloricAcid.getCells(2),
                 600,
                 450);
+        
+     // Lanthanum Oxide
+        GT_Values.RA.stdBuilder()
+        		.fluidInputs(Materials.Water.getFluid(3000))
+        		.fluidOutputs(Materials.HydrochloricAcid.getFluid(6000))
+        		.itemInputs(WerkstoffMaterialPool.LanthaniumChloride.get(OrePrefixes.dust, 4))
+        		.itemOutputs(WerkstoffMaterialPool.LanthanumOxide.get(OrePrefixes.dust, 1))
+        		.duration(10 * GT_RecipeBuilder.SECONDS).eut(480)
+        		.addTo(UniversalChemical);
+        
+        // Boron Trioxide
+        GT_Values.RA.stdBuilder()
+        		.fluidInputs(FluidRegistry.getFluidStack("boricacid", 2000))
+        		.fluidOutputs(new FluidStack(FluidRegistry.WATER, 3000))
+        		.itemOutputs(WerkstoffMaterialPool.BoronTrioxide.get(OrePrefixes.dust, 1))
+        		.duration(15 * GT_RecipeBuilder.SECONDS).eut(1920)
+        		.addTo(UniversalChemical);
+        
+        // Boron Trichloride
+        GT_Values.RA.stdBuilder()
+        		.fluidInputs(BotWerkstoffMaterialPool.Phosgene.getFluidOrGas(3000))
+        		.fluidOutputs(WerkstoffMaterialPool.BoronTrichloride.getFluidOrGas(2000))
+        		.itemInputs(WerkstoffMaterialPool.BoronTrioxide.get(OrePrefixes.dust, 1), Materials.Empty.getCells(3))
+        		.itemOutputs(Materials.CarbonMonoxide.getCells(3))
+        		.duration(10 * GT_RecipeBuilder.SECONDS).eut(480)
+        		.addTo(UniversalChemical);
+        
+        // Lanthanum Hexaboride
+        GT_Values.RA.stdBuilder()
+        		.fluidInputs(WerkstoffMaterialPool.BoronTrichloride.getFluidOrGas(8000))
+        		.fluidOutputs(FluidRegistry.getFluidStack("boricacid", 1000))
+        		.itemInputs(WerkstoffMaterialPool.LanthanumOxide.get(OrePrefixes.dust, 1))
+        		.itemOutputs(WerkstoffMaterialPool.LanthanumHexaboride.get(OrePrefixes.gemChipped))
+        		.duration(60 * GT_RecipeBuilder.SECONDS).eut(7980)
+        		.addTo(autoclaveRecipes);
     }
 
     public static void loadLanthanideRecipes() {
