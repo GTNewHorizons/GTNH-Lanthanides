@@ -239,7 +239,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         mMaxProgresstime = 20;
         mEUt = (int) -getMaxInputVoltage();
 
-        // GT_Log.out.print("Can accelerate");
+        GT_Log.out.print("Can accelerate");
 
         // Particle stays the same with this multiblock
         outputParticle = particleId;
@@ -251,11 +251,11 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         }
 
         machineFocus = Math.max(((-0.9f) * this.length * tempFactor) + 110, 5); // Min of 5
-        if (machineFocus >= 90) { // Max of 100
-        	return false; 
+        if (machineFocus > 90) { // Max of 90
+        	machineFocus = 90; 
         }
         
-        //GT_Log.out.print("machine focus " +  machineFocus);
+        GT_Log.out.print("machine focus " +  machineFocus);
         
         inputFocus = this.getInputInformation().getFocus();
 
@@ -266,10 +266,10 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         long voltage = this.getMaxInputVoltage();
         voltageFactor = calculateVoltageFactor(voltage);
 
-        machineEnergy = Math.max(-((60) / this.length) * voltageFactor + 60_000, 2000);
+        machineEnergy = Math.max(-((60) / this.length) * voltageFactor + 60_000, 2000); // Minimum of 2000keV
 
         inputEnergy = this.getInputInformation().getEnergy();
-        outputEnergy = Math.min(inputEnergy + machineEnergy, 60_000); // TODO more complex calculation than just
+        outputEnergy = Math.min((1 + inputEnergy/Particle.getParticleFromId(outputParticle).maxSourceEnergy()) * machineEnergy, 100_000); // TODO more complex calculation than just
                                                                       // addition
 
         inputRate = this.getInputInformation().getRate();
@@ -282,7 +282,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
             return false;
         }
 
-        // GT_Log.out.print("Fluid ok");
+        GT_Log.out.print("Fluid ok");
 
         primFluid.amount -= fluidConsumed;
 
