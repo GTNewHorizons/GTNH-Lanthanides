@@ -270,8 +270,10 @@ public class RecipeLoader {
         // NB: http://www.smfl.rit.edu/pdf/process/process_nitride_etch_paper.pdf
         // Reactive Ion Etchant
         GT_Values.RA.stdBuilder()
-                .fluidInputs(WerkstoffMaterialPool.Fluoroform.getFluidOrGas(3000), Materials.Oxygen.getGas(4000))
+                .fluidInputs(WerkstoffMaterialPool.Fluoroform.getFluidOrGas(3000))
+                .itemInputs(Materials.Oxygen.getCells(4))
                 .fluidOutputs(WerkstoffMaterialPool.FluoroformOxygenMix.getFluidOrGas(5000))
+                .itemOutputs(Materials.Empty.getCells(4))
                 .duration(15 * GT_RecipeBuilder.SECONDS).eut(1920).addTo(mixerRecipes);
 
         // Boring but makes a lot more sense than needing to make it in an assembler or something similar

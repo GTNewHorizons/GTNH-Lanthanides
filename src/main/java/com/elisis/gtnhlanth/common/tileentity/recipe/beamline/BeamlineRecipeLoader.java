@@ -170,6 +170,8 @@ public class BeamlineRecipeLoader {
     		
         }
         
+        
+        
         BeamlineRecipeAdder2.instance.addTargetChamberRecipe(
         		new ItemStack(Items.coal, 1), 
         		new ItemStack(Items.diamond, 1), 

@@ -2,6 +2,8 @@ package com.elisis.gtnhlanth.common.item;
 
 import java.util.List;
 
+import com.elisis.gtnhlanth.Tags;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -18,6 +20,7 @@ public class PhotolithographicMask extends Item implements ICanFocus {
         this.setUnlocalizedName("photomask." + name);
         this.setMaxStackSize(1);
         this.setMaxDamage(maxDamage);
+        this.setTextureName(Tags.MODID + ":photomask/" + name);
     }
 /*
     @Override
