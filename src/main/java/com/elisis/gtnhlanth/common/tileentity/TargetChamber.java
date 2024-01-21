@@ -18,7 +18,7 @@ import com.elisis.gtnhlanth.common.register.LanthItemList;
 import com.elisis.gtnhlanth.common.tileentity.recipe.beamline.BeamlineRecipeAdder2;
 import com.elisis.gtnhlanth.common.tileentity.recipe.beamline.RecipeTC;
 import com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry;
-import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
+import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
@@ -40,7 +40,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
-public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<TargetChamber> implements IConstructable {
+public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<TargetChamber> implements ISurvivalConstructable {
 
 	private static final IStructureDefinition<TargetChamber> STRUCTURE_DEFINITION;
 

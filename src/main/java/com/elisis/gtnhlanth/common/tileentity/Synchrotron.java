@@ -17,7 +17,7 @@ import com.elisis.gtnhlanth.common.hatch.TileHatchInputBeamline;
 import com.elisis.gtnhlanth.common.hatch.TileHatchOutputBeamline;
 import com.elisis.gtnhlanth.common.register.LanthItemList;
 import com.elisis.gtnhlanth.common.tileentity.recipe.beamline.BeamlineRecipeLoader;
-import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
+import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
@@ -39,7 +39,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchrotron> implements IConstructable {
+public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchrotron> implements ISurvivalConstructable {
 
     private static final IStructureDefinition<Synchrotron> STRUCTURE_DEFINITION;
 
