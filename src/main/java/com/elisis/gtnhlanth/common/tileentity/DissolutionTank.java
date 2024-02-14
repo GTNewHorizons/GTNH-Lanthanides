@@ -17,6 +17,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_CRACKER_G
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static gregtech.api.util.GT_StructureUtility.buildHatchAdder;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -110,8 +111,7 @@ public class DissolutionTank extends GT_MetaTileEntity_EnhancedMultiBlockBase<Di
             @NotNull
             @Override
             protected CheckRecipeResult validateRecipe(@Nonnull GT_Recipe recipe) {
-                List<FluidStack> fluidInputs = DissolutionTank.this.getStoredFluids();
-                if (!checkRatio(recipe, fluidInputs)) {
+                if (!checkRatio(recipe, Arrays.asList(inputFluids))) {
                     return SimpleCheckRecipeResult.ofFailure("dissolution_ratio");
                 }
                 return CheckRecipeResultRegistry.SUCCESSFUL;
