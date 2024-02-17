@@ -110,9 +110,10 @@ public class DissolutionTank extends GT_MetaTileEntity_EnhancedMultiBlockBase<Di
 
             @NotNull
             @Override
-            protected CheckRecipeResult validateRecipe(@Nonnull GT_Recipe recipe) {
+            protected CheckRecipeResult onRecipeStart(@Nonnull GT_Recipe recipe) {
                 if (!checkRatio(recipe, Arrays.asList(inputFluids))) {
-                    return SimpleCheckRecipeResult.ofFailure("dissolution_ratio");
+                    criticalStopMachine();
+                    return SimpleCheckRecipeResult.ofFailurePersistOnShutdown("dissolution_ratio");
                 }
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }
