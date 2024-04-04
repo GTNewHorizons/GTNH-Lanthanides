@@ -2,22 +2,32 @@ package com.elisis.gtnhlanth.common.tileentity;
 
 import static com.elisis.gtnhlanth.util.DescTextLocalization.BLUEPRINT_INFO;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
+import static gregtech.api.enums.GT_HatchElement.Energy;
+import static gregtech.api.enums.GT_HatchElement.InputBus;
+import static gregtech.api.enums.GT_HatchElement.InputHatch;
+import static gregtech.api.enums.GT_HatchElement.Maintenance;
+import static gregtech.api.enums.GT_HatchElement.Muffler;
+import static gregtech.api.enums.GT_HatchElement.OutputBus;
+import static gregtech.api.enums.GT_HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_CRACKER;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_CRACKER_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_CRACKER_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_CRACKER_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
+import static gregtech.api.util.GT_StructureUtility.buildHatchAdder;
 import static gregtech.api.util.GT_StructureUtility.ofCoil;
-import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
-import java.util.ArrayList;
+import javax.annotation.Nonnull;
+
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import com.elisis.gtnhlanth.api.recipe.LanthanidesRecipeMaps;
 import com.elisis.gtnhlanth.util.DescTextLocalization;
-import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
+import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.GregTech_API;
@@ -25,16 +35,17 @@ import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMultiBlockBase;
 import gregtech.api.recipe.RecipeMap;
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.GT_OverclockCalculator;
 import gregtech.api.util.GT_Recipe;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
 
-public class Digester extends GT_MetaTileEntity_EnhancedMultiBlockBase<Digester> implements IConstructable {
+public class Digester extends GT_MetaTileEntity_EnhancedMultiBlockBase<Digester> implements ISurvivalConstructable {
 
     protected int casingAmount = 0;
     protected int height = 0;
@@ -48,15 +59,12 @@ public class Digester extends GT_MetaTileEntity_EnhancedMultiBlockBase<Digester>
                             { "  ttt  ", " t---t ", "t-----t", "t-----t", "t-----t", " t---t ", "  ttt  " },
                             { " tccct ", "tc---ct", "c-----c", "c-----c", "c-----c", "tc---ct", " tccct " },
                             { " tt~tt ", "thhhhht", "thsssht", "thsssht", "thsssht", "thhhhht", " ttttt " }, }))
+
             .addElement(
                     't',
-                    ofChain(
-                            ofHatchAdder(Digester::addInputToMachineList, 47, 1),
-                            ofHatchAdder(Digester::addOutputToMachineList, 47, 1),
-                            ofHatchAdder(Digester::addEnergyInputToMachineList, 47, 1),
-                            ofHatchAdder(Digester::addMaintenanceToMachineList, 47, 1),
-                            ofHatchAdder(Digester::addMufflerToMachineList, 47, 1),
-                            ofBlock(GregTech_API.sBlockCasings4, 0)))
+                    buildHatchAdder(Digester.class)
+                            .atLeast(InputHatch, OutputHatch, InputBus, OutputBus, Maintenance, Energy, Muffler)
+                            .casingIndex(47).dot(1).buildAndChain(GregTech_API.sBlockCasings4, 0))
             .addElement('h', ofBlock(GregTech_API.sBlockCasings1, 11))
             .addElement('s', ofBlock(GregTech_API.sBlockCasings4, 1))
             .addElement('c', ofCoil(Digester::setCoilLevel, Digester::getCoilLevel)).build();
@@ -74,7 +82,7 @@ public class Digester extends GT_MetaTileEntity_EnhancedMultiBlockBase<Digester>
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        return checkPiece(mName, 3, 3, 0);
+        return checkPiece(mName, 3, 3, 0) && !mMufflerHatches.isEmpty() && mMaintenanceHatches.size() == 1;
     }
 
     @Override
@@ -96,38 +104,42 @@ public class Digester extends GT_MetaTileEntity_EnhancedMultiBlockBase<Digester>
     }
 
     @Override
-    public boolean checkRecipe(ItemStack itemStack) {
-        // GT_Log.out.print("Digester: in checkRecipe\n");
+    protected ProcessingLogic createProcessingLogic() {
+        return new ProcessingLogic() {
 
-        ArrayList<FluidStack> tFluidInputs = this.getStoredFluids();
-        FluidStack[] tFluidInputArray = tFluidInputs.toArray(new FluidStack[0]);
-        ItemStack[] tItems = this.getStoredInputs().toArray(new ItemStack[0]);
-        long tVoltage = this.getMaxInputVoltage();
+            @Nonnull
+            @Override
+            protected GT_OverclockCalculator createOverclockCalculator(@Nonnull GT_Recipe recipe) {
+                return super.createOverclockCalculator(recipe).enablePerfectOC();
+            }
 
-        // GT_Log.out.print("Digester: " + Arrays.toString(mInventory));
+            @Override
+            protected @Nonnull CheckRecipeResult validateRecipe(@Nonnull GT_Recipe recipe) {
+                return recipe.mSpecialValue <= Digester.this.getCoilLevel().getHeat()
+                        ? CheckRecipeResultRegistry.SUCCESSFUL
+                        : CheckRecipeResultRegistry.insufficientHeat(recipe.mSpecialValue);
+            }
 
-        // Collection<GT_Recipe> tRecipes = RecipeAdder.instance.DigesterRecipes.mRecipeList;
-        GT_Recipe tRecipe = LanthanidesRecipeMaps.digesterRecipes
-                .findRecipe(getBaseMetaTileEntity(), false, tVoltage, tFluidInputArray, tItems);
+        };
+    }
 
-        if (tRecipe == null || !tRecipe.isRecipeInputEqual(true, tFluidInputArray, tItems)) return false;
-        // GT_Log.out.print("Recipe not null\n");
+    @Override
+    public boolean supportsVoidProtection() {
+        return true;
+    }
 
-        this.mEfficiency = (10000 - (this.getIdealStatus() - this.getRepairStatus()) * 1000);
-        this.mEfficiencyIncrease = 10000;
-        this.calculateOverclockedNessMultiInternal(tRecipe.mEUt, tRecipe.mDuration, 1, tVoltage, true);
+    @Override
+    public boolean supportsInputSeparation() {
+        return true;
+    }
 
-        if (mMaxProgresstime == Integer.MAX_VALUE - 1 && this.mEUt == Integer.MAX_VALUE - 1) return false;
+    @Override
+    public boolean supportsBatchMode() {
+        return true;
+    }
 
-        if (this.mEUt > 0) this.mEUt = (-this.mEUt);
-        // GT_Log.out.print("valid values");
-
-        if (tRecipe.mSpecialValue > this.getCoilLevel().getHeat()) return false;
-        // GT_Log.out.print("Coils good\n");
-        // GT_Log.out.print(tRecipe.getFluidOutput(0).getLocalizedName());
-        this.mOutputFluids = tRecipe.mFluidOutputs;
-        this.mOutputItems = tRecipe.mOutputs;
-        this.updateSlots();
+    @Override
+    public boolean supportsSingleRecipeLocking() {
         return true;
     }
 
@@ -149,6 +161,12 @@ public class Digester extends GT_MetaTileEntity_EnhancedMultiBlockBase<Digester>
     @Override
     public void construct(ItemStack itemStack, boolean b) {
         buildPiece(mName, itemStack, b, 3, 3, 0);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        return survivialBuildPiece(mName, stackSize, 3, 3, 0, elementBudget, env, false, true);
     }
 
     @Override
@@ -192,11 +210,13 @@ public class Digester extends GT_MetaTileEntity_EnhancedMultiBlockBase<Digester>
 
     @Override
     public boolean explodesOnComponentBreak(ItemStack arg0) {
+        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public int getDamageToComponent(ItemStack arg0) {
+        // TODO Auto-generated method stub
         return 0;
     }
 }

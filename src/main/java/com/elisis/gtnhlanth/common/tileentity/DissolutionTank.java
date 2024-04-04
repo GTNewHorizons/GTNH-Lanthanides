@@ -3,22 +3,38 @@ package com.elisis.gtnhlanth.common.tileentity;
 import static com.elisis.gtnhlanth.util.DescTextLocalization.BLUEPRINT_INFO;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAdder;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
+import static gregtech.api.enums.GT_HatchElement.Energy;
+import static gregtech.api.enums.GT_HatchElement.InputBus;
+import static gregtech.api.enums.GT_HatchElement.InputHatch;
+import static gregtech.api.enums.GT_HatchElement.Maintenance;
+import static gregtech.api.enums.GT_HatchElement.OutputBus;
+import static gregtech.api.enums.GT_HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_CRACKER;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_CRACKER_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_CRACKER_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_CRACKER_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
-import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
+import static gregtech.api.util.GT_StructureUtility.buildHatchAdder;
 
+import java.util.Arrays;
 import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
+
+import org.jetbrains.annotations.NotNull;
 
 import com.elisis.gtnhlanth.api.recipe.LanthanidesRecipeMaps;
 import com.elisis.gtnhlanth.util.DescTextLocalization;
 import com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry;
-import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
+import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.GregTech_API;
@@ -26,18 +42,18 @@ import gregtech.api.interfaces.ISecondaryDescribable;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMultiBlockBase;
 import gregtech.api.recipe.RecipeMap;
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
 
 public class DissolutionTank extends GT_MetaTileEntity_EnhancedMultiBlockBase<DissolutionTank>
-        implements IConstructable, ISecondaryDescribable {
+        implements ISurvivalConstructable, ISecondaryDescribable {
 
     private final IStructureDefinition<DissolutionTank> multiDefinition = StructureDefinition.<DissolutionTank>builder()
             .addShape(
@@ -50,13 +66,9 @@ public class DissolutionTank extends GT_MetaTileEntity_EnhancedMultiBlockBase<Di
                                     { "s   s", "     ", "     ", "     ", "s   s" } }))
             .addElement(
                     's',
-                    ofChain(
-                            ofHatchAdder(DissolutionTank::addInputToMachineList, 49, 1),
-                            ofHatchAdder(DissolutionTank::addOutputToMachineList, 49, 1),
-                            ofHatchAdder(DissolutionTank::addEnergyInputToMachineList, 49, 1),
-                            ofHatchAdder(DissolutionTank::addMaintenanceToMachineList, 49, 1),
-                            ofHatchAdder(DissolutionTank::addMufflerToMachineList, 49, 1),
-                            ofBlock(GregTech_API.sBlockCasings4, 1)))
+                    buildHatchAdder(DissolutionTank.class)
+                            .atLeast(InputHatch, OutputHatch, InputBus, OutputBus, Maintenance, Energy).casingIndex(49)
+                            .dot(1).buildAndChain(GregTech_API.sBlockCasings4, 1))
             .addElement('h', ofBlock(GregTech_API.sBlockCasings1, 11))
             .addElement('g', ofBlockAdder(DissolutionTank::addGlass, ItemRegistry.bw_glasses[0], 1)).build();
 
@@ -75,7 +87,7 @@ public class DissolutionTank extends GT_MetaTileEntity_EnhancedMultiBlockBase<Di
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        return checkPiece(mName, 2, 3, 0);
+        return checkPiece(mName, 2, 3, 0) && mMaintenanceHatches.size() == 1;
     }
 
     @Override
@@ -88,36 +100,44 @@ public class DissolutionTank extends GT_MetaTileEntity_EnhancedMultiBlockBase<Di
     }
 
     @Override
-    public boolean checkRecipe(ItemStack itemStack) {
-        // GT_Log.out.print("in checkRecipe");
+    public RecipeMap<?> getRecipeMap() {
+        return LanthanidesRecipeMaps.dissolutionTankRecipes;
+    }
 
-        List<FluidStack> tFluidInputs = this.getStoredFluids();
-        FluidStack[] tFluidInputArray = tFluidInputs.toArray(new FluidStack[0]);
-        ItemStack[] tItems = this.getStoredInputs().toArray(new ItemStack[0]);
-        long tVoltage = this.getMaxInputVoltage();
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+        return new ProcessingLogic() {
 
-        GT_Recipe tRecipe = LanthanidesRecipeMaps.dissolutionTankRecipes
-                .findRecipe(getBaseMetaTileEntity(), false, tVoltage, tFluidInputArray, tItems);
+            @NotNull
+            @Override
+            protected CheckRecipeResult onRecipeStart(@Nonnull GT_Recipe recipe) {
+                if (!checkRatio(recipe, Arrays.asList(inputFluids))) {
+                    criticalStopMachine();
+                    return SimpleCheckRecipeResult.ofFailurePersistOnShutdown("dissolution_ratio");
+                }
+                return CheckRecipeResultRegistry.SUCCESSFUL;
+            }
 
-        if (tRecipe == null || !tRecipe.isRecipeInputEqual(true, tFluidInputArray, tItems)) return false;
-        // GT_Log.out.print("Recipe not null\n");
+        };
+    }
 
-        this.mEfficiency = (10000 - (this.getIdealStatus() - this.getRepairStatus()) * 1000);
-        this.mEfficiencyIncrease = 10000;
-        this.calculateOverclockedNessMulti(tRecipe.mEUt, tRecipe.mDuration, 1, tVoltage);
+    @Override
+    public boolean supportsVoidProtection() {
+        return true;
+    }
 
-        if (mMaxProgresstime == Integer.MAX_VALUE - 1 && this.mEUt == Integer.MAX_VALUE - 1) return false;
-        if (this.mEUt > 0) this.mEUt = (-this.mEUt);
+    @Override
+    public boolean supportsInputSeparation() {
+        return true;
+    }
 
-        this.updateSlots();
+    @Override
+    public boolean supportsBatchMode() {
+        return true;
+    }
 
-        if (!checkRatio(tRecipe, tFluidInputs)) {
-            stopMachine();
-            return false;
-        }
-
-        this.mOutputFluids = new FluidStack[] { tRecipe.getFluidOutput(0) };
-        this.mOutputItems = tRecipe.mOutputs;
+    @Override
+    public boolean supportsSingleRecipeLocking() {
         return true;
     }
 
@@ -168,11 +188,6 @@ public class DissolutionTank extends GT_MetaTileEntity_EnhancedMultiBlockBase<Di
     }
 
     @Override
-    public RecipeMap<?> getRecipeMap() {
-    	return LanthanidesRecipeMaps.dissolutionTankRecipes;
-    }
-    
-    @Override
     public int getMaxEfficiency(ItemStack itemStack) {
         return 10000;
     }
@@ -185,6 +200,12 @@ public class DissolutionTank extends GT_MetaTileEntity_EnhancedMultiBlockBase<Di
     @Override
     public void construct(ItemStack itemStack, boolean b) {
         buildPiece(mName, itemStack, b, 2, 3, 0);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        return survivialBuildPiece(mName, stackSize, 2, 3, 0, elementBudget, env, false, true);
     }
 
     @Override
