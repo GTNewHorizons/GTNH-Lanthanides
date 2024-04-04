@@ -78,3 +78,4 @@ particle.photon=Photon
 particle.alpha=Alpha
 particle.neutron=Neutron
 particle.proton=Proton
+GT5U.gui.text.dissolution_ratio=§7Wrong fluid input ratio

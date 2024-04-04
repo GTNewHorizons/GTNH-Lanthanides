@@ -9,7 +9,6 @@ import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 import com.elisis.gtnhlanth.common.tileentity.recipe.beamline.BeamlineRecipeLoader;
 import com.elisis.gtnhlanth.loader.BotRecipes;
 import com.elisis.gtnhlanth.loader.RecipeLoader;
-import com.elisis.gtnhlanth.xmod.nei.IMC;
 import com.github.bartimaeusnek.bartworks.API.WerkstoffAdderRegistry;
 
 import cpw.mods.fml.common.Mod;
@@ -58,7 +57,6 @@ public class GTNHLanthanides {
     public static void init(FMLInitializationEvent e) {
         proxy.init(e);
         WerkstoffMaterialPool.runInit();
-        IMC.IMCSender();
     }
 
     @EventHandler

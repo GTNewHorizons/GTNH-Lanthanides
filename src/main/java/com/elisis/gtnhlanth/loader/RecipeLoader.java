@@ -1047,7 +1047,7 @@ public class RecipeLoader {
                 Materials.Europium.getDust(1),
                 null,
                 null,
-                WerkstoffMaterialPool.EuropiumOxide.get(OrePrefixes.dust, 4),
+                WerkstoffMaterialPool.EuropiumOxide.get(OrePrefixes.dust, 6),
                 300,
                 8400);
 
@@ -2523,7 +2523,7 @@ public class RecipeLoader {
                 .itemOutputs(
                         Materials.Samarium.getDust(9),
                         Materials.Sodium.getDust(9),
-                        RarestEarthResidue.get(OrePrefixes.dust, 1))
+                        RarestEarthResidue.get(OrePrefixes.dust, 2))
                 .fluidOutputs(Materials.Chlorine.getGas(36000)).eut(30720).duration(2 * SECONDS)
                 .addTo(electrolyzerRecipes);
 
@@ -3324,7 +3324,9 @@ public class RecipeLoader {
                     int[] oreDict = OreDictionary.getOreIDs(input);
                     for (int oreDictID : oreDict) {
                         if (OreDictionary.getOreName(oreDictID).startsWith("dustImpureCerium")
-                                || OreDictionary.getOreName(oreDictID).startsWith("dustImpureSamarium")) {
+                                || OreDictionary.getOreName(oreDictID).startsWith("dustImpureSamarium")
+                                || OreDictionary.getOreName(oreDictID).startsWith("dustPureSamarium")
+                                || OreDictionary.getOreName(oreDictID).startsWith("dustPureCerium")) {
                             GT_Recipe tRecipe = recipe.copy();
                             for (int i = 0; i < tRecipe.mOutputs.length; i++) {
                                 if (!GT_Utility.isStackValid(tRecipe.mOutputs[i])) continue;
