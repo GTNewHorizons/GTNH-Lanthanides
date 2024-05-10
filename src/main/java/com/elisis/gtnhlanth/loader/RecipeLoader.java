@@ -64,10 +64,12 @@ import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.Prometh
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.PromethiumExtractingNanoResin;
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.PromethiumOreConcentrate;
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.RarestEarthResidue;
+import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.SamariumChloride;
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.SamariumChlorideConcentrate;
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.SamariumChlorideSodiumChlorideBlend;
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.SamariumExtractingNanoResin;
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.SamariumOreConcentrate;
+import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.SamariumOxalate;
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.SamariumOxide;
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.SamariumRareEarthMud;
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.TerbiumChlorideConcentrate;
