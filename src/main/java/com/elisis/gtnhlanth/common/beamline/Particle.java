@@ -18,15 +18,16 @@ public enum Particle {
 
     private String name;
     private String shortName;
-    
+
     private float charge; // in multiples of elemental charge
-    
+
     private String chargeSpecial;
 
-    private Particle(boolean canAcc, int id, float restMass, float maxSourceEnergy, String name, String shortName, float charge, String chargeSpecial) { // ID
-                                                                                                                     // is
-                                                                                                                     // symbolic
-                                                                                                                     // only
+    private Particle(boolean canAcc, int id, float restMass, float maxSourceEnergy, String name, String shortName,
+            float charge, String chargeSpecial) { // ID
+        // is
+        // symbolic
+        // only
         this.canAcc = canAcc;
         this.restMass = restMass;
         this.maxSourceEnergy = maxSourceEnergy;
@@ -39,13 +40,13 @@ public enum Particle {
     public float getMass() {
         return this.restMass;
     }
-    
+
     public float getCharge() {
-    	return this.charge;
+        return this.charge;
     }
-    
+
     public String getChargeSpecial() {
-    	return this.chargeSpecial;
+        return this.chargeSpecial;
     }
 
     public boolean canAccelerate() {
@@ -55,9 +56,9 @@ public enum Particle {
     public float maxSourceEnergy() {
         return this.maxSourceEnergy;
     }
-    
+
     public String getName() {
-    	return this.name;
+        return this.name;
     }
 
     public String getLocalisedName() {

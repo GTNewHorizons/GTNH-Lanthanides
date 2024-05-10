@@ -1,7 +1,5 @@
 package com.elisis.gtnhlanth.common.tileentity;
 
-
-
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAdder;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -9,6 +7,13 @@ import static gregtech.api.enums.GT_Values.VN;
 import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
 import java.util.ArrayList;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
 
 import com.elisis.gtnhlanth.common.beamline.BeamInformation;
 import com.elisis.gtnhlanth.common.beamline.Particle;
@@ -33,30 +38,24 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockB
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
 
-public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<TargetChamber> implements ISurvivalConstructable {
+public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<TargetChamber>
+        implements ISurvivalConstructable {
 
-	private static final IStructureDefinition<TargetChamber> STRUCTURE_DEFINITION;
+    private static final IStructureDefinition<TargetChamber> STRUCTURE_DEFINITION;
 
     private ArrayList<TileHatchInputBeamline> mInputBeamline = new ArrayList<>();
-    
+
     private ArrayList<TileBusInputFocus> mInputFocus = new ArrayList<>();
 
     private static final int CASING_INDEX = 49;
-    
+
     private float inputEnergy;
-	private float inputRate;
-	private int inputParticle;
-	private float inputFocus;
-    
-	
-	//spotless:off
+    private float inputRate;
+    private int inputParticle;
+    private float inputFocus;
+
+    // spotless:off
     static {
     	STRUCTURE_DEFINITION = StructureDefinition.<TargetChamber>builder()
     			.addShape(
@@ -94,12 +93,11 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
     			.build();
     }
     //spotless:on
-    
-    
+
     private boolean addGlass(Block block, int meta) {
         return block == ItemRegistry.bw_glasses[0];
     }
-    
+
     private boolean addBeamLineInputHatch(IGregTechTileEntity te, int casingIndex) {
 
         if (te == null) return false;
@@ -114,7 +112,7 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
 
         return false;
     }
-    
+
     private boolean addFocusInputHatch(IGregTechTileEntity te, int casingIndex) {
 
         if (te == null) return false;
@@ -129,275 +127,238 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
 
         return false;
     }
-    
-	public TargetChamber(int id, String name, String nameRegional) {
-		super(id, name, nameRegional);
-	}
-	
-	public TargetChamber(String name) {
-		super(name);
-	}
-	
-	@Override
+
+    public TargetChamber(int id, String name, String nameRegional) {
+        super(id, name, nameRegional);
+    }
+
+    public TargetChamber(String name) {
+        super(name);
+    }
+
+    @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity te) {
         return new TargetChamber(this.mName);
     }
 
-	@Override
-	public ITexture[] getTexture(IGregTechTileEntity arg0, ForgeDirection arg1, ForgeDirection arg2, int arg3,
-			boolean arg4, boolean arg5) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	/*
-	protected OverclockDescriber createOverclockDescriber() {
-        return new EUNoDurationOverclockDescriber((byte) 4, 1);
-    }*/
-	
-	@Override
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity arg0, ForgeDirection arg1, ForgeDirection arg2, int arg3,
+            boolean arg4, boolean arg5) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /*
+     * protected OverclockDescriber createOverclockDescriber() { return new EUNoDurationOverclockDescriber((byte) 4, 1);
+     * }
+     */
+
+    @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-        tt.addMachineType("Collision Chamber").addInfo("Controller block for the Target Chamber").addInfo("Hitting things with other things")
-                .toolTipFinisher("GTNH: Lanthanides");
+        tt.addMachineType("Collision Chamber").addInfo("Controller block for the Target Chamber")
+                .addInfo("Hitting things with other things").toolTipFinisher("GTNH: Lanthanides");
         return tt;
     }
 
-	@Override
-	public void construct(ItemStack stackSize, boolean hintsOnly) {
-		buildPiece("base", stackSize, hintsOnly, 2, 4, 0);
-		
-	}
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece("base", stackSize, hintsOnly, 2, 4, 0);
 
-	@Override
-	public IStructureDefinition<TargetChamber> getStructureDefinition() {
-		return STRUCTURE_DEFINITION;
-	}
-	
-	@Override
-	public boolean checkRecipe(ItemStack itemStack) {
-		
-		inputEnergy = 0;
-		inputRate = 0;
-		inputParticle = 0;
-		inputFocus = 0;
-		
-		
-		ArrayList<ItemStack> tItems = this.getStoredInputs();
-		ItemStack tFocusItem = this.getFocusItemStack();
-		
-		ItemStack tFocusItemZeroDamage = null;
-		
-		if (tFocusItem != null) {
-			
-		
-			tFocusItemZeroDamage = tFocusItem.copy();
-			tFocusItemZeroDamage.setItemDamage(0);
-		}
-			
-		
-		
-		ArrayList<ItemStack> tItemsWithFocusItem = new ArrayList<>();
-		tItemsWithFocusItem.add(tFocusItemZeroDamage);
-		tItemsWithFocusItem.addAll(tItems);
-		
-		
-        
-		// GT_Log.out.print(Arrays.toString(tItems));
+    }
+
+    @Override
+    public IStructureDefinition<TargetChamber> getStructureDefinition() {
+        return STRUCTURE_DEFINITION;
+    }
+
+    @Override
+    public boolean checkRecipe(ItemStack itemStack) {
+
+        inputEnergy = 0;
+        inputRate = 0;
+        inputParticle = 0;
+        inputFocus = 0;
+
+        ArrayList<ItemStack> tItems = this.getStoredInputs();
+        ItemStack tFocusItem = this.getFocusItemStack();
+
+        ItemStack tFocusItemZeroDamage = null;
+
+        if (tFocusItem != null) {
+
+            tFocusItemZeroDamage = tFocusItem.copy();
+            tFocusItemZeroDamage.setItemDamage(0);
+        }
+
+        ArrayList<ItemStack> tItemsWithFocusItem = new ArrayList<>();
+        tItemsWithFocusItem.add(tFocusItemZeroDamage);
+        tItemsWithFocusItem.addAll(tItems);
+
+        // GT_Log.out.print(Arrays.toString(tItems));
         long tVoltage = this.getMaxInputVoltage();
-        
-        //tItems.add(tFocusItem);
-        
+
+        // tItems.add(tFocusItem);
+
         ItemStack[] tItemsArray = tItems.toArray(new ItemStack[0]);
-        
-        ItemStack[] tItemsWithFocusItemArray = tItemsWithFocusItem.toArray(new ItemStack[0]);        
-        //GT_Log.out.print("tItemsArray: " +  Arrays.toString(tItemsArray));
-        
+
+        ItemStack[] tItemsWithFocusItemArray = tItemsWithFocusItem.toArray(new ItemStack[0]);
+        // GT_Log.out.print("tItemsArray: " + Arrays.toString(tItemsArray));
+
         /*
-        for (GT_Recipe tRecipe : BeamlineRecipeAdder.instance.TargetChamberRecipes.mRecipeList) {
-        	GT_Log.out.print(Arrays.toString(tRecipe.mInputs) + "\n");
-        }
-        */
-        
-        
-        RecipeTC tRecipe = (RecipeTC) BeamlineRecipeAdder2.instance.TargetChamberRecipes.findRecipeQuery().items(tItemsWithFocusItemArray).voltage(tVoltage).filter((GT_Recipe recipe) -> {
-        
-        	RecipeTC recipeTc = (RecipeTC) recipe;
-        	
-        	//GT_Log.out.print(Arrays.toString(recipeTc.mOutputs));
-        	
-        	
-        	BeamInformation inputInfo = this.getInputInformation();
-        	
-        	int particle = recipeTc.particleId;
-        	
-        	//GT_Log.out.print(particle + " Particle");
-        	
-        	return (particle == inputInfo.getParticleId() && !(inputInfo.getEnergy() < recipeTc.minEnergy || inputInfo.getEnergy() > recipeTc.maxEnergy));
-        
-        }).find();
-        
-        
+         * for (GT_Recipe tRecipe : BeamlineRecipeAdder.instance.TargetChamberRecipes.mRecipeList) {
+         * GT_Log.out.print(Arrays.toString(tRecipe.mInputs) + "\n"); }
+         */
+
+        RecipeTC tRecipe = (RecipeTC) BeamlineRecipeAdder2.instance.TargetChamberRecipes.findRecipeQuery()
+                .items(tItemsWithFocusItemArray).voltage(tVoltage).filter((GT_Recipe recipe) -> {
+
+                    RecipeTC recipeTc = (RecipeTC) recipe;
+
+                    // GT_Log.out.print(Arrays.toString(recipeTc.mOutputs));
+
+                    BeamInformation inputInfo = this.getInputInformation();
+
+                    int particle = recipeTc.particleId;
+
+                    // GT_Log.out.print(particle + " Particle");
+
+                    return (particle == inputInfo.getParticleId() && !(inputInfo.getEnergy() < recipeTc.minEnergy
+                            || inputInfo.getEnergy() > recipeTc.maxEnergy));
+
+                }).find();
+
         /*
-        FindRecipeResult result = BeamlineRecipeAdder2.instance.TargetChamberRecipes.findRecipeWithResult(null, (GT_Recipe recipe) -> {
-        	
-        	RecipeTC recipeTc = (RecipeTC) recipe;
-        	
-        	//GT_Log.out.print(Arrays.toString(recipeTc.mOutputs));
-        	
-        	
-        	BeamInformation inputInfo = this.getInputInformation();
-        	
-        	int particle = recipeTc.particleId;
-        	
-        	//GT_Log.out.print(particle + " Particle");
-        	
-        	return (particle == inputInfo.getParticleId() && !(inputInfo.getEnergy() < recipeTc.minEnergy || inputInfo.getEnergy() > recipeTc.maxEnergy));
-        	
-        },
-        		false, false, tVoltage, null, null, tItemsWithFocusItemArray);
-        
-        RecipeTC tRecipe;
-        
-        if (result.isSuccessful()) {
-        	tRecipe = (RecipeTC) result.getRecipe();
-        } else {
-        	return false;
-        }
-        */
+         * FindRecipeResult result = BeamlineRecipeAdder2.instance.TargetChamberRecipes.findRecipeWithResult(null,
+         * (GT_Recipe recipe) -> { RecipeTC recipeTc = (RecipeTC) recipe;
+         * //GT_Log.out.print(Arrays.toString(recipeTc.mOutputs)); BeamInformation inputInfo =
+         * this.getInputInformation(); int particle = recipeTc.particleId; //GT_Log.out.print(particle + " Particle");
+         * return (particle == inputInfo.getParticleId() && !(inputInfo.getEnergy() < recipeTc.minEnergy ||
+         * inputInfo.getEnergy() > recipeTc.maxEnergy)); }, false, false, tVoltage, null, null,
+         * tItemsWithFocusItemArray); RecipeTC tRecipe; if (result.isSuccessful()) { tRecipe = (RecipeTC)
+         * result.getRecipe(); } else { return false; }
+         */
         /*
-        
-        RecipeTC tRecipe = (RecipeTC) BeamlineRecipeAdder.instance.TargetChamberRecipes.findRecipe(
-        		this.getBaseMetaTileEntity(), false, tVoltage, null, tItemsWithFocusItemArray);
-        		
-       */ 		
-        		
-        		
+         * RecipeTC tRecipe = (RecipeTC) BeamlineRecipeAdder.instance.TargetChamberRecipes.findRecipe(
+         * this.getBaseMetaTileEntity(), false, tVoltage, null, tItemsWithFocusItemArray);
+         */
+
         /*
-        if (tRecipe == null) {
-        	GT_Log.out.print("Recipe null!");
-        }
-        */
-        //GT_Log.out.print("Focus in machine " + tFocusItem.getItem().getUnlocalizedName());
-        //GT_Log.out.print("Focus in recipe " + tRecipe.focusItem.getItem().getUnlocalizedName());
-        
-        
-           
-        if (tRecipe == null || !tRecipe.isRecipeInputEqual(true, new FluidStack[] {}, tItemsWithFocusItemArray)) return false;
-        
+         * if (tRecipe == null) { GT_Log.out.print("Recipe null!"); }
+         */
+        // GT_Log.out.print("Focus in machine " + tFocusItem.getItem().getUnlocalizedName());
+        // GT_Log.out.print("Focus in recipe " + tRecipe.focusItem.getItem().getUnlocalizedName());
+
+        if (tRecipe == null || !tRecipe.isRecipeInputEqual(true, new FluidStack[] {}, tItemsWithFocusItemArray))
+            return false;
+
         if (tRecipe.focusItem != null) {
-        	if (tRecipe.focusItem.getItem() != tFocusItem.getItem())
-            	return false;
+            if (tRecipe.focusItem.getItem() != tFocusItem.getItem()) return false;
         }
-        
-        
-        
-        //GT_Log.out.print("Items are the same!");
-        
+
+        // GT_Log.out.print("Items are the same!");
+
         this.mEfficiency = (10000 - (this.getIdealStatus() - this.getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
-        
+
         BeamInformation inputInfo = this.getInputInformation();
-        
-        if (inputInfo == null)
-            return false;
-        
+
+        if (inputInfo == null) return false;
+
         inputEnergy = inputInfo.getEnergy();
         inputRate = inputInfo.getRate();
         inputParticle = inputInfo.getParticleId();
         inputFocus = inputInfo.getFocus();
 
-        //GT_Log.out.print("Min energy: " + tRecipe.minEnergy + " Max energy: " + tRecipe.maxEnergy);
-        //GT_Log.out.print("Energy: " + inputEnergy);
-        
-        if (inputEnergy < tRecipe.minEnergy || inputEnergy > tRecipe.maxEnergy)
-            return false;
-        
-        //GT_Log.out.print("This far!");
-        
-        if (inputFocus < tRecipe.minFocus)
-        	return false;
-        
-        //GT_Log.out.print("This far too!");
-        
-        if (inputParticle != tRecipe.particleId)
-        	return false;
-        
-        //GT_Log.out.print("Passed beamline requirements");
-        
-        this.mMaxProgresstime =  Math.round((tRecipe.amount / inputRate * 10 * 20)); // 10 seconds per integer multiple over the rate. E.g., 100a, 10r would equal 100 seconds
+        // GT_Log.out.print("Min energy: " + tRecipe.minEnergy + " Max energy: " + tRecipe.maxEnergy);
+        // GT_Log.out.print("Energy: " + inputEnergy);
+
+        if (inputEnergy < tRecipe.minEnergy || inputEnergy > tRecipe.maxEnergy) return false;
+
+        // GT_Log.out.print("This far!");
+
+        if (inputFocus < tRecipe.minFocus) return false;
+
+        // GT_Log.out.print("This far too!");
+
+        if (inputParticle != tRecipe.particleId) return false;
+
+        // GT_Log.out.print("Passed beamline requirements");
+
+        this.mMaxProgresstime = Math.round((tRecipe.amount / inputRate * 10 * 20)); // 10 seconds per integer multiple
+                                                                                    // over the rate. E.g., 100a, 10r
+                                                                                    // would equal 100 seconds
         if (this.mMaxProgresstime == Integer.MAX_VALUE - 1 && this.mEUt == Integer.MAX_VALUE - 1) return false;
-        
+
         mEUt = (int) -tVoltage;
         if (this.mEUt > 0) this.mEUt = (-this.mEUt);
-        
-        
-        //GT_Log.out.print(Arrays.toString(tRecipe.mOutputs));
-        
+
+        // GT_Log.out.print(Arrays.toString(tRecipe.mOutputs));
+
         this.mOutputItems = tRecipe.mOutputs;
-        
-        if (tRecipe.focusItem != null) // Recipe actually uses the mask, can also assume machine mask item is nonnull due to above conditions
-        	mInputFocus.get(0).depleteFocusDurability(1);
-        
-        
+
+        if (tRecipe.focusItem != null) // Recipe actually uses the mask, can also assume machine mask item is nonnull
+                                       // due to above conditions
+            mInputFocus.get(0).depleteFocusDurability(1);
+
         this.updateSlots();
-        
+
         return true;
-	}
-	
-	private BeamInformation getInputInformation() {
+    }
+
+    private BeamInformation getInputInformation() {
 
         for (TileHatchInputBeamline in : this.mInputBeamline) {
 
-            //if (in.q == null) return new BeamInformation(0, 0, 0, 0);
-            if (in.q == null) return new BeamInformation(10, 10, Particle.PHOTON.ordinal(), 90); // TODO temporary for testing purposes
+            // if (in.q == null) return new BeamInformation(0, 0, 0, 0);
+            if (in.q == null) return new BeamInformation(10, 10, Particle.PHOTON.ordinal(), 90); // TODO temporary for
+                                                                                                 // testing purposes
 
             return in.q.getContent();
         }
         return null;
     }
-	
-	private ItemStack getFocusItemStack() {
-		
-		for (TileBusInputFocus hatch : this.mInputFocus) {
-			return hatch.getContentUsageSlots().get(0);
-		}
-		
-		return null;
-		
-	}
-	
 
-	@Override
-	public boolean checkMachine(IGregTechTileEntity arg0, ItemStack arg1) {
-		
-		mInputBeamline.clear();
-		mInputFocus.clear();
-		
-		return checkPiece("base", 2, 4, 0);
-	}
+    private ItemStack getFocusItemStack() {
 
-	@Override
-	public boolean explodesOnComponentBreak(ItemStack arg0) {
-		return false;
-	}
+        for (TileBusInputFocus hatch : this.mInputFocus) {
+            return hatch.getContentUsageSlots().get(0);
+        }
 
-	@Override
-	public int getDamageToComponent(ItemStack arg0) {
-		return 0;
-	}
+        return null;
 
-	@Override
-	public int getMaxEfficiency(ItemStack arg0) {
-		return 10000;
-	}
+    }
 
-	@Override
-	public boolean isCorrectMachinePart(ItemStack arg0) {
-		return true;
-	}
-	
-	@Override
+    @Override
+    public boolean checkMachine(IGregTechTileEntity arg0, ItemStack arg1) {
+
+        mInputBeamline.clear();
+        mInputFocus.clear();
+
+        return checkPiece("base", 2, 4, 0);
+    }
+
+    @Override
+    public boolean explodesOnComponentBreak(ItemStack arg0) {
+        return false;
+    }
+
+    @Override
+    public int getDamageToComponent(ItemStack arg0) {
+        return 0;
+    }
+
+    @Override
+    public int getMaxEfficiency(ItemStack arg0) {
+        return 10000;
+    }
+
+    @Override
+    public boolean isCorrectMachinePart(ItemStack arg0) {
+        return true;
+    }
+
+    @Override
     public String[] getInfoData() {
         int mPollutionReduction = 0;
         for (GT_MetaTileEntity_Hatch_Muffler tHatch : mMufflerHatches) {
@@ -416,7 +377,7 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
         }
 
         BeamInformation information = this.getInputInformation();
-        
+
         return new String[] {
                 /* 1 */ StatCollector.translateToLocal("GT5U.multiblock.Progress") + ": "
                         + EnumChatFormatting.GREEN
@@ -489,8 +450,7 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
                         + EnumChatFormatting.RESET,
                 StatCollector.translateToLocal("beamline.amount") + ": " // "Amount:"
                         + EnumChatFormatting.LIGHT_PURPLE
-                        + information.getRate(),
-                };
+                        + information.getRate(), };
     }
 
 }

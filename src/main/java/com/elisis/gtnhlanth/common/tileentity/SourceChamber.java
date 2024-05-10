@@ -7,6 +7,12 @@ import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
 import java.util.ArrayList;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
+
 import com.elisis.gtnhlanth.common.beamline.BeamInformation;
 import com.elisis.gtnhlanth.common.beamline.BeamLinePacket;
 import com.elisis.gtnhlanth.common.beamline.Particle;
@@ -27,13 +33,9 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffl
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Utility;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
 
-public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<SourceChamber> implements ISurvivalConstructable {
+public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<SourceChamber>
+        implements ISurvivalConstructable {
 
     private static final IStructureDefinition<SourceChamber> STRUCTURE_DEFINITION;
 
@@ -104,11 +106,10 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
 
         return false;
     }
-/*
-    protected OverclockDescriber createOverclockDescriber() {
-        return new EUNoTotalOverclockDescriber((byte) 4, 1);
-    }*/
-    
+    /*
+     * protected OverclockDescriber createOverclockDescriber() { return new EUNoTotalOverclockDescriber((byte) 4, 1); }
+     */
+
     // TODO: Variable recipe duration
     @Override
     public boolean checkRecipe(ItemStack itemStack) {

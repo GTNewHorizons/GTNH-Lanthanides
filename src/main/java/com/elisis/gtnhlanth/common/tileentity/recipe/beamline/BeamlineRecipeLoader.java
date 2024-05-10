@@ -3,6 +3,11 @@ package com.elisis.gtnhlanth.common.tileentity.recipe.beamline;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+
 import com.elisis.gtnhlanth.common.beamline.Particle;
 import com.elisis.gtnhlanth.common.item.MaskList;
 import com.elisis.gtnhlanth.common.register.LanthItemList;
@@ -14,19 +19,15 @@ import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
 import gtPlusPlus.core.material.ELEMENT;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 
 public class BeamlineRecipeLoader {
 
     public static final HashMap<Fluid, Fluid> coolantMap = new HashMap<>();
-    
-    private static final ItemList[] VIABLE_WAFERS = new ItemList[] {
-    		ItemList.Circuit_Silicon_Wafer, ItemList.Circuit_Silicon_Wafer2, ItemList.Circuit_Silicon_Wafer3, ItemList.Circuit_Silicon_Wafer4, ItemList.Circuit_Silicon_Wafer5, ItemList.Circuit_Silicon_Wafer6, ItemList.Circuit_Silicon_Wafer7
-    };
-	
+
+    private static final ItemList[] VIABLE_WAFERS = new ItemList[] { ItemList.Circuit_Silicon_Wafer,
+            ItemList.Circuit_Silicon_Wafer2, ItemList.Circuit_Silicon_Wafer3, ItemList.Circuit_Silicon_Wafer4,
+            ItemList.Circuit_Silicon_Wafer5, ItemList.Circuit_Silicon_Wafer6, ItemList.Circuit_Silicon_Wafer7 };
+
     public static void load() {
 
         /*
@@ -52,16 +53,15 @@ public class BeamlineRecipeLoader {
                 7680);
 
         BeamlineRecipeAdder2.instance.addSourceChamberRecipe(
-        		new ItemStack[] {WerkstoffMaterialPool.LanthanumHexaboride.get(OrePrefixes.stickLong, 1)}, 
-        		null, 
-        		Particle.ELECTRON.ordinal(), 
-        		60, 
-        		5000,
-        		99, 
-        		0.3f, 
-        		7680
-        		);
-        
+                new ItemStack[] { WerkstoffMaterialPool.LanthanumHexaboride.get(OrePrefixes.stickLong, 1) },
+                null,
+                Particle.ELECTRON.ordinal(),
+                60,
+                5000,
+                99,
+                0.3f,
+                7680);
+
         /*
          * NEUTRON
          */
@@ -87,116 +87,81 @@ public class BeamlineRecipeLoader {
                 90,
                 999,
                 512);
-        
-        
-        
-        
+
         /*
          * TARGET CHAMBER
          */
-        
+
         for (MaskList mask : MaskList.values()) {
-    		
-        	if (mask.getProducedItem() == null) //Blank or error
-    			continue;
-        	
-        	int index = 0;
+
+            if (mask.getProducedItem() == null) // Blank or error
+                continue;
+
+            int index = 0;
             for (ItemList wafer : VIABLE_WAFERS) {
-            		
-            	index++;    	
-    		
-            	if (!Arrays.asList(mask.getForbiddenWafers()).contains(wafer)) {
-    			
-            		BeamlineRecipeAdder2.instance.addTargetChamberRecipe(
-            				wafer.get(1), 
-	                		GT_Utility.copyAmountUnsafe((int) Math.pow(2, index + 2), mask.getProducedItem()),
-	                		new ItemStack(LanthItemList.maskMap.get(mask), 0),
-	                		1, 
-	                		mask.getBaselineAmount() * (int) Math.pow(2, index - 1),
-	                		mask.getMinEnergy(),
-	                		mask.getMaxEnergy(),
-	                		mask.getMinFocus(),
-	                		1, 
-	                		1920
-	                	);
-    			
-            	}
-            	
+
+                index++;
+
+                if (!Arrays.asList(mask.getForbiddenWafers()).contains(wafer)) {
+
+                    BeamlineRecipeAdder2.instance.addTargetChamberRecipe(
+                            wafer.get(1),
+                            GT_Utility.copyAmountUnsafe((int) Math.pow(2, index + 2), mask.getProducedItem()),
+                            new ItemStack(LanthItemList.maskMap.get(mask), 0),
+                            1,
+                            mask.getBaselineAmount() * (int) Math.pow(2, index - 1),
+                            mask.getMinEnergy(),
+                            mask.getMaxEnergy(),
+                            mask.getMinFocus(),
+                            1,
+                            1920);
+
+                }
+
             }
-        
-        
-        	
-        	
-        	
-        	/*
-    		if (!Arrays.asList(MaskList.CPU.getForbiddenWafers()).contains(wafer)) {
-    			
-    			BeamlineRecipeAdder.instance.addTargetChamberRecipe(
-                		wafer.get(1), 
-                		GT_Utility.copyAmountUnsafe((int) Math.pow(2, index + 2), ItemList.Circuit_Wafer_CPU.get(1)), //Varies
-                		new ItemStack(LanthItemList.maskMap.get(MaskList.CPU), 0), // Varies 
-                		0, 
-                		10 * (int) Math.pow(2, index - 1),  // Varies
-                		1, //Varies
-                		10000000, //Varies
-                		50, //Varies
-                		1, 
-                		1920
-                	);
-    		}
-    		
-    		/*
-    		 * PPIC
-    		 */
-    		
-    		/*
-    		if (!Arrays.asList(MaskList.PPIC.getForbiddenWafers()).contains(wafer)) {
-    			
-    			GT_Log.out.print("Adding recipe for PPIC with " + wafer.get(1).getUnlocalizedName() + " amount: " + 40 * (int) Math.pow(2, index - 1));
-    			
-    			BeamlineRecipeAdder.instance.addTargetChamberRecipe(
-                		wafer.get(1), 
-                		ItemList.Circuit_Wafer_PPIC.get((int) Math.pow(2, index + 2)), //Varies
-                		new ItemStack(LanthItemList.maskMap.get(MaskList.PPIC), 0), // Varies 
-                		0, 
-                		40 * (int) Math.pow(2, index - 1),  // Varies
-                		1, //Varies
-                		10000000, //Varies
-                		50, //Varies
-                		1, 
-                		1920
-                	);
-    		}*/
-    		
+
+            /*
+             * if (!Arrays.asList(MaskList.CPU.getForbiddenWafers()).contains(wafer)) {
+             * BeamlineRecipeAdder.instance.addTargetChamberRecipe( wafer.get(1), GT_Utility.copyAmountUnsafe((int)
+             * Math.pow(2, index + 2), ItemList.Circuit_Wafer_CPU.get(1)), //Varies new
+             * ItemStack(LanthItemList.maskMap.get(MaskList.CPU), 0), // Varies 0, 10 * (int) Math.pow(2, index - 1), //
+             * Varies 1, //Varies 10000000, //Varies 50, //Varies 1, 1920 ); } /* PPIC
+             */
+
+            /*
+             * if (!Arrays.asList(MaskList.PPIC.getForbiddenWafers()).contains(wafer)) {
+             * GT_Log.out.print("Adding recipe for PPIC with " + wafer.get(1).getUnlocalizedName() + " amount: " + 40 *
+             * (int) Math.pow(2, index - 1)); BeamlineRecipeAdder.instance.addTargetChamberRecipe( wafer.get(1),
+             * ItemList.Circuit_Wafer_PPIC.get((int) Math.pow(2, index + 2)), //Varies new
+             * ItemStack(LanthItemList.maskMap.get(MaskList.PPIC), 0), // Varies 0, 40 * (int) Math.pow(2, index - 1),
+             * // Varies 1, //Varies 10000000, //Varies 50, //Varies 1, 1920 ); }
+             */
+
         }
-        
-        
-        
+
         BeamlineRecipeAdder2.instance.addTargetChamberRecipe(
-        		new ItemStack(Items.coal, 1), 
-        		new ItemStack(Items.diamond, 1), 
-        		null, 
-        		1, 
-        		20, 
-        		100, 
-        		1000, 
-        		60, 
-        		1, 
-        		1920
-        	);
-        
+                new ItemStack(Items.coal, 1),
+                new ItemStack(Items.diamond, 1),
+                null,
+                1,
+                20,
+                100,
+                1000,
+                60,
+                1,
+                1920);
+
         BeamlineRecipeAdder2.instance.addTargetChamberRecipe(
-        		new ItemStack(Items.coal, 1), 
-        		new ItemStack(Items.cooked_chicken, 1), 
-        		null, 
-        		1, 
-        		20, 
-        		1, 
-        		10, 
-        		60, 
-        		1, 
-        		1920
-        	);
-        
+                new ItemStack(Items.coal, 1),
+                new ItemStack(Items.cooked_chicken, 1),
+                null,
+                1,
+                20,
+                1,
+                10,
+                60,
+                1,
+                1920);
+
     }
 }

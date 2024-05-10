@@ -45,8 +45,6 @@ import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.Holmium
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.HolmiumExtractingNanoResin;
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.HolmiumOreConcentrate;
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.ImpureLanthanumChloride;
-import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.ImpureSamariumChloride;
-import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.ImpureSamariumOxalate;
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.LanthaniumChloride;
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.LanthanumChlorideConcentrate;
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.LanthanumExtractingNanoResin;
@@ -66,10 +64,12 @@ import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.Prometh
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.PromethiumExtractingNanoResin;
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.PromethiumOreConcentrate;
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.RarestEarthResidue;
+import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.SamariumChloride;
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.SamariumChlorideConcentrate;
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.SamariumChlorideSodiumChlorideBlend;
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.SamariumExtractingNanoResin;
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.SamariumOreConcentrate;
+import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.SamariumOxalate;
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.SamariumOxide;
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.SamariumRareEarthMud;
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.TerbiumChlorideConcentrate;
@@ -117,6 +117,17 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashSet;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
+
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import com.dreammaster.gthandler.CustomItemList;
@@ -126,8 +137,8 @@ import com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool;
 import com.elisis.gtnhlanth.common.register.LanthItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 import com.github.bartimaeusnek.bartworks.system.material.BW_GT_MaterialReference;
-import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 import com.github.bartimaeusnek.bartworks.system.material.GT_Enhancement.PlatinumSludgeOverHaul;
+import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -145,16 +156,6 @@ import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_RecipeBuilder;
 import gregtech.api.util.GT_RecipeConstants;
 import gregtech.api.util.GT_Utility;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraft.item.crafting.ShapelessRecipes;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 public class RecipeLoader {
 
@@ -330,18 +331,19 @@ public class RecipeLoader {
                 1920);
 
         GT_Values.RA.stdBuilder()
-        		.fluidInputs(Materials.Chloroform.getFluid(1000), Materials.HydrofluoricAcid.getFluid(3000))
-        		.fluidOutputs(WerkstoffMaterialPool.Fluoroform.getFluidOrGas(1000), Materials.HydrochloricAcid.getFluid(3000))
-        		.duration(15 * GT_RecipeBuilder.SECONDS).eut(1920).addTo(multiblockChemicalReactorRecipes);
-        
+                .fluidInputs(Materials.Chloroform.getFluid(1000), Materials.HydrofluoricAcid.getFluid(3000))
+                .fluidOutputs(
+                        WerkstoffMaterialPool.Fluoroform.getFluidOrGas(1000),
+                        Materials.HydrochloricAcid.getFluid(3000))
+                .duration(15 * GT_RecipeBuilder.SECONDS).eut(1920).addTo(multiblockChemicalReactorRecipes);
+
         // NB: http://www.smfl.rit.edu/pdf/process/process_nitride_etch_paper.pdf
         // Reactive Ion Etchant
-        GT_Values.RA.stdBuilder()
-                .fluidInputs(WerkstoffMaterialPool.Fluoroform.getFluidOrGas(3000))
+        GT_Values.RA.stdBuilder().fluidInputs(WerkstoffMaterialPool.Fluoroform.getFluidOrGas(3000))
                 .itemInputs(Materials.Oxygen.getCells(4))
                 .fluidOutputs(WerkstoffMaterialPool.FluoroformOxygenMix.getFluidOrGas(5000))
-                .itemOutputs(Materials.Empty.getCells(4))
-                .duration(15 * GT_RecipeBuilder.SECONDS).eut(1920).addTo(mixerRecipes);
+                .itemOutputs(Materials.Empty.getCells(4)).duration(15 * GT_RecipeBuilder.SECONDS).eut(1920)
+                .addTo(mixerRecipes);
 
         // Boring but makes a lot more sense than needing to make it in an assembler or something similar
         GameRegistry.addShapelessRecipe(
@@ -375,9 +377,8 @@ public class RecipeLoader {
 
         // Grow the first silicon
         GT_Values.RA.stdBuilder().itemInputs(Materials.Glass.getPlates(1)).fluidInputs(Materials.Silane.getGas(4000))
-                .itemOutputs(new ItemStack(LanthItemList.SUBSTRATE_PRECURSOR))
-                .duration(60 * GT_RecipeBuilder.SECONDS).eut(480).requiresCleanRoom()
-                .addTo(autoclaveRecipes);
+                .itemOutputs(new ItemStack(LanthItemList.SUBSTRATE_PRECURSOR)).duration(60 * GT_RecipeBuilder.SECONDS)
+                .eut(480).requiresCleanRoom().addTo(autoclaveRecipes);
 
         // Now to deposit nitride
         GT_Values.RA.stdBuilder()
@@ -399,9 +400,8 @@ public class RecipeLoader {
 
             GT_Values.RA.stdBuilder()
                     .itemInputs(GT_Utility.copyAmount(0, lens), new ItemStack(LanthItemList.MASK_SUBSTRATE))
-                    .itemOutputs(new ItemStack(LanthItemList.MASKED_MASK))
-                    .duration(60 * GT_RecipeBuilder.SECONDS).eut(1920).requiresCleanRoom()
-                    .addTo(laserEngraverRecipes);
+                    .itemOutputs(new ItemStack(LanthItemList.MASKED_MASK)).duration(60 * GT_RecipeBuilder.SECONDS)
+                    .eut(1920).requiresCleanRoom().addTo(laserEngraverRecipes);
 
         }
 
@@ -411,13 +411,14 @@ public class RecipeLoader {
                 .eut(1920).requiresCleanRoom().addTo(autoclaveRecipes);
 
         // Etch pt. 2 with KOH
-        GT_Values.RA.stdBuilder()
-        		.fluidInputs(Materials.Argon.getGas(1000))
-        		.itemInputs(new ItemStack(LanthItemList.MASKED_MASK), MyMaterial.lithiumChloride.get(OrePrefixes.dust, 2), GT_ModHandler.getModItem("dreamcraft", "item.PotassiumHydroxideDust", 4))
-        		.itemOutputs(new ItemStack(LanthItemList.maskMap.get(MaskList.BLANK2)))
-        		.duration(25 * GT_RecipeBuilder.SECONDS).eut(1920).specialValue(2400)
-        		.addTo(blastFurnaceRecipes);
-        
+        GT_Values.RA.stdBuilder().fluidInputs(Materials.Argon.getGas(1000))
+                .itemInputs(
+                        new ItemStack(LanthItemList.MASKED_MASK),
+                        MyMaterial.lithiumChloride.get(OrePrefixes.dust, 2),
+                        GT_ModHandler.getModItem("dreamcraft", "item.PotassiumHydroxideDust", 4))
+                .itemOutputs(new ItemStack(LanthItemList.maskMap.get(MaskList.BLANK2)))
+                .duration(25 * GT_RecipeBuilder.SECONDS).eut(1920).specialValue(2400).addTo(blastFurnaceRecipes);
+
         GT_Values.RA.stdBuilder()
                 .itemInputs(
                         new ItemStack(LanthItemList.ETCHED_MASK_1),
@@ -426,8 +427,7 @@ public class RecipeLoader {
                         Materials.Gold.getPlates(2))
                 .fluidInputs(Materials.Hydrogen.getGas(1000))
                 .itemOutputs(new ItemStack(LanthItemList.maskMap.get(MaskList.BLANK3)))
-                .duration(10 * GT_RecipeBuilder.SECONDS).eut(1920).specialValue(3600)
-                .addTo(blastFurnaceRecipes);
+                .duration(10 * GT_RecipeBuilder.SECONDS).eut(1920).specialValue(3600).addTo(blastFurnaceRecipes);
 
         for (MaskList mask : MaskList.values()) {
 
@@ -467,7 +467,7 @@ public class RecipeLoader {
             }
 
             else {
-            	
+
                 for (ItemStack lens : OreDictionary.getOres("craftingLens" + lensColour.mName.replace(" ", ""))) {
 
                     if (lens == null) continue;
@@ -736,41 +736,33 @@ public class RecipeLoader {
                 Materials.HydrochloricAcid.getCells(2),
                 600,
                 450);
-        
-     // Lanthanum Oxide
-        GT_Values.RA.stdBuilder()
-        		.fluidInputs(Materials.Water.getFluid(3000))
-        		.fluidOutputs(Materials.HydrochloricAcid.getFluid(6000))
-        		.itemInputs(WerkstoffMaterialPool.LanthaniumChloride.get(OrePrefixes.dust, 4))
-        		.itemOutputs(WerkstoffMaterialPool.LanthanumOxide.get(OrePrefixes.dust, 1))
-        		.duration(10 * GT_RecipeBuilder.SECONDS).eut(480)
-        		.addTo(UniversalChemical);
-        
+
+        // Lanthanum Oxide
+        GT_Values.RA.stdBuilder().fluidInputs(Materials.Water.getFluid(3000))
+                .fluidOutputs(Materials.HydrochloricAcid.getFluid(6000))
+                .itemInputs(WerkstoffMaterialPool.LanthaniumChloride.get(OrePrefixes.dust, 4))
+                .itemOutputs(WerkstoffMaterialPool.LanthanumOxide.get(OrePrefixes.dust, 1))
+                .duration(10 * GT_RecipeBuilder.SECONDS).eut(480).addTo(UniversalChemical);
+
         // Boron Trioxide
-        GT_Values.RA.stdBuilder()
-        		.fluidInputs(FluidRegistry.getFluidStack("boricacid", 2000))
-        		.fluidOutputs(new FluidStack(FluidRegistry.WATER, 3000))
-        		.itemOutputs(WerkstoffMaterialPool.BoronTrioxide.get(OrePrefixes.dust, 1))
-        		.duration(15 * GT_RecipeBuilder.SECONDS).eut(1920)
-        		.addTo(UniversalChemical);
-        
+        GT_Values.RA.stdBuilder().fluidInputs(FluidRegistry.getFluidStack("boricacid", 2000))
+                .fluidOutputs(new FluidStack(FluidRegistry.WATER, 3000))
+                .itemOutputs(WerkstoffMaterialPool.BoronTrioxide.get(OrePrefixes.dust, 1))
+                .duration(15 * GT_RecipeBuilder.SECONDS).eut(1920).addTo(UniversalChemical);
+
         // Boron Trichloride
-        GT_Values.RA.stdBuilder()
-        		.fluidInputs(BotWerkstoffMaterialPool.Phosgene.getFluidOrGas(3000))
-        		.fluidOutputs(WerkstoffMaterialPool.BoronTrichloride.getFluidOrGas(2000))
-        		.itemInputs(WerkstoffMaterialPool.BoronTrioxide.get(OrePrefixes.dust, 1), Materials.Empty.getCells(3))
-        		.itemOutputs(Materials.CarbonMonoxide.getCells(3))
-        		.duration(10 * GT_RecipeBuilder.SECONDS).eut(480)
-        		.addTo(UniversalChemical);
-        
+        GT_Values.RA.stdBuilder().fluidInputs(BotWerkstoffMaterialPool.Phosgene.getFluidOrGas(3000))
+                .fluidOutputs(WerkstoffMaterialPool.BoronTrichloride.getFluidOrGas(2000))
+                .itemInputs(WerkstoffMaterialPool.BoronTrioxide.get(OrePrefixes.dust, 1), Materials.Empty.getCells(3))
+                .itemOutputs(Materials.CarbonMonoxide.getCells(3)).duration(10 * GT_RecipeBuilder.SECONDS).eut(480)
+                .addTo(UniversalChemical);
+
         // Lanthanum Hexaboride
-        GT_Values.RA.stdBuilder()
-        		.fluidInputs(WerkstoffMaterialPool.BoronTrichloride.getFluidOrGas(8000))
-        		.fluidOutputs(FluidRegistry.getFluidStack("boricacid", 1000))
-        		.itemInputs(WerkstoffMaterialPool.LanthanumOxide.get(OrePrefixes.dust, 1))
-        		.itemOutputs(WerkstoffMaterialPool.LanthanumHexaboride.get(OrePrefixes.gemChipped))
-        		.duration(60 * GT_RecipeBuilder.SECONDS).eut(7980)
-        		.addTo(autoclaveRecipes);
+        GT_Values.RA.stdBuilder().fluidInputs(WerkstoffMaterialPool.BoronTrichloride.getFluidOrGas(8000))
+                .fluidOutputs(FluidRegistry.getFluidStack("boricacid", 1000))
+                .itemInputs(WerkstoffMaterialPool.LanthanumOxide.get(OrePrefixes.dust, 1))
+                .itemOutputs(WerkstoffMaterialPool.LanthanumHexaboride.get(OrePrefixes.gemChipped))
+                .duration(60 * GT_RecipeBuilder.SECONDS).eut(7980).addTo(autoclaveRecipes);
     }
 
     public static void loadLanthanideRecipes() {
@@ -868,7 +860,7 @@ public class RecipeLoader {
                         WerkstoffLoader.Thorianit.get(OrePrefixes.dust, 1),
                         Materials.Monazite.getDustTiny(2))
                 .eut(480).duration(900).specialValue(10).noOptimize().addTo(dissolutionTankRecipes);
-      
+
         GT_Values.RA.stdBuilder()
                 .fluidInputs(
                         Materials.Water.getFluid(90000),
@@ -2544,15 +2536,15 @@ public class RecipeLoader {
                         DilutedSamariumRareEarthSolution.getFluidOrGas(2000),
                         MyMaterial.oxalate.getFluidOrGas(3000))
                 .itemOutputs(
-                        ImpureSamariumOxalate.get(OrePrefixes.dust, 5),
+                        SamariumOxalate.get(OrePrefixes.dust, 5),
                         DephosphatedSamariumConcentrate.get(OrePrefixes.dust, 3))
                 .fluidOutputs(MuddySamariumRareEarthSolution.getFluidOrGas(50)).outputChances(10000, 1000)
                 .eut(TierEU.RECIPE_EV).duration(10 * SECONDS).addTo(multiblockChemicalReactorRecipes);
 
         // 5 ImpureSamariumOxalate + 6B HCL = 8 ImpureSamariumChloride + 6B CO
-        GT_Values.RA.stdBuilder().itemInputs(ImpureSamariumOxalate.get(OrePrefixes.dust, 5))
+        GT_Values.RA.stdBuilder().itemInputs(SamariumOxalate.get(OrePrefixes.dust, 5))
                 .fluidInputs(Materials.HydrochloricAcid.getFluid(6000))
-                .itemOutputs(ImpureSamariumChloride.get(OrePrefixes.dust, 8))
+                .itemOutputs(SamariumChloride.get(OrePrefixes.dust, 8))
                 .fluidOutputs(Materials.CarbonMonoxide.getGas(6000)).eut(960).duration(10 * SECONDS)
                 .addTo(multiblockChemicalReactorRecipes);
 
@@ -2563,11 +2555,10 @@ public class RecipeLoader {
          */
 
         // 2 ImpureSamariumChloride + 1 NaCl =LV@5s= 3 SamariumChlorideSodiumChlorideBlend
-        GT_Values.RA.stdBuilder().itemInputs(ImpureSamariumChloride.get(OrePrefixes.dust, 2), Materials.Salt.getDust(1))
+        GT_Values.RA.stdBuilder().itemInputs(SamariumChloride.get(OrePrefixes.dust, 2), Materials.Salt.getDust(1))
                 .itemOutputs(SamariumChlorideSodiumChlorideBlend.get(OrePrefixes.dust, 3)).eut(30).duration(5 * SECONDS)
                 .addTo(mixerRecipes);
-        GT_Values.RA.stdBuilder()
-                .itemInputs(ImpureSamariumChloride.get(OrePrefixes.dust, 2), Materials.Sodium.getDust(1))
+        GT_Values.RA.stdBuilder().itemInputs(SamariumChloride.get(OrePrefixes.dust, 2), Materials.Sodium.getDust(1))
                 .itemOutputs(SamariumChlorideSodiumChlorideBlend.get(OrePrefixes.dust, 3)).eut(30).duration(5 * SECONDS)
                 .addTo(mixerNonCellRecipes);
 
@@ -2597,14 +2588,14 @@ public class RecipeLoader {
         // ZPM molten distilling method
 
         // melt ImpureSamariumChloride
-        GT_Values.RA.stdBuilder().itemInputs(ImpureSamariumChloride.get(OrePrefixes.dust, 1))
-                .fluidOutputs(ImpureSamariumChloride.getMolten(144)).eut(TierEU.RECIPE_EV).duration(24)
+        GT_Values.RA.stdBuilder().itemInputs(SamariumChloride.get(OrePrefixes.dust, 1))
+                .fluidOutputs(SamariumChloride.getMolten(144)).eut(TierEU.RECIPE_EV).duration(24)
                 .addTo(fluidExtractionRecipes);
 
         // distill with LanthanumDust 36*144L moltenSmCl3 = 16*144L moltenSm + 27B Cl
         GT_Values.RA.stdBuilder().itemInputs(Materials.Lanthanum.getDust(9))
                 .itemOutputs(ImpureLanthanumChloride.get(OrePrefixes.dust, 36))
-                .fluidInputs(ImpureSamariumChloride.getMolten(5184)).fluidOutputs(Materials.Samarium.getMolten(2304))
+                .fluidInputs(SamariumChloride.getMolten(5184)).fluidOutputs(Materials.Samarium.getMolten(2304))
                 .eut(TierEU.RECIPE_ZPM).duration(5 * SECONDS).noOptimize().addTo(distillationTowerRecipes);
 
         // Centrifuge ImpureLanthanumChlorideDust
@@ -2941,7 +2932,6 @@ public class RecipeLoader {
         }
 
     }
-    
 
     // public static void loadZylon
 
