@@ -9,6 +9,14 @@ import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+
 import com.elisis.gtnhlanth.common.beamline.BeamInformation;
 import com.elisis.gtnhlanth.common.beamline.BeamLinePacket;
 import com.elisis.gtnhlanth.common.beamline.Particle;
@@ -31,15 +39,9 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffl
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Utility;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 
-public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchrotron> implements ISurvivalConstructable {
+public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchrotron>
+        implements ISurvivalConstructable {
 
     private static final IStructureDefinition<Synchrotron> STRUCTURE_DEFINITION;
 
@@ -48,13 +50,13 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
 
     private ArrayList<TileHatchInputBeamline> mInputBeamline = new ArrayList<>();
     private ArrayList<TileHatchOutputBeamline> mOutputBeamline = new ArrayList<>();
-    
+
     public ArrayList<AntennaCasing> mAntennaCasings = new ArrayList<>();
-    
+
     private static final int CASING_INDEX = 49;
-    
+
     private int energyHatchTier;
-    
+
     private int antennaeTier;
 
     /*
@@ -435,27 +437,20 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
     }
     
     // spotless:on
-    
+
     /*
-     * v = pi * lorentz^2 * sfreq
-
-		sfreq = sw / 2pi
-
-		sw = e * B / mass(e) * c
-
-		v = (e * B * l^2) / (2 * mass(e) * c)
-
-  		= 292.718624222 * l^2 * B
+     * v = pi * lorentz^2 * sfreq sfreq = sw / 2pi sw = e * B / mass(e) * c v = (e * B * l^2) / (2 * mass(e) * c) =
+     * 292.718624222 * l^2 * B
      */
-    
+
     private float outputEnergy;
     private int outputRate;
     private int outputParticle;
     private float outputFocus;
     private float machineFocus;
-    
+
     private int machineTemp;
-    
+
     public Synchrotron(String aName) {
         super(aName);
     }
@@ -479,8 +474,8 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
     }
 
     private boolean addBeamlineInputHatch(IGregTechTileEntity te, int casingIndex) {
-    	
-    	if (te == null) return false;
+
+        if (te == null) return false;
 
         IMetaTileEntity mte = te.getMetaTileEntity();
 
@@ -491,12 +486,12 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
         }
 
         return false;
-    	
+
     }
-    
+
     private boolean addBeamlineOutputHatch(IGregTechTileEntity te, int casingIndex) {
-    	
-    	if (te == null) return false;
+
+        if (te == null) return false;
 
         IMetaTileEntity mte = te.getMetaTileEntity();
 
@@ -507,9 +502,9 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
         }
 
         return false;
-    	
+
     }
-    
+
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection aSide, ForgeDirection aFacing,
             int aColorIndex, boolean aActive, boolean aRedstone) {
@@ -519,7 +514,7 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
-    	buildPiece(STRUCTURE_PIECE_ENTRANCE, stackSize, hintsOnly, 16, 3, 1);
+        buildPiece(STRUCTURE_PIECE_ENTRANCE, stackSize, hintsOnly, 16, 3, 1);
         buildPiece(STRUCTURE_PIECE_BASE, stackSize, hintsOnly, 16, 3, 0);
 
     }
@@ -528,7 +523,7 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
     public IStructureDefinition<Synchrotron> getStructureDefinition() {
         return STRUCTURE_DEFINITION;
     }
-    
+
     public boolean addEnergyInputToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
         if (aTileEntity == null) {
             return false;
@@ -536,46 +531,39 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
         IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
         if (aMetaTileEntity == null) return false;
         if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_Energy) {
-        	
-        	GT_MetaTileEntity_Hatch_Energy hatch = (GT_MetaTileEntity_Hatch_Energy) aMetaTileEntity;
-        	
-        	//First energy hatch added
-        	if (this.mEnergyHatches.size() == 0)
-        		this.energyHatchTier = hatch.mTier;
-        	
-        	// Disallow any hatches that don't match the tier of the first hatch added
-        	if (hatch.mTier != this.energyHatchTier)
-        		return false;
-        		
-        	
+
+            GT_MetaTileEntity_Hatch_Energy hatch = (GT_MetaTileEntity_Hatch_Energy) aMetaTileEntity;
+
+            // First energy hatch added
+            if (this.mEnergyHatches.size() == 0) this.energyHatchTier = hatch.mTier;
+
+            // Disallow any hatches that don't match the tier of the first hatch added
+            if (hatch.mTier != this.energyHatchTier) return false;
+
             hatch.updateTexture(aBaseCasingIndex);
             hatch.updateCraftingIcon(this.getMachineCraftingIcon());
             return mEnergyHatches.add(hatch);
         }
         return false;
     }
-    
+
     private boolean addAntenna(Block block, int meta) {
-    	
-    	if (block == null)
-    		return false;
-    	
-    	if (!(block instanceof AntennaCasing))
-    		return false;
-    	
-    	AntennaCasing antennaBlock = (AntennaCasing) block;
-    	
-    	int antennaTier = antennaBlock.getTier();
-    	
-    	//First antenna casing added
-    	if (this.mAntennaCasings.size() == 0)
-    		this.antennaeTier = antennaTier;
-    	
-    	if (antennaTier != this.antennaeTier) 
-    		return false;
-    	
-    	return mAntennaCasings.add(antennaBlock);
-    	
+
+        if (block == null) return false;
+
+        if (!(block instanceof AntennaCasing)) return false;
+
+        AntennaCasing antennaBlock = (AntennaCasing) block;
+
+        int antennaTier = antennaBlock.getTier();
+
+        // First antenna casing added
+        if (this.mAntennaCasings.size() == 0) this.antennaeTier = antennaTier;
+
+        if (antennaTier != this.antennaeTier) return false;
+
+        return mAntennaCasings.add(antennaBlock);
+
     }
 
     @Override
@@ -586,137 +574,135 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
 
     @Override
     public boolean checkRecipe(ItemStack aStack) {
-        
-    	float inputEnergy = 0;
-    	float inputFocus = 0;
-    	float inputRate = 0;
-    	int inputParticleId = 0;
-    	
-    	machineFocus = 0;
-    	machineTemp = 0;
-    	
-    	outputEnergy = 0;
-    	outputFocus = 0;
-    	outputRate = 0;
-    	outputParticle = 0;
-    	
-    	float tempFactor = 0;
-    	
-    	float voltageFactor = 0;
-    	
-    	
-    	ArrayList<FluidStack> fluidList = this.getStoredFluids();
-    	
-    	if (fluidList.size() == 0) return false;
-    	
-    	this.mEfficiency = (10000 - (this.getIdealStatus() - this.getRepairStatus()) * 1000);
+
+        float inputEnergy = 0;
+        float inputFocus = 0;
+        float inputRate = 0;
+        int inputParticleId = 0;
+
+        machineFocus = 0;
+        machineTemp = 0;
+
+        outputEnergy = 0;
+        outputFocus = 0;
+        outputRate = 0;
+        outputParticle = 0;
+
+        float tempFactor = 0;
+
+        float voltageFactor = 0;
+
+        ArrayList<FluidStack> fluidList = this.getStoredFluids();
+
+        if (fluidList.size() == 0) return false;
+
+        this.mEfficiency = (10000 - (this.getIdealStatus() - this.getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
-    	
-    	if (this.getInputInformation() == null) {
-    		return false;
-    	}
-    	
-    	if (this.getInputInformation().getEnergy() == 0) {
+
+        if (this.getInputInformation() == null) {
             return false;
         }
-    	
-    	if (this.getInputInformation().getFocus() < 25) {
-    		return false;
-    	}
-    	
-    	BeamInformation inputInformation = this.getInputInformation();
-    	
-    	inputParticleId = this.getInputInformation().getParticleId();
-    	
-    	Particle inputParticle = Particle.getParticleFromId(inputParticleId);
-    	
-    	if (!inputParticle.canAccelerate()) {
-    		stopMachine();
-    		//GT_Log.out.print("Accelerate");
-    	}
-    	
-    	//GT_Log.out.print("Got this far");
-    	
-    	mMaxProgresstime = 20;
-    	
-    	long voltage = this.getMaxInputVoltage();
-    	mEUt = (int) -voltage;
-    	
-    	
-    	outputParticle = 1; // Photon 
-    	
-    	//GT_Log.out.print("euT " + mEUt);
-    	
-    	FluidStack primaryFluid = fluidList.get(0);
-    	
-    	int fluidTemperature;
-    	
-    	if (primaryFluid.isFluidEqual(new FluidStack(FluidRegistry.getFluid("ic2coolant"), 1))) {
+
+        if (this.getInputInformation().getEnergy() == 0) {
+            return false;
+        }
+
+        if (this.getInputInformation().getFocus() < 25) {
+            return false;
+        }
+
+        BeamInformation inputInformation = this.getInputInformation();
+
+        inputParticleId = this.getInputInformation().getParticleId();
+
+        Particle inputParticle = Particle.getParticleFromId(inputParticleId);
+
+        if (!inputParticle.canAccelerate()) {
+            stopMachine();
+            // GT_Log.out.print("Accelerate");
+        }
+
+        // GT_Log.out.print("Got this far");
+
+        mMaxProgresstime = 20;
+
+        long voltage = this.getMaxInputVoltage();
+        mEUt = (int) -voltage;
+
+        outputParticle = 1; // Photon
+
+        // GT_Log.out.print("euT " + mEUt);
+
+        FluidStack primaryFluid = fluidList.get(0);
+
+        int fluidTemperature;
+
+        if (primaryFluid.isFluidEqual(new FluidStack(FluidRegistry.getFluid("ic2coolant"), 1))) {
             fluidTemperature = 60; // Default temp of 300 is unreasonable
         } else {
             fluidTemperature = primaryFluid.getFluid().getTemperature();
         }
-    	
-    	machineTemp = fluidTemperature; //Solely for tricorder info
-    	
+
+        machineTemp = fluidTemperature; // Solely for tricorder info
+
         machineFocus = getMachineFocus(fluidTemperature);
-        
+
         inputFocus = this.getInputInformation().getFocus();
 
         outputFocus = (inputFocus > machineFocus) ? ((inputFocus + machineFocus) / 2)
                 : inputFocus * (machineFocus / 100); // If input focus > machine focus, take the average of both, else
                                                      // weigh the former by the latter
-        
-        
+
         voltageFactor = getVoltageFactor(voltage, this.antennaeTier);
-    	
+
         inputEnergy = this.getInputInformation().getEnergy();
         float mass = inputParticle.getMass();
-    	
-        
-        // Perhaps divide by mass somehow here too
-    	outputEnergy = (float) calculateOutputParticleEnergy(voltage, inputEnergy, this.antennaeTier); //TODO maybe adjust behaviour here
-    	
-    	
-    	inputRate = this.getInputInformation().getRate();
-    	outputRate = (int) (inputRate * getOutputRatetio(voltageFactor));
-    	
-    	//GT_Log.out.print("Voltage factor " + voltageFactor);
-    	
-    	//outputAmount = inputParticle.getCharge() / Particle.ELECTRON.getCharge() * 100;
-    	
-    	int fluidConsumed = 32_000; // Amount of fluid consumed per operation
-    	
-    	if (primaryFluid.amount < fluidConsumed || (!primaryFluid.isFluidEqual(FluidRegistry.getFluidStack("ic2coolant", 1))
-                && primaryFluid.getFluid().getTemperature() > 200)) {
 
-    		//GT_Log.out.print("Primary fluid amount: " + primaryFluid.amount);
-    		
+        // Perhaps divide by mass somehow here too
+        outputEnergy = (float) calculateOutputParticleEnergy(voltage, inputEnergy, this.antennaeTier); // TODO maybe
+                                                                                                       // adjust
+                                                                                                       // behaviour here
+
+        inputRate = this.getInputInformation().getRate();
+        outputRate = (int) (inputRate * getOutputRatetio(voltageFactor));
+
+        // GT_Log.out.print("Voltage factor " + voltageFactor);
+
+        // outputAmount = inputParticle.getCharge() / Particle.ELECTRON.getCharge() * 100;
+
+        int fluidConsumed = 32_000; // Amount of fluid consumed per operation
+
+        if (primaryFluid.amount < fluidConsumed
+                || (!primaryFluid.isFluidEqual(FluidRegistry.getFluidStack("ic2coolant", 1))
+                        && primaryFluid.getFluid().getTemperature() > 200)) {
+
+            // GT_Log.out.print("Primary fluid amount: " + primaryFluid.amount);
+
             stopMachine();
             return false;
         }
-    	
-    	primaryFluid.amount -= fluidConsumed;
+
+        primaryFluid.amount -= fluidConsumed;
 
         FluidStack fluidOutput = null;
-        
+
         fluidOutput = new FluidStack(BeamlineRecipeLoader.coolantMap.get(primaryFluid.getFluid()), fluidConsumed);
-        
-        //GT_Log.out.print(fluidOutput.getLocalizedName());
+
+        // GT_Log.out.print(fluidOutput.getLocalizedName());
 
         if (Objects.isNull(fluidOutput)) return false;
 
-        //GT_Log.out.print("Fluid out ok");
+        // GT_Log.out.print("Fluid out ok");
 
         this.addFluidOutputs(new FluidStack[] { fluidOutput });
 
-        //GT_Log.out.print("This far too");
-        
+        // GT_Log.out.print("This far too");
+
         outputAfterRecipe();
-    	
+
         return true;
     }
-    
+
     private void outputAfterRecipe() {
 
         if (!mOutputBeamline.isEmpty()) {
@@ -730,18 +716,18 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
             }
         }
     }
-    
+
     @Override
     public void stopMachine() {
-    	
-    	outputFocus = 0;
+
+        outputFocus = 0;
         outputEnergy = 0;
         outputParticle = 0;
         outputRate = 0;
         machineFocus = 0;
         machineTemp = 0;
         super.stopMachine();
-    
+
     }
 
     private BeamInformation getInputInformation() {
@@ -749,54 +735,57 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
         for (TileHatchInputBeamline in : this.mInputBeamline) {
 
             if (in.q == null) return new BeamInformation(0, 0, 0, 0);
-            //if (in.q == null) return new BeamInformation(10000, 10, 0, 90); // TODO temporary for testing purposes
+            // if (in.q == null) return new BeamInformation(10000, 10, 0, 90); // TODO temporary for testing purposes
 
             return in.q.getContent();
         }
         return null;
     }
-    
+
     private static float getVoltageFactor(long mEU, int antennaTier) {
-    	
-    	//float factor = (float) Math.pow(1.00004, -mEU * Math.pow(antennaTier, 1.0/3.0) + 80000);
-    	float factor = (float) -Math.pow(1.1, -mEU/10 * Math.pow(antennaTier, 2.0/3.0)) + 1;
-    	return factor;
-    	
+
+        // float factor = (float) Math.pow(1.00004, -mEU * Math.pow(antennaTier, 1.0/3.0) + 80000);
+        float factor = (float) -Math.pow(1.1, -mEU / 10 * Math.pow(antennaTier, 2.0 / 3.0)) + 1;
+        return factor;
+
     }
+
     /*
-    private static float getTemperatureFactor(int temperature) {
-    	float factor = (float) Math.pow(1.11, 0.18 * temperature);
-		return factor;
-    }
-    */
+     * private static float getTemperatureFactor(int temperature) { float factor = (float) Math.pow(1.11, 0.18 *
+     * temperature); return factor; }
+     */
     private static double calculateOutputParticleEnergy(long voltage, double inputParticleEnergy, int antennaTier) {
-    	
-    	/* Energy in general increases as input energy increases, with the relationship between the machine EUt and energy being an negative exponential, with a maximum depending on both input
-    	   particle energy and antenna tier. The extent to which the output depends on the former is determined by the cbrt of the latter, meaning that increases in antenna tier result in diminishing returns.
-    	   In the same way, the curve of the output energy vs. machine voltage exponential depends on antenna tier, with an increase in antenna tier resulting in a more shallow curve up.
-    	   The effect of this also increases with the tier.
-    	 
-    	 	LaTeX:
-    	 	-\frac{l^{1.11t^{\frac{1}{3}}}}{40000000}\cdot\left(0.15^{\frac{2}{t^{\frac{3}{2}}}}\right)^{\frac{x}{60768}}\ +\ \frac{l^{1.11t^{\frac{1}{3}}}}{40000000}
-    	*/
-    	
-    	double energy = (Math.pow(inputParticleEnergy, 1.13 * Math.pow(antennaTier, 1.0/3.0)) / 40_000_000) * (-Math.pow(Math.pow(0.15, 2.0/(Math.pow(antennaTier, 3.0/2.0))), voltage / 60768.0) + 1); // In keV
-    	
-    	GT_Log.out.print("Energy " + energy);
-    	return energy;
-    	
+
+        /*
+         * Energy in general increases as input energy increases, with the relationship between the machine EUt and
+         * energy being an negative exponential, with a maximum depending on both input particle energy and antenna
+         * tier. The extent to which the output depends on the former is determined by the cbrt of the latter, meaning
+         * that increases in antenna tier result in diminishing returns. In the same way, the curve of the output energy
+         * vs. machine voltage exponential depends on antenna tier, with an increase in antenna tier resulting in a more
+         * shallow curve up. The effect of this also increases with the tier. LaTeX:
+         * -\frac{l^{1.11t^{\frac{1}{3}}}}{40000000}\cdot\left(0.15^{\frac{2}{t^{\frac{3}{2}}}}\right)^{\frac{x}{60768}}
+         * \ +\ \frac{l^{1.11t^{\frac{1}{3}}}}{40000000}
+         */
+
+        double energy = (Math.pow(inputParticleEnergy, 1.13 * Math.pow(antennaTier, 1.0 / 3.0)) / 40_000_000)
+                * (-Math.pow(Math.pow(0.15, 2.0 / (Math.pow(antennaTier, 3.0 / 2.0))), voltage / 60768.0) + 1); // In
+                                                                                                                // keV
+
+        GT_Log.out.print("Energy " + energy);
+        return energy;
+
     }
-    
+
     private static float getMachineFocus(int temperature) {
-    	
-    	return (float) Math.max(Math.min(Math.pow(1.5, -1.0/40.0 * (temperature - 480)), 90), 10);
+
+        return (float) Math.max(Math.min(Math.pow(1.5, -1.0 / 40.0 * (temperature - 480)), 90), 10);
     }
-    
+
     // Punny, right?
     private static float getOutputRatetio(float voltageFactor) {
-    	return voltageFactor / 10; //TODO this is terrible
+        return voltageFactor / 10; // TODO this is terrible
     }
-    
+
     @Override
     public String[] getInfoData() {
         int mPollutionReduction = 0;
@@ -868,22 +857,22 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
                         + EnumChatFormatting.RESET
                         + " %",
 
-               /* 7 */    EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.info")
+                /* 7 */ EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.info")
                         + ": "
                         + EnumChatFormatting.RESET,
-                StatCollector.translateToLocal("beamline.focus") + ": " //Machine Focus:
-            			+ EnumChatFormatting.BLUE
-            			+ machineFocus
-            			+ " "
-            			+ EnumChatFormatting.RESET,
-            	StatCollector.translateToLocal("beamline.temperature") + ": " //Temperature:
-            			+ EnumChatFormatting.DARK_RED
-            			+ machineTemp
-            			+ EnumChatFormatting.RESET
-            			+ " K", // e.g. "137 K"
-                        
+                StatCollector.translateToLocal("beamline.focus") + ": " // Machine Focus:
+                        + EnumChatFormatting.BLUE
+                        + machineFocus
+                        + " "
+                        + EnumChatFormatting.RESET,
+                StatCollector.translateToLocal("beamline.temperature") + ": " // Temperature:
+                        + EnumChatFormatting.DARK_RED
+                        + machineTemp
+                        + EnumChatFormatting.RESET
+                        + " K", // e.g. "137 K"
+
                 /* 8 */ EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.in_pre")
-                       + ": "
+                        + ": "
                         + EnumChatFormatting.RESET,
                 StatCollector.translateToLocal("beamline.particle") + ": " // "Multiblock Beamline Input:"
                         + EnumChatFormatting.GOLD
@@ -927,33 +916,30 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
                         + EnumChatFormatting.LIGHT_PURPLE
                         + this.outputRate, };
     }
-    
+
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        
-    	this.mInputBeamline.clear();
+
+        this.mInputBeamline.clear();
         this.mOutputBeamline.clear();
-        
+
         this.mAntennaCasings.clear();
-        
+
         this.energyHatchTier = 0;
         this.antennaeTier = 0;
-        
+
         this.outputEnergy = 0;
         this.outputRate = 0;
         this.outputFocus = 0;
         this.outputParticle = 0;
-    	
+
         if (!checkPiece(STRUCTURE_PIECE_ENTRANCE, 16, 3, 1)) return false;
         if (!checkPiece(STRUCTURE_PIECE_BASE, 16, 3, 0)) return false;
-        
-    	
+
         return this.mInputBeamline.size() == 1 && this.mOutputBeamline.size() == 1
                 && this.mMaintenanceHatches.size() == 1
                 && this.mEnergyHatches.size() == 4;
     }
-    
-    
 
     @Override
     public int getMaxEfficiency(ItemStack aStack) {

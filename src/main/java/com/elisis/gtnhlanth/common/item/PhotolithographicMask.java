@@ -2,11 +2,11 @@ package com.elisis.gtnhlanth.common.item;
 
 import java.util.List;
 
-import com.elisis.gtnhlanth.Tags;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import com.elisis.gtnhlanth.Tags;
 
 public class PhotolithographicMask extends Item implements ICanFocus {
 
@@ -22,12 +22,10 @@ public class PhotolithographicMask extends Item implements ICanFocus {
         this.setMaxDamage(maxDamage);
         this.setTextureName(Tags.MODID + ":photomask/" + name);
     }
-/*
-    @Override
-    public String getUnlocalizedName() {
-        return "item.photomask." + this.name;
-    }
-*/
+
+    /*
+     * @Override public String getUnlocalizedName() { return "item.photomask." + this.name; }
+     */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool) {

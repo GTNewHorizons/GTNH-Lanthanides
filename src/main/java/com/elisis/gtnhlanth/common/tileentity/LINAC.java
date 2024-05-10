@@ -9,6 +9,14 @@ import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+
 import com.elisis.gtnhlanth.common.beamline.BeamInformation;
 import com.elisis.gtnhlanth.common.beamline.BeamLinePacket;
 import com.elisis.gtnhlanth.common.beamline.Particle;
@@ -32,13 +40,6 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockB
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Utility;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 
 public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> implements ISurvivalConstructable {
 
@@ -252,11 +253,11 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 
         machineFocus = Math.max(((-0.9f) * this.length * tempFactor) + 110, 5); // Min of 5
         if (machineFocus > 90) { // Max of 90
-        	machineFocus = 90; 
+            machineFocus = 90;
         }
-        
-        GT_Log.out.print("machine focus " +  machineFocus);
-        
+
+        GT_Log.out.print("machine focus " + machineFocus);
+
         inputFocus = this.getInputInformation().getFocus();
 
         outputFocus = (inputFocus > machineFocus) ? ((inputFocus + machineFocus) / 2)
@@ -269,8 +270,10 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         machineEnergy = Math.max(-((60) / this.length) * voltageFactor + 60_000, 2000); // Minimum of 2000keV
 
         inputEnergy = this.getInputInformation().getEnergy();
-        outputEnergy = Math.min((1 + inputEnergy/Particle.getParticleFromId(outputParticle).maxSourceEnergy()) * machineEnergy, 100_000); // TODO more complex calculation than just
-                                                                      // addition
+        outputEnergy = Math.min(
+                (1 + inputEnergy / Particle.getParticleFromId(outputParticle).maxSourceEnergy()) * machineEnergy,
+                100_000); // TODO more complex calculation than just
+        // addition
 
         inputRate = this.getInputInformation().getRate();
         outputRate = inputRate; // Cannot increase rate with this multiblock

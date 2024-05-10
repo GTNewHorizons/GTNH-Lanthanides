@@ -8,8 +8,6 @@ public class NEI_Config implements IConfigureNEI {
 
     public static boolean isAdded = true;
 
-    
-    
     @Override
     public String getName() {
         return "GTNH: Lanthanides NEI";
@@ -21,11 +19,9 @@ public class NEI_Config implements IConfigureNEI {
     }
 
     @Override
-    public void loadConfig() {	
+    public void loadConfig() {
         isAdded = false;
-        
-        
-        
+
         isAdded = true;
     }
 }
