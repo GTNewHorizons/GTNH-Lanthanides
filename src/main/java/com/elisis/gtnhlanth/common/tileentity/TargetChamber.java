@@ -1,19 +1,25 @@
 package com.elisis.gtnhlanth.common.tileentity;
 
+import static com.elisis.gtnhlanth.util.DescTextLocalization.BLUEPRINT_INFO;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAdder;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static gregtech.api.enums.GT_Values.VN;
 import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
-import java.util.ArrayList;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_CRACKER;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_CRACKER_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_CRACKER_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_CRACKER_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
+import static gregtech.api.util.GT_StructureUtility.buildHatchAdder;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
+import static gregtech.api.enums.GT_HatchElement.Energy;
+import static gregtech.api.enums.GT_HatchElement.InputBus;
+import static gregtech.api.enums.GT_HatchElement.Maintenance;
+import static gregtech.api.enums.GT_HatchElement.OutputBus;
+
+import java.util.ArrayList;
 
 import com.elisis.gtnhlanth.common.beamline.BeamInformation;
 import com.elisis.gtnhlanth.common.beamline.Particle;
@@ -22,9 +28,11 @@ import com.elisis.gtnhlanth.common.hatch.TileHatchInputBeamline;
 import com.elisis.gtnhlanth.common.register.LanthItemList;
 import com.elisis.gtnhlanth.common.tileentity.recipe.beamline.BeamlineRecipeAdder2;
 import com.elisis.gtnhlanth.common.tileentity.recipe.beamline.RecipeTC;
+import com.elisis.gtnhlanth.util.DescTextLocalization;
 import com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.GregTech_API;
@@ -35,9 +43,17 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMul
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
+import gregtech.api.recipe.RecipeMap;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
 
 public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<TargetChamber>
         implements ISurvivalConstructable {
@@ -71,24 +87,22 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
     			.addElement('g', ofBlock(GregTech_API.sBlockCasings3, 10)) //Grate casing
     			.addElement(
     					'f', 
-    					ofChain(
-    							ofHatchAdder(TargetChamber::addMaintenanceToMachineList, 49, 1),
-    							ofHatchAdder(TargetChamber::addEnergyInputToMachineList, 49, 1),
-    							ofBlock(GregTech_API.sBlockCasings3, 10)
-    					))
+    					buildHatchAdder(TargetChamber.class).atLeast(Maintenance, Energy)
+    					.casingIndex(47).dot(2).buildAndChain(ofBlock(GregTech_API.sBlockCasings3, 10)))
+    			
     			.addElement('j', ofBlockAdder(TargetChamber::addGlass, ItemRegistry.bw_glasses[0], 1))
-    			.addElement('b', ofHatchAdder(TargetChamber::addBeamLineInputHatch, CASING_INDEX, 1))
+    			.addElement('b', buildHatchAdder(TargetChamber.class).hatchClass(TileHatchInputBeamline.class).casingIndex(47).dot(5).adder(TargetChamber::addBeamLineInputHatch).build())
     			.addElement('c', ofBlock(LanthItemList.SHIELDED_ACCELERATOR_CASING, 0))
     			
-    			.addElement('l', ofHatchAdder(TargetChamber::addFocusInputHatch, CASING_INDEX, 1))
+    			.addElement('l', buildHatchAdder(TargetChamber.class).hatchClass(TileBusInputFocus.class).casingIndex(47).dot(1).adder(TargetChamber::addFocusInputHatch).build())
     			
-    			.addElement('t', ofHatchAdder(GT_MetaTileEntity_MultiBlockBase::addInputBusToMachineList, CASING_INDEX, 1))
+    			.addElement('t', buildHatchAdder(TargetChamber.class).atLeast(InputBus).casingIndex(47).dot(3).build())
     			.addElement('s', ofBlock(LanthItemList.SHIELDED_ACCELERATOR_GLASS, 0))
     			.addElement('r', ofBlock(LanthItemList.FOCUS_MANIPULATION_CASING, 0))
     			.addElement('h', ofBlock(LanthItemList.FOCUS_HOLDER, 0))
     			.addElement('u', ofBlock(LanthItemList.TARGET_RECEPTACLE_CASING, 0))
     			.addElement('i', ofBlock(LanthItemList.TARGET_HOLDER, 0))
-    			.addElement('o', ofHatchAdder(GT_MetaTileEntity_MultiBlockBase::addOutputBusToMachineList, CASING_INDEX, 1))
+    			.addElement('o', buildHatchAdder(TargetChamber.class).atLeast(OutputBus).casingIndex(47).dot(4).build())
     			
     			.build();
     }
@@ -142,10 +156,19 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
     }
 
     @Override
-    public ITexture[] getTexture(IGregTechTileEntity arg0, ForgeDirection arg1, ForgeDirection arg2, int arg3,
-            boolean arg4, boolean arg5) {
-        // TODO Auto-generated method stub
-        return null;
+    public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing, int colorIndex,
+            boolean active, boolean redstoneLevel) {
+    	// Placeholder
+    	if (side == facing) {
+            if (active) return new ITexture[] { casingTexturePages[0][47],
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_OIL_CRACKER_ACTIVE).extFacing().build(),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_OIL_CRACKER_ACTIVE_GLOW).extFacing().glow()
+                            .build() };
+            return new ITexture[] { casingTexturePages[0][47],
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_OIL_CRACKER).extFacing().build(),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_OIL_CRACKER_GLOW).extFacing().glow().build() };
+        }
+        return new ITexture[] { casingTexturePages[0][47] };
     }
 
     /*
@@ -157,7 +180,14 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Collision Chamber").addInfo("Controller block for the Target Chamber")
-                .addInfo("Hitting things with other things").toolTipFinisher("GTNH: Lanthanides");
+                .addInfo("Hitting things with other things")
+                
+                .addInfo(BLUEPRINT_INFO)
+                .addInfo(DescTextLocalization.BEAMLINE_SCANNER_INFO)
+                .addSeparator()
+                .beginStructureBlock(5, 5, 6, true)
+                .addInputBus("Hint block with dot 1").addOutputBus("Hint block with dot 2")
+                .toolTipFinisher("GTNH: Lanthanides");
         return tt;
     }
 
@@ -166,12 +196,23 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
         buildPiece("base", stackSize, hintsOnly, 2, 4, 0);
 
     }
+    
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        return survivialBuildPiece("base", stackSize, 2, 4, 0, elementBudget, env, false, true);
+    }
 
     @Override
     public IStructureDefinition<TargetChamber> getStructureDefinition() {
         return STRUCTURE_DEFINITION;
     }
 
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+    	return BeamlineRecipeAdder2.instance.TargetChamberRecipes;
+    }
+    
     @Override
     public boolean checkRecipe(ItemStack itemStack) {
 
@@ -335,7 +376,12 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
         mInputBeamline.clear();
         mInputFocus.clear();
 
-        return checkPiece("base", 2, 4, 0);
+        if (!checkPiece("base", 2, 4, 0))
+        	return false;
+        
+        return this.mInputBeamline.size() == 1 && this.mMaintenanceHatches.size() == 1
+        		&& this.mInputBusses.size() == 1 && this.mOutputBusses.size() == 1
+        		&& this.mInputFocus.size() == 1;
     }
 
     @Override

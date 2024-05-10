@@ -1,6 +1,11 @@
 # RecipeMaps
 gtnhlanth.recipe.digester=Digester
 gtnhlanth.recipe.disstank=Dissolution Tank
+gtnhlanth.recipe.tc=Target Chamber
+gtnhlanth.recipe.sc=Source Chamber
+
+gtnhlanth.tt.beaminfo=Use a §9portable scanner &rfor info about the input/output of this multiblock.
+gtnhlanth.tt.blueprint=Follow the §9Structure§2Lib §7hologram projector to build the main structure.
 
 # NEI
 value.disstank=Ratio: %s:1

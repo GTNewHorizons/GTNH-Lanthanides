@@ -3,19 +3,16 @@ package com.elisis.gtnhlanth.common.tileentity;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAdder;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
+import static gregtech.api.enums.GT_HatchElement.Energy;
+import static gregtech.api.enums.GT_HatchElement.InputHatch;
+import static gregtech.api.enums.GT_HatchElement.Maintenance;
+import static gregtech.api.enums.GT_HatchElement.OutputHatch;
 import static gregtech.api.enums.GT_Values.VN;
+import static gregtech.api.util.GT_StructureUtility.buildHatchAdder;
 import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
 import java.util.ArrayList;
 import java.util.Objects;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 
 import com.elisis.gtnhlanth.common.beamline.BeamInformation;
 import com.elisis.gtnhlanth.common.beamline.BeamLinePacket;
@@ -24,9 +21,11 @@ import com.elisis.gtnhlanth.common.hatch.TileHatchInputBeamline;
 import com.elisis.gtnhlanth.common.hatch.TileHatchOutputBeamline;
 import com.elisis.gtnhlanth.common.register.LanthItemList;
 import com.elisis.gtnhlanth.common.tileentity.recipe.beamline.BeamlineRecipeLoader;
+import com.elisis.gtnhlanth.util.DescTextLocalization;
 import com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.GregTech_API;
@@ -37,9 +36,15 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMul
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
-import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Utility;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> implements ISurvivalConstructable {
 
@@ -89,28 +94,22 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
                                 { "ccccccc", "ccccccc", "ccccccc", "ccc-ccc", "ccccccc", "ccccccc", "ccccccc" },
                                 { "ccccccc", "cbbbbbc", "cbbbbbc", "cbbobbc", "cbbbbbc", "cbbbbbc", "ccccccc" } })
                 .addElement('c', ofBlock(LanthItemList.SHIELDED_ACCELERATOR_CASING, 0))
-                .addElement('g', ofBlock(GregTech_API.sBlockCasings3, 10))
+                .addElement('g', ofBlock(GregTech_API.sBlockCasings3, 10)) // Grate Machine Casing
                 .addElement('b', ofBlockAdder(LINAC::addGlass, ItemRegistry.bw_glasses[0], 1))
-                .addElement('i', ofHatchAdder(LINAC::addBeamLineInputHatch, CASING_INDEX, 1))
-                .addElement('o', ofHatchAdder(LINAC::addBeamLineOutputHatch, CASING_INDEX, 1))
+                .addElement('i', buildHatchAdder(LINAC.class).hatchClass(TileHatchInputBeamline.class)
+                		.casingIndex(CASING_INDEX).dot(3).adder(LINAC::addBeamLineInputHatch).build())
+                .addElement('o', buildHatchAdder(LINAC.class).hatchClass(TileHatchOutputBeamline.class)
+                		.casingIndex(CASING_INDEX).dot(4).adder(LINAC::addBeamLineOutputHatch).build())
                 .addElement('v', ofBlock(LanthItemList.ELECTRODE_CASING, 0))
                 .addElement('k', ofBlock(LanthItemList.SHIELDED_ACCELERATOR_GLASS, 0))
                 .addElement('d', ofBlock(LanthItemList.COOLANT_DELIVERY_CASING, 0))
-                .addElement('y', ofBlock(GregTech_API.sBlockCasings1, 15))
-                .addElement(
-                        'h',
-                        ofChain(
-                                ofHatchAdder(
-                                        GT_MetaTileEntity_MultiBlockBase::addInputHatchToMachineList,
-                                        CASING_INDEX,
-                                        1),
-                                ofHatchAdder(LINAC::addOutputHatchToMachineList, CASING_INDEX, 1)))
-                .addElement(
-                        'j',
-                        ofChain(
-                                ofHatchAdder(LINAC::addMaintenanceToMachineList, CASING_INDEX, 1),
-                                ofHatchAdder(LINAC::addEnergyInputToMachineList, CASING_INDEX, 1),
-                                ofBlock(LanthItemList.SHIELDED_ACCELERATOR_CASING, 0)))
+                .addElement('y', ofBlock(GregTech_API.sBlockCasings1, 15)) // Superconducting coil
+                .addElement('h', buildHatchAdder(LINAC.class).atLeast(InputHatch, OutputHatch)
+                		.casingIndex(CASING_INDEX).dot(2).build())
+                 
+                .addElement('j', buildHatchAdder(LINAC.class).atLeast(Maintenance, Energy).casingIndex(CASING_INDEX)
+                		.dot(1).buildAndChain(ofBlock(LanthItemList.SHIELDED_ACCELERATOR_CASING, 0)))
+                        
                 .build();
     }
 
@@ -138,7 +137,21 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Particle Accelerator").addInfo("Controller block for the LINAC")
-                .addInfo("Extendable, with a minimum length of 18 blocks").toolTipFinisher("GTNH: Lanthanides");;
+                .addInfo("Extendable, with a minimum length of 18 blocks")
+                .addInfo(DescTextLocalization.BLUEPRINT_INFO)
+                .addInfo(DescTextLocalization.BEAMLINE_SCANNER_INFO)
+                .addSeparator()
+                .beginVariableStructureBlock(7, 7, 7, 7, 18, 256, false)
+                .addController("Front bottom")
+                .addEnergyHatch("Hint block with dot 1")
+                .addMaintenanceHatch("Hint block with dot 1")
+                .addInputHatch("Hint block with dot 2")
+                .addOutputHatch("Hint block with dot 2")
+                .addOtherStructurePart("Beamline Input Hatch", "Hint block with dot 3")
+                .addOtherStructurePart("Beamline Output Hatch", "Hint block with dot 4")
+                
+                
+                .toolTipFinisher("GTNH: Lanthanides");;
         return tt;
     }
 
@@ -240,7 +253,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         mMaxProgresstime = 20;
         mEUt = (int) -getMaxInputVoltage();
 
-        GT_Log.out.print("Can accelerate");
+        //GT_Log.out.print("Can accelerate");
 
         // Particle stays the same with this multiblock
         outputParticle = particleId;
@@ -256,7 +269,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
             machineFocus = 90;
         }
 
-        GT_Log.out.print("machine focus " + machineFocus);
+        //GT_Log.out.print("machine focus " + machineFocus);
 
         inputFocus = this.getInputInformation().getFocus();
 
@@ -285,7 +298,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
             return false;
         }
 
-        GT_Log.out.print("Fluid ok");
+        //GT_Log.out.print("Fluid ok");
 
         primFluid.amount -= fluidConsumed;
 
@@ -551,6 +564,37 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 
         buildPiece(STRUCTURE_PIECE_END, stackSize, hintsOnly, 3, 6, -(lLength + 2));
     }
+    
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        
+        int build = 0;
+        
+        build = survivialBuildPiece(STRUCTURE_PIECE_BASE, stackSize, 3, 6, 0, elementBudget, env, false, true);
+        
+        if (build >= 0)
+        	return build; // Incomplete
+        
+        int lLength = Math.max(stackSize.stackSize - 16, 8); // !!
+
+        if (!(lLength % 2 == 0)) {
+            lLength++; // Otherwise you get gaps at the end
+        }
+        
+        for (int i = -8; i > -lLength - 1; i -= 2) {
+
+            // GT_Log.out.print("Building inner piece! i = " + i);
+
+            build = survivialBuildPiece(STRUCTURE_PIECE_LAYER, stackSize, 3, 6, i, elementBudget, env, false, true);
+        
+            if (build >= 0)
+            	return build;
+            
+        }
+        
+        return survivialBuildPiece(STRUCTURE_PIECE_END, stackSize, 3, 6, -(lLength + 2), elementBudget, env, false, true);
+    } 
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection aSide, ForgeDirection aFacing,

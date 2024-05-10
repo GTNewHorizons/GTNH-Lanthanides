@@ -1,16 +1,12 @@
 package com.elisis.gtnhlanth.util;
 
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 
 public class DescTextLocalization {
 
-    public static final String BLUEPRINT_INFO = "Follow the" + EnumChatFormatting.BLUE
-            + " Structure"
-            + EnumChatFormatting.DARK_BLUE
-            + "Lib"
-            + EnumChatFormatting.GRAY
-            + " hologram projector to build the main structure.";
+    public static final String BLUEPRINT_INFO = StatCollector.translateToLocal("gtnhlanth.tt.blueprint");
+    
+    public static final String BEAMLINE_SCANNER_INFO = StatCollector.translateToLocal("gtnhlanth.tt.beaminfo");
 
     public static String[] addText(String preFix, int length) {
         String[] text = new String[length];

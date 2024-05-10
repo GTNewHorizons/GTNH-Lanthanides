@@ -222,71 +222,69 @@ public class RecipeLoader {
                 new ItemStack(LanthItemList.COOLANT_DELIVERY_CASING),
                 1000,
                 7680);
-        
+
         // T1 Antenna Casing
         GT_Values.RA.stdBuilder()
-        		.fluidInputs(Materials.SolderingAlloy.getMolten(6000), Materials.Gold.getMolten(4000), WerkstoffLoader.Xenon.getFluidOrGas(2000))
-        		.itemInputs(
-        				GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Tungsten, 1), 
-        				Materials.Copper.getPlates(4), 
-        				WerkstoffMaterialPool.MuMetal.get(OrePrefixes.plate, 5), 
-        				GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorLuV, 4),
-        				new Object[] {OrePrefixes.circuit.get(Materials.Ultimate), 4},
-        				ItemList.Emitter_LuV.get(6),
-        				GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Gold, 32),
-        				GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Electrum, 6)
-        				)
-        		.itemOutputs(new ItemStack(LanthItemList.ANTENNA_CASING_T1))
-        		
-        		.metadata(GT_RecipeConstants.RESEARCH_ITEM, Materials.Niobium.getBlocks(1))
+                .fluidInputs(
+                        Materials.SolderingAlloy.getMolten(6000),
+                        Materials.Gold.getMolten(4000),
+                        WerkstoffLoader.Xenon.getFluidOrGas(2000))
+                .itemInputs(
+                        GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Tungsten, 1),
+                        Materials.Copper.getPlates(4),
+                        WerkstoffMaterialPool.MuMetal.get(OrePrefixes.plate, 5),
+                        GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorLuV, 4),
+                        new Object[] { OrePrefixes.circuit.get(Materials.Ultimate), 4 },
+                        ItemList.Emitter_LuV.get(6),
+                        GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Gold, 32),
+                        GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Electrum, 6))
+                .itemOutputs(new ItemStack(LanthItemList.ANTENNA_CASING_T1))
+
+                .metadata(GT_RecipeConstants.RESEARCH_ITEM, Materials.Niobium.getBlocks(1))
                 .metadata(GT_RecipeConstants.RESEARCH_TIME, 30 * GT_RecipeBuilder.MINUTES)
-        		
-        		.duration(30 * GT_RecipeBuilder.SECONDS)
-        		.eut(1920)
-        		.addTo(AssemblyLine);
-        
+
+                .duration(30 * GT_RecipeBuilder.SECONDS).eut(1920).addTo(AssemblyLine);
+
         // T2 Antenna Casing
         GT_Values.RA.stdBuilder()
-        		.fluidInputs(Materials.SolderingAlloy.getMolten(12000), Materials.Gold.getMolten(6000), WerkstoffLoader.Xenon.getFluidOrGas(2000))
-        		.itemInputs(
-        				GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.TungstenCarbide, 1), 
-        				Materials.Copper.getPlates(4), 
-        				WerkstoffMaterialPool.MuMetal.get(OrePrefixes.plate, 5), 
-        				GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorZPM, 4),
-        				new Object[] {OrePrefixes.circuit.get(Materials.Bio), 4},
-        				ItemList.Emitter_ZPM.get(6),
-        				GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Gold, 64),
-        				GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Electrum, 6)
-        				)
-        		.itemOutputs(new ItemStack(LanthItemList.ANTENNA_CASING_T2))
-        		.metadata(GT_RecipeConstants.RESEARCH_ITEM, new ItemStack(LanthItemList.ANTENNA_CASING_T1))
+                .fluidInputs(
+                        Materials.SolderingAlloy.getMolten(12000),
+                        Materials.Gold.getMolten(6000),
+                        WerkstoffLoader.Xenon.getFluidOrGas(2000))
+                .itemInputs(
+                        GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.TungstenCarbide, 1),
+                        Materials.Copper.getPlates(4),
+                        WerkstoffMaterialPool.MuMetal.get(OrePrefixes.plate, 5),
+                        GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorZPM, 4),
+                        new Object[] { OrePrefixes.circuit.get(Materials.Bio), 4 },
+                        ItemList.Emitter_ZPM.get(6),
+                        GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Gold, 64),
+                        GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Electrum, 6))
+                .itemOutputs(new ItemStack(LanthItemList.ANTENNA_CASING_T2))
+                .metadata(GT_RecipeConstants.RESEARCH_ITEM, new ItemStack(LanthItemList.ANTENNA_CASING_T1))
                 .metadata(GT_RecipeConstants.RESEARCH_TIME, 40 * GT_RecipeBuilder.MINUTES)
-        		.duration(60 * GT_RecipeBuilder.SECONDS)
-        		.eut(7680)
-        		.addTo(AssemblyLine);
-        
+                .duration(60 * GT_RecipeBuilder.SECONDS).eut(7680).addTo(AssemblyLine);
+
         // Focus Manipulator
         GT_Values.RA.stdBuilder()
-			.fluidInputs(Materials.SolderingAlloy.getMolten(8000), Materials.Gold.getMolten(2000), Materials.Argon.getGas(1000))
-			.itemInputs(
-					GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Aluminium, 1),  
-					
-					new Object[] {OrePrefixes.circuit.get(Materials.Elite), 4},
-					ItemList.Robot_Arm_LuV.get(2),
-					ItemList.Robot_Arm_LuV.get(2),
-					ItemList.Conveyor_Module_LuV.get(2),
-					GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Gold, 16),
-					GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Gold, 16),
-					GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Tungsten, 2)
-					)
-			.itemOutputs(new ItemStack(LanthItemList.FOCUS_MANIPULATION_CASING))
-			.metadata(GT_RecipeConstants.RESEARCH_ITEM, ItemList.Hatch_Input_Bus_ULV.get(1))
-	        .metadata(GT_RecipeConstants.RESEARCH_TIME, 20 * GT_RecipeBuilder.MINUTES)
-			.duration(60 * GT_RecipeBuilder.SECONDS)
-			.eut(1920)
-			.addTo(AssemblyLine);
-        		
-        
+                .fluidInputs(
+                        Materials.SolderingAlloy.getMolten(8000),
+                        Materials.Gold.getMolten(2000),
+                        Materials.Argon.getGas(1000))
+                .itemInputs(
+                        GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Aluminium, 1),
+
+                        new Object[] { OrePrefixes.circuit.get(Materials.Elite), 4 },
+                        ItemList.Robot_Arm_LuV.get(2),
+                        ItemList.Robot_Arm_LuV.get(2),
+                        ItemList.Conveyor_Module_LuV.get(2),
+                        GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Gold, 16),
+                        GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Gold, 16),
+                        GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Tungsten, 2))
+                .itemOutputs(new ItemStack(LanthItemList.FOCUS_MANIPULATION_CASING))
+                .metadata(GT_RecipeConstants.RESEARCH_ITEM, ItemList.Hatch_Input_Bus_ULV.get(1))
+                .metadata(GT_RecipeConstants.RESEARCH_TIME, 20 * GT_RecipeBuilder.MINUTES)
+                .duration(60 * GT_RecipeBuilder.SECONDS).eut(1920).addTo(AssemblyLine);
 
         // Capillary Exchange
         GT_Values.RA.addAssemblerRecipe(
