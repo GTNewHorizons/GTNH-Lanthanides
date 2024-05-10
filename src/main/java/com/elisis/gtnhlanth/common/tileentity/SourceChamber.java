@@ -2,8 +2,6 @@ package com.elisis.gtnhlanth.common.tileentity;
 
 import static com.elisis.gtnhlanth.util.DescTextLocalization.BLUEPRINT_INFO;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
 import static gregtech.api.enums.GT_HatchElement.Energy;
 import static gregtech.api.enums.GT_HatchElement.InputBus;
 import static gregtech.api.enums.GT_HatchElement.Maintenance;
@@ -15,9 +13,14 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_CRACKER_A
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_CRACKER_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static gregtech.api.util.GT_StructureUtility.buildHatchAdder;
-import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
 import java.util.ArrayList;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
 
 import com.elisis.gtnhlanth.common.beamline.BeamInformation;
 import com.elisis.gtnhlanth.common.beamline.BeamLinePacket;
@@ -31,22 +34,17 @@ import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructa
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMultiBlockBase;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Utility;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
 
 public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<SourceChamber>
         implements ISurvivalConstructable {
@@ -73,18 +71,17 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
                 .addElement('c', ofBlock(LanthItemList.SHIELDED_ACCELERATOR_CASING, 0))
                 .addElement('k', ofBlock(LanthItemList.SHIELDED_ACCELERATOR_GLASS, 0))
                 .addElement('e', ofBlock(LanthItemList.ELECTRODE_CASING, 0))
-                .addElement('b', buildHatchAdder(SourceChamber.class)
-                		.hatchClass(TileHatchOutputBeamline.class).casingIndex(47).dot(4).adder(SourceChamber::addBeamLineOutputHatch).build())
+                .addElement(
+                        'b',
+                        buildHatchAdder(SourceChamber.class).hatchClass(TileHatchOutputBeamline.class).casingIndex(47)
+                                .dot(4).adder(SourceChamber::addBeamLineOutputHatch).build())
                 .addElement('i', buildHatchAdder(SourceChamber.class).atLeast(InputBus).casingIndex(47).dot(1).build())
                 .addElement('o', buildHatchAdder(SourceChamber.class).atLeast(OutputBus).casingIndex(47).dot(2).build())
                 .addElement(
-                        'd',                                		
-                        buildHatchAdder(SourceChamber.class)
-                       	.atLeast(Maintenance, Energy).casingIndex(47).dot(3)
-                       	.buildAndChain(ofBlock(LanthItemList.SHIELDED_ACCELERATOR_CASING, 0)))
-                        	                  
-                                
-                                
+                        'd',
+                        buildHatchAdder(SourceChamber.class).atLeast(Maintenance, Energy).casingIndex(47).dot(3)
+                                .buildAndChain(ofBlock(LanthItemList.SHIELDED_ACCELERATOR_CASING, 0)))
+
                 .build();
     }
 
@@ -95,7 +92,7 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
     public SourceChamber(String name) {
         super(name);
     }
-    
+
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (mMachine) return -1;
@@ -110,20 +107,15 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-        tt.addMachineType("Particle Source").addInfo("Controller block for the Source Chamber")
-        .addInfo(BLUEPRINT_INFO)
-        .addInfo(DescTextLocalization.BEAMLINE_SCANNER_INFO)
-        .addSeparator()
-        .beginStructureBlock(5, 5, 6, true)
-        .addController("Front bottom")
-        .addCasingInfoExactly("Shielded Accelerator Casing", 56, false)
-        .addCasingInfoExactly("Shielded Accelerator Glass", 52, false)
-        .addCasingInfoExactly("Electrode Casing", 16, false)
-        .addOtherStructurePart("Beamline Output Hatch", "Hint block with dot 4")
-        .addEnergyHatch("Hint block with dot 3")
-        .addMaintenanceHatch("Hint block with dot 3")
-        .addInputBus("Hint block with dot 1").addOutputBus("Hint block with dot 2")
-        .toolTipFinisher("GTNH: Lanthanides");;
+        tt.addMachineType("Particle Source").addInfo("Controller block for the Source Chamber").addInfo(BLUEPRINT_INFO)
+                .addInfo(DescTextLocalization.BEAMLINE_SCANNER_INFO).addSeparator().beginStructureBlock(5, 5, 6, true)
+                .addController("Front bottom").addCasingInfoExactly("Shielded Accelerator Casing", 56, false)
+                .addCasingInfoExactly("Shielded Accelerator Glass", 52, false)
+                .addCasingInfoExactly("Electrode Casing", 16, false)
+                .addOtherStructurePart("Beamline Output Hatch", "Hint block with dot 4")
+                .addEnergyHatch("Hint block with dot 3").addMaintenanceHatch("Hint block with dot 3")
+                .addInputBus("Hint block with dot 1").addOutputBus("Hint block with dot 2")
+                .toolTipFinisher("GTNH: Lanthanides");;
         return tt;
     }
 
@@ -242,7 +234,7 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
     public RecipeMap<?> getRecipeMap() {
         return BeamlineRecipeAdder2.instance.SourceChamberRecipes;
     }
-    
+
     @Override
     public String[] getInfoData() {
         int mPollutionReduction = 0;
@@ -372,10 +364,9 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
             int colorIndex, boolean active, boolean redstoneLevel) {
-        
-    	
-    	// Placeholder
-    	if (side == facing) {
+
+        // Placeholder
+        if (side == facing) {
             if (active) return new ITexture[] { casingTexturePages[0][47],
                     TextureFactory.builder().addIcon(OVERLAY_FRONT_OIL_CRACKER_ACTIVE).extFacing().build(),
                     TextureFactory.builder().addIcon(OVERLAY_FRONT_OIL_CRACKER_ACTIVE_GLOW).extFacing().glow()

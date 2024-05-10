@@ -3,10 +3,11 @@ package com.elisis.gtnhlanth.common.tileentity;
 import static com.elisis.gtnhlanth.util.DescTextLocalization.BLUEPRINT_INFO;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAdder;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
+import static gregtech.api.enums.GT_HatchElement.Energy;
+import static gregtech.api.enums.GT_HatchElement.InputBus;
+import static gregtech.api.enums.GT_HatchElement.Maintenance;
+import static gregtech.api.enums.GT_HatchElement.OutputBus;
 import static gregtech.api.enums.GT_Values.VN;
-import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
-
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_CRACKER;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_CRACKER_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_CRACKER_ACTIVE_GLOW;
@@ -14,12 +15,14 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_CRACKER_G
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static gregtech.api.util.GT_StructureUtility.buildHatchAdder;
 
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.Maintenance;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-
 import java.util.ArrayList;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
 
 import com.elisis.gtnhlanth.common.beamline.BeamInformation;
 import com.elisis.gtnhlanth.common.beamline.Particle;
@@ -42,18 +45,11 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMultiBlockBase;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
 
 public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<TargetChamber>
         implements ISurvivalConstructable {
@@ -156,10 +152,10 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
     }
 
     @Override
-    public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing, int colorIndex,
-            boolean active, boolean redstoneLevel) {
-    	// Placeholder
-    	if (side == facing) {
+    public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
+            int colorIndex, boolean active, boolean redstoneLevel) {
+        // Placeholder
+        if (side == facing) {
             if (active) return new ITexture[] { casingTexturePages[0][47],
                     TextureFactory.builder().addIcon(OVERLAY_FRONT_OIL_CRACKER_ACTIVE).extFacing().build(),
                     TextureFactory.builder().addIcon(OVERLAY_FRONT_OIL_CRACKER_ACTIVE_GLOW).extFacing().glow()
@@ -181,13 +177,10 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Collision Chamber").addInfo("Controller block for the Target Chamber")
                 .addInfo("Hitting things with other things")
-                
-                .addInfo(BLUEPRINT_INFO)
-                .addInfo(DescTextLocalization.BEAMLINE_SCANNER_INFO)
-                .addSeparator()
-                .beginStructureBlock(5, 5, 6, true)
-                .addInputBus("Hint block with dot 1").addOutputBus("Hint block with dot 2")
-                .toolTipFinisher("GTNH: Lanthanides");
+
+                .addInfo(BLUEPRINT_INFO).addInfo(DescTextLocalization.BEAMLINE_SCANNER_INFO).addSeparator()
+                .beginStructureBlock(5, 5, 6, true).addInputBus("Hint block with dot 1")
+                .addOutputBus("Hint block with dot 2").toolTipFinisher("GTNH: Lanthanides");
         return tt;
     }
 
@@ -196,7 +189,7 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
         buildPiece("base", stackSize, hintsOnly, 2, 4, 0);
 
     }
-    
+
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (mMachine) return -1;
@@ -210,9 +203,9 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-    	return BeamlineRecipeAdder2.instance.TargetChamberRecipes;
+        return BeamlineRecipeAdder2.instance.TargetChamberRecipes;
     }
-    
+
     @Override
     public boolean checkRecipe(ItemStack itemStack) {
 
@@ -376,12 +369,12 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
         mInputBeamline.clear();
         mInputFocus.clear();
 
-        if (!checkPiece("base", 2, 4, 0))
-        	return false;
-        
+        if (!checkPiece("base", 2, 4, 0)) return false;
+
         return this.mInputBeamline.size() == 1 && this.mMaintenanceHatches.size() == 1
-        		&& this.mInputBusses.size() == 1 && this.mOutputBusses.size() == 1
-        		&& this.mInputFocus.size() == 1;
+                && this.mInputBusses.size() == 1
+                && this.mOutputBusses.size() == 1
+                && this.mInputFocus.size() == 1;
     }
 
     @Override
