@@ -994,7 +994,7 @@ public class WerkstoffMaterialPool implements Runnable {
     public static final Werkstoff SamariumChloride = new Werkstoff(
             new short[] { 248, 248, 120 },
             "Samarium(III)-Chloride",
-            subscriptNumbers("?SmCI3"),
+            subscriptNumbers("SmCI3"),
             new Werkstoff.Stats(),
             Werkstoff.Types.MIXTURE,
             new Werkstoff.GenerationFeatures().disable().onlyDust().addMolten(),
