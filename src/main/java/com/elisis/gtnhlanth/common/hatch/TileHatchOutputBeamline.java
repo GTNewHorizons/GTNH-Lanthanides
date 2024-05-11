@@ -1,5 +1,6 @@
 package com.elisis.gtnhlanth.common.hatch;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -8,6 +9,9 @@ import com.elisis.gtnhlanth.common.beamline.IConnectsToBeamline;
 import com.elisis.gtnhlanth.common.beamline.TileBeamline;
 import com.github.technus.tectech.util.TT_Utility;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -21,6 +25,15 @@ public class TileHatchOutputBeamline extends TileHatchBeamlineConnector<BeamLine
 
     public TileHatchOutputBeamline(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
+    }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister aBlockIconRegister) {
+        super.registerIcons(aBlockIconRegister);
+        EM_D_ACTIVE = new Textures.BlockIcons.CustomIcon("iconsets/OVERLAY_BO_ACTIVE");
+        EM_D_SIDES = new Textures.BlockIcons.CustomIcon("iconsets/OVERLAY_BO_SIDES");
+        EM_D_CONN = new Textures.BlockIcons.CustomIcon("iconsets/BO_CONN");
     }
 
     @Override

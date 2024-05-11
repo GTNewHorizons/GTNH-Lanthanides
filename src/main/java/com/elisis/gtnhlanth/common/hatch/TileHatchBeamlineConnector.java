@@ -48,14 +48,6 @@ public abstract class TileHatchBeamlineConnector<T extends DataPacket> extends G
         super(aName, aTier, 0, aDescription, aTextures);
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister aBlockIconRegister) {
-        super.registerIcons(aBlockIconRegister);
-        EM_D_ACTIVE = new Textures.BlockIcons.CustomIcon("iconsets/OVERLAY_EM_D_ACTIVE");
-        EM_D_SIDES = new Textures.BlockIcons.CustomIcon("iconsets/OVERLAY_EM_D_SIDES");
-        EM_D_CONN = new Textures.BlockIcons.CustomIcon("iconsets/EM_DATA_CONN");
-    }
 
     @Override
     public ITexture[] getTexturesActive(ITexture aBaseTexture) {
