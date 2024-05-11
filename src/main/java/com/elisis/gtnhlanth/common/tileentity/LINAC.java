@@ -37,7 +37,6 @@ import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.ItemList;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -146,21 +145,19 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Particle Accelerator").addInfo("Controller block for the LINAC")
-                //.addInfo("Extendable, with a minimum length of 18 blocks")
-                .addInfo(DescTextLocalization.BLUEPRINT_INFO)
-                .addInfo(DescTextLocalization.BEAMLINE_SCANNER_INFO).addSeparator()
-                .beginVariableStructureBlock(7, 7, 7, 7, 24, 88, false).addController("Front bottom")
+                // .addInfo("Extendable, with a minimum length of 18 blocks")
+                .addInfo(DescTextLocalization.BLUEPRINT_INFO).addInfo(DescTextLocalization.BEAMLINE_SCANNER_INFO)
+                .addSeparator().beginVariableStructureBlock(7, 7, 7, 7, 24, 88, false).addController("Front bottom")
                 .addCasingInfoRange(LanthItemList.SHIELDED_ACCELERATOR_CASING.getLocalizedName(), 310, 1270, false)
                 .addCasingInfoRange(LanthItemList.COOLANT_DELIVERY_CASING.getLocalizedName(), 142, 846, false)
                 .addCasingInfoRange(LanthItemList.SHIELDED_ACCELERATOR_GLASS.getLocalizedName(), 118, 694, false)
                 .addCasingInfoRange("Superconducting Coil Block", 56, 312, false)
                 .addCasingInfoRange(LanthItemList.ELECTRODE_CASING.getLocalizedName(), 138, 714, false)
                 .addCasingInfoExactly("Grate Machine Casing", 47, false)
-                .addCasingInfoExactly("Borosilicate Glass", 48, true)
-                .addEnergyHatch(addDotText(1)).addMaintenanceHatch(addDotText(1))
-                .addInputHatch(addDotText(2)).addOutputHatch(addDotText(2))
+                .addCasingInfoExactly("Borosilicate Glass", 48, true).addEnergyHatch(addDotText(1))
+                .addMaintenanceHatch(addDotText(1)).addInputHatch(addDotText(2)).addOutputHatch(addDotText(2))
                 .addOtherStructurePart("Beamline Input Hatch", addDotText(3))
-                .addOtherStructurePart("Beamline Output Hatch",addDotText(4))
+                .addOtherStructurePart("Beamline Output Hatch", addDotText(4))
 
                 .toolTipFinisher("GTNH: Lanthanides");;
         return tt;
@@ -574,7 +571,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         }
 
         buildPiece(STRUCTURE_PIECE_END, stackSize, hintsOnly, 3, 6, -(lLength + 2));
-        
+
         StructureLib.addClientSideChatMessages("Length " + (16 + lLength) + " blocks.");
     }
 
@@ -603,7 +600,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
             if (build >= 0) return build;
 
         }
-        
+
         int finalOutput = survivialBuildPiece(
                 STRUCTURE_PIECE_END,
                 stackSize,
@@ -614,10 +611,10 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
                 env,
                 false,
                 true);
-        
+
         if (finalOutput >= 0) // Prevent repeating messages
-        	StructureLib.addClientSideChatMessages("Length " + (16 + lLength) + " blocks.");
-        
+            StructureLib.addClientSideChatMessages("Length " + (16 + lLength) + " blocks.");
+
         return finalOutput;
     }
 
