@@ -1,6 +1,7 @@
 package com.elisis.gtnhlanth.common.tileentity;
 
 import static com.elisis.gtnhlanth.util.DescTextLocalization.BLUEPRINT_INFO;
+import static com.elisis.gtnhlanth.util.DescTextLocalization.addDotText;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAdder;
 import static gregtech.api.enums.GT_HatchElement.Energy;
@@ -179,8 +180,21 @@ public class TargetChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Targ
                 .addInfo("Hitting things with other things")
 
                 .addInfo(BLUEPRINT_INFO).addInfo(DescTextLocalization.BEAMLINE_SCANNER_INFO).addSeparator()
-                .beginStructureBlock(5, 5, 6, true).addInputBus("Hint block with dot 1")
-                .addOutputBus("Hint block with dot 2").toolTipFinisher("GTNH: Lanthanides");
+                .beginStructureBlock(5, 5, 6, true)
+                .addController("Front bottom")
+                .addCasingInfoExactly("Grate Machine Casing", 29, false)
+                .addCasingInfoExactly("Shielded Accelerator Casing", 28, false)
+                .addCasingInfoExactly("Borosilicate Glass", 16, true)
+                .addCasingInfoExactly(LanthItemList.TARGET_RECEPTACLE_CASING.getLocalizedName(), 4, false)
+                .addCasingInfoExactly(LanthItemList.FOCUS_MANIPULATION_CASING.getLocalizedName(), 4, false)
+                .addCasingInfoExactly(LanthItemList.SHIELDED_ACCELERATOR_GLASS.getLocalizedName(), 34, false)
+                .addOtherStructurePart("Focus Input Bus", addDotText(1))
+                .addMaintenanceHatch(addDotText(2))
+                .addEnergyHatch(addDotText(2))
+                .addInputBus(addDotText(3))
+                .addOutputBus(addDotText(4))
+                .addOtherStructurePart("Beamline Input Hatch", addDotText(5))
+                .toolTipFinisher("GTNH: Lanthanides");
         return tt;
     }
 

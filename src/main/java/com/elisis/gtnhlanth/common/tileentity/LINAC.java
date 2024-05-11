@@ -1,5 +1,6 @@
 package com.elisis.gtnhlanth.common.tileentity;
 
+import static com.elisis.gtnhlanth.util.DescTextLocalization.addDotText;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAdder;
 import static gregtech.api.enums.GT_HatchElement.Energy;
@@ -29,12 +30,14 @@ import com.elisis.gtnhlanth.common.register.LanthItemList;
 import com.elisis.gtnhlanth.common.tileentity.recipe.beamline.BeamlineRecipeLoader;
 import com.elisis.gtnhlanth.util.DescTextLocalization;
 import com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry;
+import com.gtnewhorizon.structurelib.StructureLib;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.GregTech_API;
+import gregtech.api.enums.ItemList;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -143,13 +146,21 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Particle Accelerator").addInfo("Controller block for the LINAC")
-                .addInfo("Extendable, with a minimum length of 18 blocks").addInfo(DescTextLocalization.BLUEPRINT_INFO)
+                //.addInfo("Extendable, with a minimum length of 18 blocks")
+                .addInfo(DescTextLocalization.BLUEPRINT_INFO)
                 .addInfo(DescTextLocalization.BEAMLINE_SCANNER_INFO).addSeparator()
-                .beginVariableStructureBlock(7, 7, 7, 7, 18, 256, false).addController("Front bottom")
-                .addEnergyHatch("Hint block with dot 1").addMaintenanceHatch("Hint block with dot 1")
-                .addInputHatch("Hint block with dot 2").addOutputHatch("Hint block with dot 2")
-                .addOtherStructurePart("Beamline Input Hatch", "Hint block with dot 3")
-                .addOtherStructurePart("Beamline Output Hatch", "Hint block with dot 4")
+                .beginVariableStructureBlock(7, 7, 7, 7, 24, 88, false).addController("Front bottom")
+                .addCasingInfoRange(LanthItemList.SHIELDED_ACCELERATOR_CASING.getLocalizedName(), 310, 1270, false)
+                .addCasingInfoRange(LanthItemList.COOLANT_DELIVERY_CASING.getLocalizedName(), 142, 846, false)
+                .addCasingInfoRange(LanthItemList.SHIELDED_ACCELERATOR_GLASS.getLocalizedName(), 118, 694, false)
+                .addCasingInfoRange("Superconducting Coil Block", 56, 312, false)
+                .addCasingInfoRange(LanthItemList.ELECTRODE_CASING.getLocalizedName(), 138, 714, false)
+                .addCasingInfoExactly("Grate Machine Casing", 47, false)
+                .addCasingInfoExactly("Borosilicate Glass", 48, true)
+                .addEnergyHatch(addDotText(1)).addMaintenanceHatch(addDotText(1))
+                .addInputHatch(addDotText(2)).addOutputHatch(addDotText(2))
+                .addOtherStructurePart("Beamline Input Hatch", addDotText(3))
+                .addOtherStructurePart("Beamline Output Hatch",addDotText(4))
 
                 .toolTipFinisher("GTNH: Lanthanides");;
         return tt;
@@ -549,7 +560,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 
         buildPiece(STRUCTURE_PIECE_BASE, stackSize, hintsOnly, 3, 6, 0);
 
-        int lLength = Math.max(stackSize.stackSize - 16, 8); // !!
+        int lLength = Math.max(stackSize.stackSize + 7, 8); // !!
 
         if (!(lLength % 2 == 0)) {
             lLength++; // Otherwise you get gaps at the end
@@ -563,6 +574,8 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         }
 
         buildPiece(STRUCTURE_PIECE_END, stackSize, hintsOnly, 3, 6, -(lLength + 2));
+        
+        StructureLib.addClientSideChatMessages("Length " + (16 + lLength) + " blocks.");
     }
 
     @Override
@@ -575,7 +588,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 
         if (build >= 0) return build; // Incomplete
 
-        int lLength = Math.max(stackSize.stackSize - 16, 8); // !!
+        int lLength = Math.max(stackSize.stackSize + 7, 8); // !!
 
         if (!(lLength % 2 == 0)) {
             lLength++; // Otherwise you get gaps at the end
@@ -590,8 +603,8 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
             if (build >= 0) return build;
 
         }
-
-        return survivialBuildPiece(
+        
+        int finalOutput = survivialBuildPiece(
                 STRUCTURE_PIECE_END,
                 stackSize,
                 3,
@@ -601,6 +614,11 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
                 env,
                 false,
                 true);
+        
+        if (finalOutput >= 0) // Prevent repeating messages
+        	StructureLib.addClientSideChatMessages("Length " + (16 + lLength) + " blocks.");
+        
+        return finalOutput;
     }
 
     @Override

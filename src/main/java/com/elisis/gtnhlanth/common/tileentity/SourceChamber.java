@@ -1,6 +1,7 @@
 package com.elisis.gtnhlanth.common.tileentity;
 
 import static com.elisis.gtnhlanth.util.DescTextLocalization.BLUEPRINT_INFO;
+import static com.elisis.gtnhlanth.util.DescTextLocalization.addDotText;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static gregtech.api.enums.GT_HatchElement.Energy;
 import static gregtech.api.enums.GT_HatchElement.InputBus;
@@ -109,12 +110,12 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Particle Source").addInfo("Controller block for the Source Chamber").addInfo(BLUEPRINT_INFO)
                 .addInfo(DescTextLocalization.BEAMLINE_SCANNER_INFO).addSeparator().beginStructureBlock(5, 5, 6, true)
-                .addController("Front bottom").addCasingInfoExactly("Shielded Accelerator Casing", 56, false)
-                .addCasingInfoExactly("Shielded Accelerator Glass", 52, false)
-                .addCasingInfoExactly("Electrode Casing", 16, false)
-                .addOtherStructurePart("Beamline Output Hatch", "Hint block with dot 4")
-                .addEnergyHatch("Hint block with dot 3").addMaintenanceHatch("Hint block with dot 3")
-                .addInputBus("Hint block with dot 1").addOutputBus("Hint block with dot 2")
+                .addController("Front bottom").addCasingInfoExactly(LanthItemList.SHIELDED_ACCELERATOR_CASING.getLocalizedName(), 56, false)
+                .addCasingInfoExactly(LanthItemList.SHIELDED_ACCELERATOR_GLASS.getLocalizedName(), 52, false)
+                .addCasingInfoExactly(LanthItemList.ELECTRODE_CASING.getLocalizedName(), 16, false)
+                .addOtherStructurePart("Beamline Output Hatch", addDotText(4))
+                .addEnergyHatch(addDotText(3)).addMaintenanceHatch(addDotText(3))
+                .addInputBus(addDotText(1)).addOutputBus(addDotText(2))
                 .toolTipFinisher("GTNH: Lanthanides");;
         return tt;
     }
@@ -343,7 +344,10 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        return checkPiece("sc", 2, 4, 0);
+        return checkPiece("sc", 2, 4, 0) 
+        		&& this.mMaintenanceHatches.size() == 1 && this.mInputBusses.size() == 1
+        		&& this.mOutputBusses.size() == 1 && this.mOutputBeamline.size() == 1 
+        		&& this.mEnergyHatches.size() == 1;
     }
 
     @Override
