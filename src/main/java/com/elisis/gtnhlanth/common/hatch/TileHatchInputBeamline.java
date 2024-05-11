@@ -35,7 +35,7 @@ public class TileHatchInputBeamline extends TileHatchBeamlineConnector<BeamLineP
         super.registerIcons(aBlockIconRegister);
         EM_D_ACTIVE = new Textures.BlockIcons.CustomIcon("iconsets/OVERLAY_BI_ACTIVE");
         EM_D_SIDES = new Textures.BlockIcons.CustomIcon("iconsets/OVERLAY_BI_SIDES");
-        EM_D_CONN = new Textures.BlockIcons.CustomIcon("iconsets/BO_CONN");
+        EM_D_CONN = new Textures.BlockIcons.CustomIcon("iconsets/BI_CONN");
     }
 
     @Override
