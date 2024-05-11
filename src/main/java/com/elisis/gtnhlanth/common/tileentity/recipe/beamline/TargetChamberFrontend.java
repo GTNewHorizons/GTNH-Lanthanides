@@ -4,6 +4,9 @@ import static gregtech.api.util.GT_Utility.trans;
 
 import java.util.List;
 
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
+
 import com.elisis.gtnhlanth.util.Util;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 
@@ -15,8 +18,6 @@ import gregtech.api.util.GT_Utility;
 import gregtech.common.gui.modularui.UIHelper;
 import gregtech.nei.GT_NEI_DefaultHandler;
 import gregtech.nei.RecipeDisplayInfo;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
 
 public class TargetChamberFrontend extends RecipeMapFrontend {
 
@@ -32,22 +33,27 @@ public class TargetChamberFrontend extends RecipeMapFrontend {
         drawMetadataInfo(recipeInfo);
         drawRecipeOwnerInfo(recipeInfo);
     }
-    
+
     @Override
     protected void drawNEIOverlayForInput(GT_NEI_DefaultHandler.FixedPositionedStack stack) {
-    	if (stack.isNotConsumed()) { // The stack actually takes damage, but is technically still not considered to be consumed by the code
-    		drawNEIOverlayText("PC", stack);
-    	}
+        if (stack.isNotConsumed()) { // The stack actually takes damage, but is technically still not considered to be
+                                     // consumed by the code
+            drawNEIOverlayText("PC", stack);
+        }
     }
-    
+
     @Override
     protected List<String> handleNEIItemInputTooltip(List<String> currentTip,
             GT_NEI_DefaultHandler.FixedPositionedStack pStack) {
-            if (pStack.isNotConsumed()) { // See above
-                currentTip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("gtnhlanth.tt.pc")); // Partially consumed: Takes damage in the process
-            }
-            return currentTip;
+        if (pStack.isNotConsumed()) { // See above
+            currentTip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("gtnhlanth.tt.pc")); // Partially
+                                                                                                         // consumed:
+                                                                                                         // Takes damage
+                                                                                                         // in the
+                                                                                                         // process
         }
+        return currentTip;
+    }
 
     @Override
     public void drawEnergyInfo(RecipeDisplayInfo recipeInfo) {
