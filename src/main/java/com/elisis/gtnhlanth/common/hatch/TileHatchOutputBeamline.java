@@ -26,7 +26,7 @@ public class TileHatchOutputBeamline extends TileHatchBeamlineConnector<BeamLine
     public TileHatchOutputBeamline(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister aBlockIconRegister) {

@@ -4,7 +4,6 @@ import static com.github.technus.tectech.util.CommonValues.MOVE_AT;
 import static gregtech.api.enums.Dyes.MACHINE_METAL;
 import static net.minecraft.util.StatCollector.translateToLocalFormatted;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,8 +16,6 @@ import com.elisis.gtnhlanth.common.beamline.IConnectsToBeamline;
 import com.github.technus.tectech.mechanics.dataTransport.DataPacket;
 import com.github.technus.tectech.util.TT_Utility;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.Dyes;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
@@ -47,7 +44,6 @@ public abstract class TileHatchBeamlineConnector<T extends DataPacket> extends G
     protected TileHatchBeamlineConnector(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, 0, aDescription, aTextures);
     }
-
 
     @Override
     public ITexture[] getTexturesActive(ITexture aBaseTexture) {
