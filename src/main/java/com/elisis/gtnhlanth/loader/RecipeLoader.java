@@ -117,6 +117,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashSet;
 
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
@@ -282,10 +284,48 @@ public class RecipeLoader {
                         GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Gold, 16),
                         GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Tungsten, 2))
                 .itemOutputs(new ItemStack(LanthItemList.FOCUS_MANIPULATION_CASING))
-                .metadata(GT_RecipeConstants.RESEARCH_ITEM, ItemList.Hatch_Input_Bus_ULV.get(1))
+                .metadata(GT_RecipeConstants.RESEARCH_ITEM, new ItemStack(LanthItemList.maskMap.get(MaskList.BLANK1)))
                 .metadata(GT_RecipeConstants.RESEARCH_TIME, 20 * GT_RecipeBuilder.MINUTES)
                 .duration(60 * GT_RecipeBuilder.SECONDS).eut(1920).addTo(AssemblyLine);
 
+        // Target Holder
+        GameRegistry.addShapedRecipe(new ItemStack(LanthItemList.TARGET_HOLDER),  new Object[] {
+        		"MCM", 
+        		"MHM", 
+        		"MCM", 
+        			'M', WerkstoffMaterialPool.MuMetal.get(OrePrefixes.plateDense, 1), 
+        			'H', ItemList.Hull_LuV.get(1), 
+        			'C', ItemList.Conveyor_Module_LuV.get(1)});
+        
+        // Focus Input Bus
+        GameRegistry.addShapedRecipe(LanthItemList.BEAMLINE_FOCUS_INPUT_BUS, 
+        		"MCM",
+        		"McM",
+        		"RCR",
+        			'M', WerkstoffMaterialPool.MuMetal.get(OrePrefixes.plateDense, 1),
+        			'C', ItemList.Conveyor_Module_HV.get(1),
+        			'R', ItemList.Robot_Arm_HV.get(1),
+        			'c', new ItemStack(Blocks.chest, 1, 32767));
+        
+        // Target Receptacle, same thing as Focus Manipulator basically
+        GT_Values.RA.stdBuilder()
+        	.fluidInputs(
+        			Materials.SolderingAlloy.getMolten(8000), 
+        			Materials.Gold.getMolten(2000), 
+        			Materials.Argon.getGas(1000))
+        	.itemInputs(
+        			GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Aluminium, 1),
+        			new Object[] { OrePrefixes.circuit.get(Materials.Elite), 4 },
+        			ItemList.Robot_Arm_LuV.get(2),
+                    ItemList.Robot_Arm_LuV.get(2),
+                    GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Gold, 16),
+                    GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Tungsten, 2))
+        	.itemOutputs(new ItemStack(LanthItemList.TARGET_RECEPTACLE_CASING))
+        	.metadata(GT_RecipeConstants.RESEARCH_ITEM, ItemList.Circuit_Silicon_Wafer.get(1))
+        	.metadata(GT_RecipeConstants.RESEARCH_TIME, 20 * GT_RecipeBuilder.MINUTES)
+        	.duration(60 * GT_RecipeBuilder.SECONDS).eut(1920).addTo(AssemblyLine);
+                    		
+        
         // Capillary Exchange
         GT_Values.RA.addAssemblerRecipe(
                 new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.pipeTiny, Materials.TungstenSteel, 8),
