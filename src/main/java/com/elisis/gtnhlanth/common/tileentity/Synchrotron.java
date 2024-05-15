@@ -2,20 +2,15 @@ package com.elisis.gtnhlanth.common.tileentity;
 
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAdder;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
+import static gregtech.api.enums.GT_HatchElement.Energy;
+import static gregtech.api.enums.GT_HatchElement.InputHatch;
+import static gregtech.api.enums.GT_HatchElement.Maintenance;
+import static gregtech.api.enums.GT_HatchElement.OutputHatch;
 import static gregtech.api.enums.GT_Values.VN;
-import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
+import static gregtech.api.util.GT_StructureUtility.buildHatchAdder;
 
 import java.util.ArrayList;
 import java.util.Objects;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 
 import com.elisis.gtnhlanth.common.beamline.BeamInformation;
 import com.elisis.gtnhlanth.common.beamline.BeamLinePacket;
@@ -25,8 +20,10 @@ import com.elisis.gtnhlanth.common.hatch.TileHatchInputBeamline;
 import com.elisis.gtnhlanth.common.hatch.TileHatchOutputBeamline;
 import com.elisis.gtnhlanth.common.register.LanthItemList;
 import com.elisis.gtnhlanth.common.tileentity.recipe.beamline.BeamlineRecipeLoader;
+import com.google.common.collect.ImmutableMap;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.GregTech_API;
@@ -39,6 +36,13 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffl
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Utility;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchrotron>
         implements ISurvivalConstructable {
@@ -416,19 +420,19 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
                 ).addElement('c', ofBlock(LanthItemList.SHIELDED_ACCELERATOR_CASING, 0))
                 .addElement('k', ofBlock(GregTech_API.sBlockCasings1, 15)) // Superconducting coils
                 .addElement('d', ofBlock(LanthItemList.COOLANT_DELIVERY_CASING, 0))
-                .addElement('e', ofHatchAdder(Synchrotron::addEnergyInputToMachineList, CASING_INDEX, 2))
+                .addElement('e', buildHatchAdder(Synchrotron.class).atLeast(ImmutableMap.of(Energy, 4)).dot(6).casingIndex(CASING_INDEX).build())
                 .addElement('n', ofBlock(GregTech_API.sBlockMetal5, 5)) //Niobium Blocks
                 .addElement('a', ofBlockAdder(Synchrotron::addAntenna, LanthItemList.ANTENNA_CASING_T1, 3)) //Antenna Casings
-                .addElement('i', ofHatchAdder(Synchrotron::addInputHatchToMachineList, CASING_INDEX, 2))
-                .addElement('o', ofHatchAdder(Synchrotron::addOutputHatchToMachineList, CASING_INDEX, 2))
-                .addElement('v', ofHatchAdder(Synchrotron::addBeamlineInputHatch, CASING_INDEX, 2))
-                .addElement('b', ofHatchAdder(Synchrotron::addBeamlineOutputHatch, CASING_INDEX, 2))
+                .addElement('i', buildHatchAdder(Synchrotron.class).atLeast(ImmutableMap.of(InputHatch, 2)).dot(4).casingIndex(CASING_INDEX).build())
+                .addElement('o', buildHatchAdder(Synchrotron.class).atLeast(ImmutableMap.of(OutputHatch, 2)).dot(5).casingIndex(CASING_INDEX).build())
+                .addElement('v', buildHatchAdder(Synchrotron.class).hatchClass(TileHatchInputBeamline.class).casingIndex(CASING_INDEX)
+                        .dot(1).adder(Synchrotron::addBeamlineInputHatch).build())
+                .addElement('b', buildHatchAdder(Synchrotron.class).hatchClass(TileHatchOutputBeamline.class).casingIndex(CASING_INDEX)
+                        .dot(2).adder(Synchrotron::addBeamlineOutputHatch).build())
                 
-                .addElement(
-                		'j',
-                		ofChain(
-                			ofHatchAdder(Synchrotron::addMaintenanceToMachineList, CASING_INDEX, 2),
-                			ofBlock(LanthItemList.SHIELDED_ACCELERATOR_CASING, 0)))
+                .addElement('j', 
+                		buildHatchAdder(Synchrotron.class).atLeast(Maintenance).dot(3).casingIndex(CASING_INDEX)
+                		.buildAndChain(LanthItemList.SHIELDED_ACCELERATOR_CASING, 0))
                 
                 .build();
         
@@ -512,6 +516,19 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
         return null;
     }
 
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        
+        int build = survivialBuildPiece(STRUCTURE_PIECE_ENTRANCE, stackSize, 16, 3, 1, elementBudget, env, false, true);
+        
+        if (build >= 0)
+        	return build;
+        
+        return survivialBuildPiece(STRUCTURE_PIECE_BASE, stackSize, 16, 3, 0, elementBudget, env, false, true);
+   
+    }
+    
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         buildPiece(STRUCTURE_PIECE_ENTRANCE, stackSize, hintsOnly, 16, 3, 1);

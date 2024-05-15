@@ -83,6 +83,7 @@ import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.Ytterbi
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.YtterbiumExtractingNanoResin;
 import static com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool.YtterbiumOreConcentrate;
 import static gregtech.api.enums.OrePrefixes.blockCasingAdvanced;
+import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 import static gregtech.api.recipe.RecipeMaps.autoclaveRecipes;
 import static gregtech.api.recipe.RecipeMaps.blastFurnaceRecipes;
 import static gregtech.api.recipe.RecipeMaps.centrifugeNonCellRecipes;
@@ -117,18 +118,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashSet;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraft.item.crafting.ShapelessRecipes;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
-
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import com.dreammaster.gthandler.CustomItemList;
@@ -138,8 +127,8 @@ import com.elisis.gtnhlanth.common.register.BotWerkstoffMaterialPool;
 import com.elisis.gtnhlanth.common.register.LanthItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 import com.github.bartimaeusnek.bartworks.system.material.BW_GT_MaterialReference;
-import com.github.bartimaeusnek.bartworks.system.material.GT_Enhancement.PlatinumSludgeOverHaul;
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
+import com.github.bartimaeusnek.bartworks.system.material.GT_Enhancement.PlatinumSludgeOverHaul;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -157,6 +146,17 @@ import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_RecipeBuilder;
 import gregtech.api.util.GT_RecipeConstants;
 import gregtech.api.util.GT_Utility;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 public class RecipeLoader {
 
@@ -165,6 +165,49 @@ public class RecipeLoader {
     @SuppressWarnings("deprecation")
     public static void loadAccelerator() {
 
+    	/* Actual Beamline Multiblocks */
+    	
+    	// SC
+    	GT_Values.RA.stdBuilder()
+    		.fluidInputs(Materials.SolderingAlloy.getMolten(288))
+    		.itemInputs(
+    				ItemList.Hull_LuV.get(1), 
+    				WerkstoffMaterialPool.MuMetal.get(OrePrefixes.plateDense, 8), 
+    				GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Ultimate, 4),
+    				ItemList.Conveyor_Module_LuV.get(4),
+    				GT_Utility.copyAmount(2, LanthItemList.BEAMLINE_PIPE),
+    				GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.VanadiumGallium, 2),
+    				GT_Utility.getIntegratedCircuit(16)
+    				
+    				)
+    		.itemOutputs(LanthItemList.SOURCE_CHAMBER)
+    		.duration(30 * GT_RecipeBuilder.SECONDS)
+    		.eut(7680)
+    		.addTo(assemblerRecipes);
+    	
+    	
+    	// LINAC
+    	GT_Values.RA.stdBuilder()
+    		.fluidInputs(Materials.SolderingAlloy.getMolten(288))
+    		.itemInputs(
+    				ItemList.Hull_LuV.get(1),
+    				WerkstoffMaterialPool.MuMetal.get(OrePrefixes.plateDense, 8),
+    				ItemList.Casing_Coil_Superconductor.get(2),
+    				GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Ultimate, 8),
+    				ItemList.Electric_Pump_LuV.get(2),
+    				GT_Utility.copyAmount(2, LanthItemList.BEAMLINE_PIPE),
+    				GT_OreDictUnificator.get(OrePrefixes.cableGt08, Materials.VanadiumGallium, 2),
+    				GT_Utility.getIntegratedCircuit(16)
+    				
+    				
+    				)
+    		.itemOutputs(LanthItemList.LINAC)
+    		.duration(60 * GT_RecipeBuilder.SECONDS).eut(7680)
+    		.addTo(assemblerRecipes);
+    		
+    	
+    	
+    	
         /*
          * //Permalloy GT_Values.RA.addMixerRecipe( GT_Utility.getIntegratedCircuit(4), Materials.Nickel.getDust(4),
          * Materials.Iron.getDust(1), Materials.Molybdenum.getDust(1), null, null,

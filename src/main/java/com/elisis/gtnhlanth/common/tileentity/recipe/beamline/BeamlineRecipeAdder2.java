@@ -120,14 +120,14 @@ public class BeamlineRecipeAdder2 {
 
     /***
      *
-     * @param itemInput   - The item to be used as a target
+     * @param itemInput   - The item to be used as a target. Should have durability
      * @param itemOutput  - duh
      * @param particleId  - The ID of the {@link com.elisis.gtnhlanth.common.beamline.Particle} used by the recipe. It
      *                    is recommended to use Particle#ordinal()
      * @param amount      - The total amount of particles required for the recipe to come to completion. The duration of
      *                    the recipe will be determined by this and the input particle rate.
-     * @param minEnergy   - The minimum energy amount required by this recipe
-     * @param maxEnergy   - The maximum energy amount allowed by this recipe
+     * @param minEnergy   - The minimum energy amount required by this recipe in keV (inclusive)
+     * @param maxEnergy   - The maximum energy amount allowed by this recipe in keV (inclusive)
      * @param minFocus    - Minimum focus allowed by the recipe
      * @param energyRatio - Set high for little-to-no EUt energy scaling, low for the opposite
      * @param minEUt      - Minimum EUt required for the recipe to start

@@ -86,7 +86,7 @@ public class BeamlineRecipeLoader {
                 4270,
                 90,
                 999,
-                512);
+                480);
 
         /*
          * TARGET CHAMBER
@@ -138,7 +138,7 @@ public class BeamlineRecipeLoader {
              */
 
         }
-
+/*
         BeamlineRecipeAdder2.instance.addTargetChamberRecipe(
                 new ItemStack(Items.coal, 1),
                 new ItemStack(Items.diamond, 1),
@@ -161,7 +161,31 @@ public class BeamlineRecipeLoader {
                 10,
                 60,
                 1,
-                1920);
+                1920);*/
+        
+        BeamlineRecipeAdder2.instance.addTargetChamberRecipe(
+        		new ItemStack(Items.chicken, 1), 
+        		new ItemStack(Items.cooked_chicken), 
+        		null, 
+        		Particle.PHOTON.ordinal(), 
+        		400, 
+        		5, 
+        		20, 
+        		80, 
+        		1, 
+        		7864320);
+        
+        BeamlineRecipeAdder2.instance.addTargetChamberRecipe(
+        		new ItemStack(Items.chicken, 1), 
+        		new ItemStack(Items.egg), 
+        		null, 
+        		Particle.PHOTON.ordinal(), 
+        		400, 
+        		21, 
+        		600, 
+        		80, 
+        		1, 
+        		7864320);
 
     }
 }
