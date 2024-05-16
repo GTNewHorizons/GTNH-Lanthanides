@@ -1,5 +1,6 @@
 package com.elisis.gtnhlanth.common.tileentity;
 
+import static com.elisis.gtnhlanth.util.DescTextLocalization.addDotText;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAdder;
 import static gregtech.api.enums.GT_HatchElement.Energy;
@@ -28,6 +29,7 @@ import com.elisis.gtnhlanth.common.hatch.TileHatchInputBeamline;
 import com.elisis.gtnhlanth.common.hatch.TileHatchOutputBeamline;
 import com.elisis.gtnhlanth.common.register.LanthItemList;
 import com.elisis.gtnhlanth.common.tileentity.recipe.beamline.BeamlineRecipeLoader;
+import com.elisis.gtnhlanth.util.DescTextLocalization;
 import com.google.common.collect.ImmutableMap;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -474,6 +476,23 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Particle Accelerator").addInfo("Controller block for the Synchrotron")
                 .addInfo("Torus-shaped, accelerates electrons to produce high-energy electromagnetic radiation")
+                .addInfo(DescTextLocalization.BLUEPRINT_INFO)
+                .addInfo(DescTextLocalization.BEAMLINE_SCANNER_INFO)
+                .addSeparator()
+                .beginStructureBlock(36, 7, 34, true)
+                .addController("Front middle")
+                .addCasingInfoExactly(LanthItemList.SHIELDED_ACCELERATOR_CASING.getLocalizedName(), 660, false)
+                .addCasingInfoExactly("Superconducting Coil Block", 90, false)
+                .addCasingInfoExactly("Niobium Block", 64, false)
+                .addCasingInfoExactly(LanthItemList.COOLANT_DELIVERY_CASING.getLocalizedName(), 28, false)
+                .addCasingInfoExactly("Antenna Casing (must match)", 4, true)
+                .addOtherStructurePart("Beamline Input Hatch", addDotText(1))
+                .addOtherStructurePart("Beamline Output Hatch", addDotText(2))
+                .addMaintenanceHatch(addDotText(3))
+                .addInputHatch(addDotText(4))
+                .addOutputHatch(addDotText(5))
+                .addEnergyHatch(addDotText(6))
+                
                 .toolTipFinisher("GTNH: Lanthanides");
         return tt;
     }
