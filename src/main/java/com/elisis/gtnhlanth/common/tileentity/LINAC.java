@@ -85,6 +85,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
                 .addShape(
                         STRUCTURE_PIECE_END,
                         new String[][] {
+                        		{ "cckkkcc", "cdvvvdc", "kvvvvvk", "kdv-vdk", "kvvvvvk", "cdvvvdc", "ccccccc" },
                                 { "cckhkcc", "cdddddc", "kdyyydk", "kdy-ydk", "kdyyydk", "cdddddc", "ccccccc" },
                                 { "cckkkcc", "cdvvvdc", "kvvvvvk", "kdv-vdk", "kvvvvvk", "cdvvvdc", "ccccccc" },
                                 { "cckkkcc", "cdddddc", "kdyyydk", "kdy-ydk", "kdyyydk", "cdddddc", "ccccccc" },
@@ -147,12 +148,12 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         tt.addMachineType("Particle Accelerator").addInfo("Controller block for the LINAC")
                 // .addInfo("Extendable, with a minimum length of 18 blocks")
                 .addInfo(DescTextLocalization.BLUEPRINT_INFO).addInfo(DescTextLocalization.BEAMLINE_SCANNER_INFO)
-                .addSeparator().beginVariableStructureBlock(7, 7, 7, 7, 24, 88, false).addController("Front bottom")
-                .addCasingInfoRange(LanthItemList.SHIELDED_ACCELERATOR_CASING.getLocalizedName(), 310, 1270, false)
-                .addCasingInfoRange(LanthItemList.COOLANT_DELIVERY_CASING.getLocalizedName(), 142, 846, false)
-                .addCasingInfoRange(LanthItemList.SHIELDED_ACCELERATOR_GLASS.getLocalizedName(), 118, 694, false)
+                .addSeparator().beginVariableStructureBlock(7, 7, 7, 7, 19, 83, false).addController("Front bottom")
+                .addCasingInfoRange(LanthItemList.SHIELDED_ACCELERATOR_CASING.getLocalizedName(), 325, 1285, false)
+                .addCasingInfoRange(LanthItemList.COOLANT_DELIVERY_CASING.getLocalizedName(), 148, 852, false)
+                .addCasingInfoRange(LanthItemList.SHIELDED_ACCELERATOR_GLASS.getLocalizedName(), 127, 703, false)
                 .addCasingInfoRange("Superconducting Coil Block", 56, 312, false)
-                .addCasingInfoRange(LanthItemList.ELECTRODE_CASING.getLocalizedName(), 138, 714, false)
+                .addCasingInfoRange(LanthItemList.ELECTRODE_CASING.getLocalizedName(), 156, 732, false)
                 .addCasingInfoExactly("Grate Machine Casing", 47, false)
                 .addCasingInfoExactly("Borosilicate Glass", 48, true).addEnergyHatch(addDotText(1))
                 .addMaintenanceHatch(addDotText(1)).addInputHatch(addDotText(2)).addOutputHatch(addDotText(2))
@@ -545,6 +546,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 
         // if (!checkPiece(STRUCTURE_PIECE_END, 3, 6, -length)) return false;
 
+        // Likely off by one or two, not visible to player however so doesn't particularly matter
         length += 8;
 
         return this.mInputBeamline.size() == 1 && this.mOutputBeamline.size() == 1
@@ -572,7 +574,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 
         buildPiece(STRUCTURE_PIECE_END, stackSize, hintsOnly, 3, 6, -(lLength + 2));
 
-        StructureLib.addClientSideChatMessages("Length " + (16 + lLength) + " blocks.");
+        StructureLib.addClientSideChatMessages("Length " + (11 + lLength) + " blocks.");
     }
 
     @Override
@@ -612,8 +614,8 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
                 false,
                 true);
 
-        if (finalOutput >= 0) // Prevent repeating messages
-            StructureLib.addClientSideChatMessages("Length " + (16 + lLength) + " blocks.");
+        //if (finalOutput >= 0) // Prevent repeating messages
+            //StructureLib.addClientSideChatMessages("Length " + (11 + lLength) + " blocks.");
 
         return finalOutput;
     }
