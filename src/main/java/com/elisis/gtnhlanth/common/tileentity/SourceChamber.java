@@ -344,6 +344,9 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+
+        this.mOutputBeamline.clear(); // Necessary due to the nature of the beamline hatch adder
+
         return checkPiece("sc", 2, 4, 0) && this.mMaintenanceHatches.size() == 1
                 && this.mInputBusses.size() == 1
                 && this.mOutputBusses.size() == 1

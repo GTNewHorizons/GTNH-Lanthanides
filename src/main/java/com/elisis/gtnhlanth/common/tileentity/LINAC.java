@@ -45,6 +45,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energ
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Utility;
+import gregtech.api.util.shutdown.SimpleShutDownReason;
 
 public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> implements ISurvivalConstructable {
 
@@ -225,6 +226,8 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 
         ArrayList<FluidStack> tFluidInputs = this.getStoredFluids();
         if (tFluidInputs.size() == 0) {
+            this.doRandomMaintenanceDamage(); // Penalise letting coolant run dry
+            this.stopMachine(SimpleShutDownReason.ofCritical("gtnhlanth.nocoolant"));
             return false;
         }
 
@@ -303,7 +306,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         if (primFluid.amount < fluidConsumed || (!primFluid.isFluidEqual(FluidRegistry.getFluidStack("ic2coolant", 1))
                 && primFluid.getFluid().getTemperature() > 200)) {
 
-            stopMachine();
+            this.stopMachine(SimpleShutDownReason.ofCritical("gtnhlanth.inscoolant"));
             return false;
         }
 
@@ -368,6 +371,12 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         outputRate = 0;
         super.stopMachine();
     }
+    /*
+     * @Override protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
+     * super.drawTexts(screenElements, inventorySlot); screenElements.widget( new
+     * TextWidget(StatCollector.translateToLocal("gtnhlanth.error.nocoolant")) // No coolant present in machine!
+     * .setDefaultColor(EnumChatFormatting.WHITE).setEnabled(this.getStoredFluids().size() == 0)); }
+     */
 
     @Override
     public String[] getInfoData() {
