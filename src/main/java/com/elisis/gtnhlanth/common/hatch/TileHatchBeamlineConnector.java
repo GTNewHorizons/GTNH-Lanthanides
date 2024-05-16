@@ -1,14 +1,7 @@
 package com.elisis.gtnhlanth.common.hatch;
 
 import static com.github.technus.tectech.util.CommonValues.MOVE_AT;
-import static gregtech.api.enums.Dyes.MACHINE_METAL;
 import static net.minecraft.util.StatCollector.translateToLocalFormatted;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 
@@ -16,19 +9,17 @@ import com.elisis.gtnhlanth.common.beamline.IConnectsToBeamline;
 import com.github.technus.tectech.mechanics.dataTransport.DataPacket;
 import com.github.technus.tectech.util.TT_Utility;
 
-import gregtech.api.enums.Dyes;
-import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
-import gregtech.api.objects.GT_RenderedTexture;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.fluids.FluidStack;
 
 public abstract class TileHatchBeamlineConnector<T extends DataPacket> extends GT_MetaTileEntity_Hatch
         implements IConnectsToBeamline {
-
-    public static Textures.BlockIcons.CustomIcon EM_D_SIDES;
-    public static Textures.BlockIcons.CustomIcon EM_D_ACTIVE;
-    public static Textures.BlockIcons.CustomIcon EM_D_CONN;
 
     private String clientLocale = "en_US";
 
@@ -43,24 +34,6 @@ public abstract class TileHatchBeamlineConnector<T extends DataPacket> extends G
 
     protected TileHatchBeamlineConnector(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, 0, aDescription, aTextures);
-    }
-
-    @Override
-    public ITexture[] getTexturesActive(ITexture aBaseTexture) {
-        return new ITexture[] { aBaseTexture,
-                new GT_RenderedTexture(
-                        EM_D_ACTIVE,
-                        Dyes.getModulation(getBaseMetaTileEntity().getColorization(), MACHINE_METAL.getRGBA())),
-                new GT_RenderedTexture(EM_D_CONN) };
-    }
-
-    @Override
-    public ITexture[] getTexturesInactive(ITexture aBaseTexture) {
-        return new ITexture[] { aBaseTexture,
-                new GT_RenderedTexture(
-                        EM_D_SIDES,
-                        Dyes.getModulation(getBaseMetaTileEntity().getColorization(), MACHINE_METAL.getRGBA())),
-                new GT_RenderedTexture(EM_D_CONN) };
     }
 
     @Override

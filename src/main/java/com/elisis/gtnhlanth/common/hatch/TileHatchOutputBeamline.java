@@ -1,23 +1,32 @@
 package com.elisis.gtnhlanth.common.hatch;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
+import static gregtech.api.enums.Dyes.MACHINE_METAL;
 
 import com.elisis.gtnhlanth.common.beamline.BeamLinePacket;
 import com.elisis.gtnhlanth.common.beamline.IConnectsToBeamline;
 import com.elisis.gtnhlanth.common.beamline.TileBeamline;
 import com.github.technus.tectech.util.TT_Utility;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import gregtech.api.enums.Dyes;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.objects.GT_RenderedTexture;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileHatchOutputBeamline extends TileHatchBeamlineConnector<BeamLinePacket> implements IConnectsToBeamline {
 
+	private static final String activeIconPath = "iconsets/OVERLAY_BO_ACTIVE";
+    private static final String sideIconPath = "iconsets/OVERLAY_BO_SIDES";
+    private static final String connIconPath = "iconsets/BO_CONN";
+    
+    private static final Textures.BlockIcons.CustomIcon activeIcon = new Textures.BlockIcons.CustomIcon(activeIconPath);
+    private static final Textures.BlockIcons.CustomIcon sideIcon = new Textures.BlockIcons.CustomIcon(sideIconPath);
+    private static final Textures.BlockIcons.CustomIcon connIcon = new Textures.BlockIcons.CustomIcon(connIconPath);
+
+	
     public TileHatchOutputBeamline(int id, String name, String nameRegional, int tier) {
         super(id, name, nameRegional, tier, "");
         TT_Utility.setTier(tier, this);
@@ -28,12 +37,21 @@ public class TileHatchOutputBeamline extends TileHatchBeamlineConnector<BeamLine
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister aBlockIconRegister) {
-        super.registerIcons(aBlockIconRegister);
-        EM_D_ACTIVE = new Textures.BlockIcons.CustomIcon("iconsets/OVERLAY_BO_ACTIVE");
-        EM_D_SIDES = new Textures.BlockIcons.CustomIcon("iconsets/OVERLAY_BO_SIDES");
-        EM_D_CONN = new Textures.BlockIcons.CustomIcon("iconsets/BO_CONN");
+    public ITexture[] getTexturesActive(ITexture aBaseTexture) {
+        return new ITexture[] { aBaseTexture,
+                new GT_RenderedTexture(
+                        activeIcon,
+                        Dyes.getModulation(getBaseMetaTileEntity().getColorization(), MACHINE_METAL.getRGBA())),
+                new GT_RenderedTexture(connIcon)};
+    }
+
+    @Override
+    public ITexture[] getTexturesInactive(ITexture aBaseTexture) {
+        return new ITexture[] { aBaseTexture,
+                new GT_RenderedTexture(
+                        sideIcon,
+                        Dyes.getModulation(getBaseMetaTileEntity().getColorization(), MACHINE_METAL.getRGBA())),
+                new GT_RenderedTexture(connIcon)};
     }
 
     @Override
