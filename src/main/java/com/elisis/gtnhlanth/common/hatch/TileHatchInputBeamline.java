@@ -2,33 +2,32 @@ package com.elisis.gtnhlanth.common.hatch;
 
 import static gregtech.api.enums.Dyes.MACHINE_METAL;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
+
 import com.elisis.gtnhlanth.common.beamline.BeamLinePacket;
 import com.elisis.gtnhlanth.common.beamline.IConnectsToBeamline;
 import com.github.technus.tectech.util.TT_Utility;
 
 import gregtech.api.enums.Dyes;
 import gregtech.api.enums.Textures;
-import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.objects.GT_RenderedTexture;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileHatchInputBeamline extends TileHatchBeamlineConnector<BeamLinePacket> {
 
     private boolean delay = true;
 
-    
     private static final String activeIconPath = "iconsets/OVERLAY_BI_ACTIVE";
     private static final String sideIconPath = "iconsets/OVERLAY_BI_SIDES";
     private static final String connIconPath = "iconsets/BI_CONN";
-    
+
     private static final Textures.BlockIcons.CustomIcon activeIcon = new Textures.BlockIcons.CustomIcon(activeIconPath);
     private static final Textures.BlockIcons.CustomIcon sideIcon = new Textures.BlockIcons.CustomIcon(sideIconPath);
     private static final Textures.BlockIcons.CustomIcon connIcon = new Textures.BlockIcons.CustomIcon(connIconPath);
-    
+
     public TileHatchInputBeamline(int id, String name, String nameRegional, int tier) {
 
         super(id, name, nameRegional, tier, "");
@@ -45,7 +44,7 @@ public class TileHatchInputBeamline extends TileHatchBeamlineConnector<BeamLineP
                 new GT_RenderedTexture(
                         activeIcon,
                         Dyes.getModulation(getBaseMetaTileEntity().getColorization(), MACHINE_METAL.getRGBA())),
-                new GT_RenderedTexture(connIcon)};
+                new GT_RenderedTexture(connIcon) };
     }
 
     @Override
@@ -54,7 +53,7 @@ public class TileHatchInputBeamline extends TileHatchBeamlineConnector<BeamLineP
                 new GT_RenderedTexture(
                         sideIcon,
                         Dyes.getModulation(getBaseMetaTileEntity().getColorization(), MACHINE_METAL.getRGBA())),
-                new GT_RenderedTexture(connIcon)};
+                new GT_RenderedTexture(connIcon) };
     }
 
     @Override

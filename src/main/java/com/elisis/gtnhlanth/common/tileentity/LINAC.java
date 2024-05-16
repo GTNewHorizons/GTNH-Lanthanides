@@ -85,7 +85,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
                 .addShape(
                         STRUCTURE_PIECE_END,
                         new String[][] {
-                        		{ "cckkkcc", "cdvvvdc", "kvvvvvk", "kdv-vdk", "kvvvvvk", "cdvvvdc", "ccccccc" },
+                                { "cckkkcc", "cdvvvdc", "kvvvvvk", "kdv-vdk", "kvvvvvk", "cdvvvdc", "ccccccc" },
                                 { "cckhkcc", "cdddddc", "kdyyydk", "kdy-ydk", "kdyyydk", "cdddddc", "ccccccc" },
                                 { "cckkkcc", "cdvvvdc", "kvvvvvk", "kdv-vdk", "kvvvvvk", "cdvvvdc", "ccccccc" },
                                 { "cckkkcc", "cdddddc", "kdyyydk", "kdy-ydk", "kdyyydk", "cdddddc", "ccccccc" },
@@ -614,8 +614,8 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
                 false,
                 true);
 
-        //if (finalOutput >= 0) // Prevent repeating messages
-            //StructureLib.addClientSideChatMessages("Length " + (11 + lLength) + " blocks.");
+        // if (finalOutput >= 0) // Prevent repeating messages
+        // StructureLib.addClientSideChatMessages("Length " + (11 + lLength) + " blocks.");
 
         return finalOutput;
     }

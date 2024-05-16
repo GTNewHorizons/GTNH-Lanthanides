@@ -476,23 +476,17 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Particle Accelerator").addInfo("Controller block for the Synchrotron")
                 .addInfo("Torus-shaped, accelerates electrons to produce high-energy electromagnetic radiation")
-                .addInfo(DescTextLocalization.BLUEPRINT_INFO)
-                .addInfo(DescTextLocalization.BEAMLINE_SCANNER_INFO)
-                .addSeparator()
-                .beginStructureBlock(36, 7, 34, true)
-                .addController("Front middle")
+                .addInfo(DescTextLocalization.BLUEPRINT_INFO).addInfo(DescTextLocalization.BEAMLINE_SCANNER_INFO)
+                .addSeparator().beginStructureBlock(36, 7, 34, true).addController("Front middle")
                 .addCasingInfoExactly(LanthItemList.SHIELDED_ACCELERATOR_CASING.getLocalizedName(), 660, false)
                 .addCasingInfoExactly("Superconducting Coil Block", 90, false)
                 .addCasingInfoExactly("Niobium Block", 64, false)
                 .addCasingInfoExactly(LanthItemList.COOLANT_DELIVERY_CASING.getLocalizedName(), 28, false)
                 .addCasingInfoExactly("Antenna Casing (must match)", 4, true)
                 .addOtherStructurePart("Beamline Input Hatch", addDotText(1))
-                .addOtherStructurePart("Beamline Output Hatch", addDotText(2))
-                .addMaintenanceHatch(addDotText(3))
-                .addInputHatch(addDotText(4))
-                .addOutputHatch(addDotText(5))
-                .addEnergyHatch(addDotText(6))
-                
+                .addOtherStructurePart("Beamline Output Hatch", addDotText(2)).addMaintenanceHatch(addDotText(3))
+                .addInputHatch(addDotText(4)).addOutputHatch(addDotText(5)).addEnergyHatch(addDotText(6))
+
                 .toolTipFinisher("GTNH: Lanthanides");
         return tt;
     }
