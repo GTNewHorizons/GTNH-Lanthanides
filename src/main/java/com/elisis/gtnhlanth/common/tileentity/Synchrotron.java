@@ -13,14 +13,6 @@ import static gregtech.api.util.GT_StructureUtility.buildHatchAdder;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-
 import com.elisis.gtnhlanth.common.beamline.BeamInformation;
 import com.elisis.gtnhlanth.common.beamline.BeamLinePacket;
 import com.elisis.gtnhlanth.common.beamline.Particle;
@@ -46,6 +38,15 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffl
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Utility;
+import gregtech.api.util.shutdown.ShutDownReason;
+import gregtech.api.util.shutdown.SimpleShutDownReason;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchrotron>
         implements ISurvivalConstructable {
@@ -624,7 +625,12 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
 
         ArrayList<FluidStack> fluidList = this.getStoredFluids();
 
-        if (fluidList.size() == 0) return false;
+        if (fluidList.size() == 0) {
+        	
+        	this.stopMachine(SimpleShutDownReason.ofCritical("gtnhlanth.nocoolant"));
+        	
+        	return false;
+        }
 
         this.mEfficiency = (10000 - (this.getIdealStatus() - this.getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
@@ -708,7 +714,7 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
 
             // GT_Log.out.print("Primary fluid amount: " + primaryFluid.amount);
 
-            stopMachine();
+            stopMachine(SimpleShutDownReason.ofCritical("gtnhlanth.inscoolant"));
             return false;
         }
 
@@ -758,6 +764,19 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
         machineTemp = 0;
         super.stopMachine();
 
+    }
+    
+    @Override
+    public void stopMachine(ShutDownReason reason) {
+    	
+    	outputFocus = 0;
+        outputEnergy = 0;
+        outputParticle = 0;
+        outputRate = 0;
+        machineFocus = 0;
+        machineTemp = 0;
+        super.stopMachine(reason);
+    	
     }
 
     private BeamInformation getInputInformation() {

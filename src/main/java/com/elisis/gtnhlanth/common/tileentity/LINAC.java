@@ -45,6 +45,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energ
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Utility;
+import gregtech.api.util.shutdown.ShutDownReason;
 import gregtech.api.util.shutdown.SimpleShutDownReason;
 
 public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> implements ISurvivalConstructable {
@@ -371,6 +372,18 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         outputRate = 0;
         super.stopMachine();
     }
+    
+    @Override
+    public void stopMachine(ShutDownReason reason) {
+    	
+    	outputFocus = 0;
+        outputEnergy = 0;
+        outputParticle = 0;
+        outputRate = 0;
+        super.stopMachine(reason);
+    	
+    }
+    
     /*
      * @Override protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
      * super.drawTexts(screenElements, inventorySlot); screenElements.widget( new
