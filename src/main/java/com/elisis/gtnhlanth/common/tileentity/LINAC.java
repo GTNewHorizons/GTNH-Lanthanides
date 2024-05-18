@@ -372,18 +372,18 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         outputRate = 0;
         super.stopMachine();
     }
-    
+
     @Override
     public void stopMachine(ShutDownReason reason) {
-    	
-    	outputFocus = 0;
+
+        outputFocus = 0;
         outputEnergy = 0;
         outputParticle = 0;
         outputRate = 0;
         super.stopMachine(reason);
-    	
+
     }
-    
+
     /*
      * @Override protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
      * super.drawTexts(screenElements, inventorySlot); screenElements.widget( new
