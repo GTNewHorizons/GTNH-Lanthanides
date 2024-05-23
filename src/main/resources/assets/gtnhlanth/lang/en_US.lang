@@ -95,6 +95,7 @@ beamline.amount=Amount
 beamline.rate=Rate
 
 beamline.temperature=Temperature
+beamline.coolusage=Coolant Usage
 
 beamline.out_pre=Multiblock Beamline Output
 

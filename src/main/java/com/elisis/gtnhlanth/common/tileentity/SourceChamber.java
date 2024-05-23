@@ -36,6 +36,7 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
+import gregtech.api.enums.GT_Values;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -153,7 +154,8 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
 
         ItemStack[] tItems = this.getStoredInputs().toArray(new ItemStack[0]);
         // GT_Log.out.print(Arrays.toString(tItems));
-        long tVoltage = this.getMaxInputVoltage();
+        long tVoltageMaxTier = this.getMaxInputVoltage(); // Used to keep old math the same
+        long tVoltageActual = GT_Values.VP[(int) this.getInputVoltageTier()];
 
         /*
          * for (GT_Recipe stack : BeamlineRecipeAdder.instance.SourceChamberRecipes.mRecipeList) {
@@ -161,7 +163,7 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
          */
 
         RecipeSC tRecipe = (RecipeSC) BeamlineRecipeAdder2.instance.SourceChamberRecipes
-                .findRecipe(this.getBaseMetaTileEntity(), false, tVoltage, new FluidStack[] {}, tItems);
+                .findRecipe(this.getBaseMetaTileEntity(), false, tVoltageActual, new FluidStack[] {}, tItems);
 
         if (tRecipe == null || !tRecipe.isRecipeInputEqual(true, new FluidStack[] {}, tItems)) return false; // Consumes
                                                                                                              // input
@@ -175,7 +177,7 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
         this.mMaxProgresstime = tRecipe.mDuration;
         if (mMaxProgresstime == Integer.MAX_VALUE - 1 && this.mEUt == Integer.MAX_VALUE - 1) return false;
 
-        mEUt = (int) -tVoltage;
+        mEUt = (int) -tVoltageActual;
         if (this.mEUt > 0) this.mEUt = (-this.mEUt);
 
         outputParticle = tRecipe.particleId;
@@ -187,7 +189,7 @@ public class SourceChamber extends GT_MetaTileEntity_EnhancedMultiBlockBase<Sour
         // outputEnergy = (float) ((-maxEnergy) * Math.pow(1.001, -(tRecipe.energyRatio)*(tVoltage-tRecipe.mEUt))) +
         // maxEnergy;
         outputEnergy = (float) Math.min(
-                (-maxMaterialEnergy) * Math.pow(1.001, -(tRecipe.energyRatio) * (tVoltage - tRecipe.mEUt))
+                (-maxMaterialEnergy) * Math.pow(1.001, -(tRecipe.energyRatio) * (tVoltageMaxTier - tRecipe.mEUt))
                         + maxMaterialEnergy,
                 maxParticleEnergy);
 

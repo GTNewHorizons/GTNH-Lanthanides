@@ -196,6 +196,21 @@ public class RecipeLoader {
 
                 ).itemOutputs(LanthItemList.LINAC).duration(60 * GT_RecipeBuilder.SECONDS).eut(7680)
                 .addTo(assemblerRecipes);
+        
+        // TC
+        GT_Values.RA.stdBuilder().fluidInputs(Materials.SolderingAlloy.getMolten(288))
+        		.itemInputs(
+        				ItemList.Hull_LuV.get(1),
+        				WerkstoffMaterialPool.MuMetal.get(OrePrefixes.plateDense, 8),
+        				GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Lead, 4),
+        				GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Ultimate, 4),
+        				GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 2),
+        				GT_Utility.copyAmount(2, LanthItemList.BEAMLINE_PIPE),
+        				GT_OreDictUnificator.get(OrePrefixes.cableGt02, Materials.VanadiumGallium, 1),
+        				GT_Utility.getIntegratedCircuit(16)
+        			
+        			).itemOutputs(LanthItemList.TARGET_CHAMBER).duration(30 * GT_RecipeBuilder.SECONDS).eut(7680).addTo(assemblerRecipes);
+
 
         /*
          * //Permalloy GT_Values.RA.addMixerRecipe( GT_Utility.getIntegratedCircuit(4), Materials.Nickel.getDust(4),
