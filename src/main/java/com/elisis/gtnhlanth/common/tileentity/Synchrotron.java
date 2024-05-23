@@ -479,17 +479,18 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Particle Accelerator").addInfo("Controller block for the Synchrotron")
                 .addInfo("Torus-shaped, accelerates electrons to produce high-energy electromagnetic radiation")
-                .addInfo(DescTextLocalization.BLUEPRINT_INFO).addInfo(DescTextLocalization.BEAMLINE_SCANNER_INFO).addInfo("Valid Coolants:");
-        
+                .addInfo(DescTextLocalization.BLUEPRINT_INFO).addInfo(DescTextLocalization.BEAMLINE_SCANNER_INFO)
+                .addInfo("Valid Coolants:");
+
         // Valid coolant list
         for (Fluid fluid : BeamlineRecipeLoader.coolantMap.keySet()) {
-        	
-        	tt.addInfo("- " + fluid.getLocalizedName(new FluidStack(fluid, 1)));
-        	
+
+            tt.addInfo("- " + fluid.getLocalizedName(new FluidStack(fluid, 1)));
+
         }
-        
-        
-        tt.addInfo("Requires 32 kL/s of coolant").addSeparator().beginStructureBlock(36, 7, 34, true).addController("Front middle")
+
+        tt.addInfo("Requires 32 kL/s of coolant").addSeparator().beginStructureBlock(36, 7, 34, true)
+                .addController("Front middle")
                 .addCasingInfoExactly(LanthItemList.SHIELDED_ACCELERATOR_CASING.getLocalizedName(), 660, false)
                 .addCasingInfoExactly("Superconducting Coil Block", 90, false)
                 .addCasingInfoExactly("Niobium Block", 64, false)
@@ -934,7 +935,7 @@ public class Synchrotron extends GT_MetaTileEntity_EnhancedMultiBlockBase<Synchr
                         + EnumChatFormatting.AQUA
                         + 32_000
                         + EnumChatFormatting.RESET
-                        + " kL/s", // 32 kL/s	
+                        + " kL/s", // 32 kL/s
 
                 /* 8 */ EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.in_pre")
                         + ": "

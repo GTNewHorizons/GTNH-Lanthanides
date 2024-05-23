@@ -13,6 +13,15 @@ import static gregtech.api.util.GT_StructureUtility.buildHatchAdder;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+
 import com.elisis.gtnhlanth.common.beamline.BeamInformation;
 import com.elisis.gtnhlanth.common.beamline.BeamLinePacket;
 import com.elisis.gtnhlanth.common.beamline.Particle;
@@ -40,14 +49,6 @@ import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Utility;
 import gregtech.api.util.shutdown.ShutDownReason;
 import gregtech.api.util.shutdown.SimpleShutDownReason;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 
 public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> implements ISurvivalConstructable {
 
@@ -58,7 +59,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
     protected static final String STRUCTURE_PIECE_END = "end";
 
     private boolean onEndInnerLayer = false;
-    
+
     private int machineTemp = 0; // Coolant temperature
 
     private ArrayList<TileHatchInputBeamline> mInputBeamline = new ArrayList<>();
@@ -154,17 +155,16 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
                 // .addInfo("Extendable, with a minimum length of 18 blocks")
                 .addInfo(DescTextLocalization.BLUEPRINT_INFO).addInfo(DescTextLocalization.BEAMLINE_SCANNER_INFO)
                 .addInfo("Valid Coolants:");
-                
+
         // Valid coolant list
         for (Fluid fluid : BeamlineRecipeLoader.coolantMap.keySet()) {
-        	
-        	tt.addInfo("- " + fluid.getLocalizedName(new FluidStack(fluid, 1)));
-        	
+
+            tt.addInfo("- " + fluid.getLocalizedName(new FluidStack(fluid, 1)));
+
         }
-        
-        
-        
-        tt.addInfo("Requires (length + 1)kL/s of coolant").addSeparator().beginVariableStructureBlock(7, 7, 7, 7, 19, 83, false).addController("Front bottom")
+
+        tt.addInfo("Requires (length + 1)kL/s of coolant").addSeparator()
+                .beginVariableStructureBlock(7, 7, 7, 7, 19, 83, false).addController("Front bottom")
                 .addCasingInfoRange(LanthItemList.SHIELDED_ACCELERATOR_CASING.getLocalizedName(), 325, 1285, false)
                 .addCasingInfoRange(LanthItemList.COOLANT_DELIVERY_CASING.getLocalizedName(), 148, 852, false)
                 .addCasingInfoRange(LanthItemList.SHIELDED_ACCELERATOR_GLASS.getLocalizedName(), 127, 703, false)
@@ -230,7 +230,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         float inputEnergy = 0;
 
         machineTemp = 0;
-        
+
         // Energy quantity determined by multi
         float machineEnergy = 0;
         outputEnergy = 0;
@@ -482,22 +482,22 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
                         + mPollutionReduction
                         + EnumChatFormatting.RESET
                         + " %",
-                        
+
                 /* 7 */ EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.info")
                         + ": "
                         + EnumChatFormatting.RESET,
-                
+
                 StatCollector.translateToLocal("beamline.temperature") + ": " // Temperature:
                         + EnumChatFormatting.DARK_RED
                         + machineTemp
                         + EnumChatFormatting.RESET
-                        + " K", // e.g. "137 K"   
-                
+                        + " K", // e.g. "137 K"
+
                 StatCollector.translateToLocal("beamline.coolusage") + ": " // Coolant usage:
-                		+ EnumChatFormatting.AQUA
-                		+ length
-                		+ EnumChatFormatting.RESET
-                		+ " kL/s", // e.g. "24 kL/s
+                        + EnumChatFormatting.AQUA
+                        + length
+                        + EnumChatFormatting.RESET
+                        + " kL/s", // e.g. "24 kL/s
 
                 /* 8 */ EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.in_pre")
                         + ": "
