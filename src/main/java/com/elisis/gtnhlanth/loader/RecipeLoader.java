@@ -3597,7 +3597,9 @@ public class RecipeLoader {
                     if ((OreDictionary.getOreName(oreDictID)
                         .startsWith("ore")
                         || OreDictionary.getOreName(oreDictID)
-                            .startsWith("crushed")) /* && OreDictionary.getOreName(oreDictID).contains("Cerium") */) {
+                            .startsWith("rawOre")
+                        || OreDictionary.getOreName(oreDictID)
+                            .startsWith("crushed"))) {
                         GT_Log.out.print(OreDictionary.getOreName(oreDictID));
                         GT_Recipe tRecipe = recipe.copy();
                         boolean modified = false;
