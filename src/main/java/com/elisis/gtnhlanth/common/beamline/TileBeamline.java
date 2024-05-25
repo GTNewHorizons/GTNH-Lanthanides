@@ -121,7 +121,8 @@ public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline 
                 continue;
             }
 
-            TileEntity next = this.getBaseMetaTileEntity().getTileEntityAtSide(dir);
+            TileEntity next = this.getBaseMetaTileEntity()
+                .getTileEntityAtSide(dir);
             if (next instanceof IConnectsToBeamline && next != source) {
 
                 if (((IConnectsToBeamline) next).isDataInputFacing(dir.getOpposite())) {
@@ -159,9 +160,12 @@ public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline 
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection aSide, int aConnections,
-            int aColorIndex, boolean aConnected, boolean aRedstone) {
-        return new ITexture[] { new GT_TextureBuilder().addIcon(pipe).build(), new GT_TextureBuilder().addIcon(pipe)
-                .setRGBA(Dyes.getModulation((byte) aColorIndex, MACHINE_METAL.getRGBA())).build() };
+        int aColorIndex, boolean aConnected, boolean aRedstone) {
+        return new ITexture[] { new GT_TextureBuilder().addIcon(pipe)
+            .build(),
+            new GT_TextureBuilder().addIcon(pipe)
+                .setRGBA(Dyes.getModulation((byte) aColorIndex, MACHINE_METAL.getRGBA()))
+                .build() };
     }
 
     public void markUsed() {
@@ -229,28 +233,28 @@ public class TileBeamline extends MetaPipeEntity implements IConnectsToBeamline 
         }
 
         return AxisAlignedBB
-                .getBoundingBox(aX + tSide4, aY + tSide0, aZ + tSide2, aX + tSide5, aY + tSide1, aZ + tSide3);
+            .getBoundingBox(aX + tSide4, aY + tSide0, aZ + tSide2, aX + tSide5, aY + tSide1, aZ + tSide3);
     }
 
     @Override
     public String[] getDescription() {
         return new String[] { StatCollector.translateToLocal("beamline.pipe.desc.0"), // Beamline pipe
-                EnumChatFormatting.AQUA + StatCollector.translateToLocal("beamline.pipe.desc.1"), // Do not cross, split
-                                                                                                  // or turn
-                "Added by " + EnumChatFormatting.GREEN + "GTNH: Lanthanides"
+            EnumChatFormatting.AQUA + StatCollector.translateToLocal("beamline.pipe.desc.1"), // Do not cross, split
+                                                                                              // or turn
+            "Added by " + EnumChatFormatting.GREEN + "GTNH: Lanthanides"
 
         };
     }
 
     @Override
     public boolean allowPullStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, ForgeDirection side,
-            ItemStack aStack) {
+        ItemStack aStack) {
         return false;
     }
 
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, ForgeDirection side,
-            ItemStack aStack) {
+        ItemStack aStack) {
         return false;
     }
 }

@@ -20,7 +20,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 
 public abstract class TileHatchBeamlineConnector<T extends DataPacket> extends GT_MetaTileEntity_Hatch
-        implements IConnectsToBeamline {
+    implements IConnectsToBeamline {
 
     private String clientLocale = "en_US";
 
@@ -111,26 +111,26 @@ public abstract class TileHatchBeamlineConnector<T extends DataPacket> extends G
     public String[] getInfoData() {
         if (id > 0) {
             return new String[] {
-                    translateToLocalFormatted("tt.keyword.ID", clientLocale) + ": " + EnumChatFormatting.AQUA + id,
-                    translateToLocalFormatted("tt.keyword.Content", clientLocale) + ": "
-                            + EnumChatFormatting.AQUA
-                            + (q != null ? q.getContentString() : 0),
-                    translateToLocalFormatted("tt.keyword.PacketHistory", clientLocale) + ": "
-                            + EnumChatFormatting.RED
-                            + (q != null ? q.getTraceSize() : 0), };
+                translateToLocalFormatted("tt.keyword.ID", clientLocale) + ": " + EnumChatFormatting.AQUA + id,
+                translateToLocalFormatted("tt.keyword.Content", clientLocale) + ": "
+                    + EnumChatFormatting.AQUA
+                    + (q != null ? q.getContentString() : 0),
+                translateToLocalFormatted("tt.keyword.PacketHistory", clientLocale) + ": "
+                    + EnumChatFormatting.RED
+                    + (q != null ? q.getTraceSize() : 0), };
         }
         return new String[] {
-                translateToLocalFormatted("tt.keyword.Content", clientLocale) + ": "
-                        + EnumChatFormatting.AQUA
-                        + (q != null ? q.getContentString() : 0),
-                translateToLocalFormatted("tt.keyword.PacketHistory", clientLocale) + ": "
-                        + EnumChatFormatting.RED
-                        + (q != null ? q.getTraceSize() : 0), };
+            translateToLocalFormatted("tt.keyword.Content", clientLocale) + ": "
+                + EnumChatFormatting.AQUA
+                + (q != null ? q.getContentString() : 0),
+            translateToLocalFormatted("tt.keyword.PacketHistory", clientLocale) + ": "
+                + EnumChatFormatting.RED
+                + (q != null ? q.getTraceSize() : 0), };
     }
 
     @Override
     public String[] getDescription() {
         return new String[] { "Text description shouldn't be seen, report to Tec", "High speed fibre optics connector.",
-                EnumChatFormatting.AQUA + "Must be painted to work" };
+            EnumChatFormatting.AQUA + "Must be painted to work" };
     }
 }

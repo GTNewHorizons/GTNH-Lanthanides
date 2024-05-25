@@ -39,19 +39,19 @@ public class TileHatchOutputBeamline extends TileHatchBeamlineConnector<BeamLine
     @Override
     public ITexture[] getTexturesActive(ITexture aBaseTexture) {
         return new ITexture[] { aBaseTexture,
-                new GT_RenderedTexture(
-                        activeIcon,
-                        Dyes.getModulation(getBaseMetaTileEntity().getColorization(), MACHINE_METAL.getRGBA())),
-                new GT_RenderedTexture(connIcon) };
+            new GT_RenderedTexture(
+                activeIcon,
+                Dyes.getModulation(getBaseMetaTileEntity().getColorization(), MACHINE_METAL.getRGBA())),
+            new GT_RenderedTexture(connIcon) };
     }
 
     @Override
     public ITexture[] getTexturesInactive(ITexture aBaseTexture) {
         return new ITexture[] { aBaseTexture,
-                new GT_RenderedTexture(
-                        sideIcon,
-                        Dyes.getModulation(getBaseMetaTileEntity().getColorization(), MACHINE_METAL.getRGBA())),
-                new GT_RenderedTexture(connIcon) };
+            new GT_RenderedTexture(
+                sideIcon,
+                Dyes.getModulation(getBaseMetaTileEntity().getColorization(), MACHINE_METAL.getRGBA())),
+            new GT_RenderedTexture(connIcon) };
     }
 
     @Override
@@ -70,8 +70,9 @@ public class TileHatchOutputBeamline extends TileHatchBeamlineConnector<BeamLine
             ((TileBeamline) meta).markUsed();
             return (IConnectsToBeamline) meta;
 
-        } else if (meta instanceof TileHatchInputBeamline
-                && ((TileHatchInputBeamline) meta).canConnect(base.getFrontFacing().getOpposite())) {
+        } else if (meta instanceof TileHatchInputBeamline && ((TileHatchInputBeamline) meta).canConnect(
+            base.getFrontFacing()
+                .getOpposite())) {
 
                     return (IConnectsToBeamline) meta;
                 }
@@ -121,7 +122,8 @@ public class TileHatchOutputBeamline extends TileHatchBeamlineConnector<BeamLine
 
     @Override
     public boolean isOutputFacing(ForgeDirection side) {
-        return side == this.getBaseMetaTileEntity().getFrontFacing();
+        return side == this.getBaseMetaTileEntity()
+            .getFrontFacing();
     }
 
     @Override

@@ -31,7 +31,7 @@ public class Util {
     }
 
     public static List<Pos2d> getGridPositions(int totalCount, int xOrigin, int yOrigin, int xDirMaxCount,
-            int yDirMaxCount, int distanceBetweenSlots) {
+        int yDirMaxCount, int distanceBetweenSlots) {
         // 18 pixels to get to a new grid for placing an item tile since they are 16x16 and have 1 pixel buffers
         // around them.
 

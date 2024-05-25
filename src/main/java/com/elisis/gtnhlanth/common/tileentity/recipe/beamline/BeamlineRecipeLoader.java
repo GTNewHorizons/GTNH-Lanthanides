@@ -25,8 +25,8 @@ public class BeamlineRecipeLoader {
     public static final HashMap<Fluid, Fluid> coolantMap = new HashMap<>();
 
     private static final ItemList[] VIABLE_WAFERS = new ItemList[] { ItemList.Circuit_Silicon_Wafer,
-            ItemList.Circuit_Silicon_Wafer2, ItemList.Circuit_Silicon_Wafer3, ItemList.Circuit_Silicon_Wafer4,
-            ItemList.Circuit_Silicon_Wafer5, ItemList.Circuit_Silicon_Wafer6, ItemList.Circuit_Silicon_Wafer7 };
+        ItemList.Circuit_Silicon_Wafer2, ItemList.Circuit_Silicon_Wafer3, ItemList.Circuit_Silicon_Wafer4,
+        ItemList.Circuit_Silicon_Wafer5, ItemList.Circuit_Silicon_Wafer6, ItemList.Circuit_Silicon_Wafer7 };
 
     public static void load() {
 
@@ -34,59 +34,71 @@ public class BeamlineRecipeLoader {
          * Coolant list
          */
 
-        coolantMap.put(Materials.LiquidNitrogen.getGas(1L).getFluid(), Materials.Nitrogen.getGas(1L).getFluid());
-        coolantMap.put(Materials.LiquidOxygen.getGas(1L).getFluid(), Materials.Oxygen.getGas(1L).getFluid());
+        coolantMap.put(
+            Materials.LiquidNitrogen.getGas(1L)
+                .getFluid(),
+            Materials.Nitrogen.getGas(1L)
+                .getFluid());
+        coolantMap.put(
+            Materials.LiquidOxygen.getGas(1L)
+                .getFluid(),
+            Materials.Oxygen.getGas(1L)
+                .getFluid());
         coolantMap.put(FluidRegistry.getFluid("ic2coolant"), FluidRegistry.getFluid("ic2hotcoolant"));
-        coolantMap.put(Materials.SuperCoolant.getFluid(1L).getFluid(), Materials.Water.getFluid(1L).getFluid());
+        coolantMap.put(
+            Materials.SuperCoolant.getFluid(1L)
+                .getFluid(),
+            Materials.Water.getFluid(1L)
+                .getFluid());
 
         /*
          * ELECTRON
          */
         BeamlineRecipeAdder2.instance.addSourceChamberRecipe(
-                new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Tungsten, 1) },
-                null,
-                Particle.ELECTRON.ordinal(),
-                20,
-                1000,
-                98,
-                0.1f,
-                7680);
+            new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Tungsten, 1) },
+            null,
+            Particle.ELECTRON.ordinal(),
+            20,
+            1000,
+            98,
+            0.1f,
+            7680);
 
         BeamlineRecipeAdder2.instance.addSourceChamberRecipe(
-                new ItemStack[] { WerkstoffMaterialPool.LanthanumHexaboride.get(OrePrefixes.stickLong, 1) },
-                null,
-                Particle.ELECTRON.ordinal(),
-                60,
-                5000,
-                99,
-                0.3f,
-                7680);
+            new ItemStack[] { WerkstoffMaterialPool.LanthanumHexaboride.get(OrePrefixes.stickLong, 1) },
+            null,
+            Particle.ELECTRON.ordinal(),
+            60,
+            5000,
+            99,
+            0.3f,
+            7680);
 
         /*
          * NEUTRON
          */
         BeamlineRecipeAdder2.instance.addSourceChamberRecipe(
-                new ItemStack[] { ELEMENT.getInstance().CALIFORNIUM.getDust(1) },
-                null,
-                Particle.NEUTRON.ordinal(),
-                10,
-                9000,
-                95,
-                999,
-                1920);
+            new ItemStack[] { ELEMENT.getInstance().CALIFORNIUM.getDust(1) },
+            null,
+            Particle.NEUTRON.ordinal(),
+            10,
+            9000,
+            95,
+            999,
+            1920);
 
         /*
          * ALPHA
          */
         BeamlineRecipeAdder2.instance.addSourceChamberRecipe(
-                new ItemStack[] { Materials.Uranium.getDustTiny(1) },
-                new ItemStack[] { WerkstoffMaterialPool.Thorium234.get(OrePrefixes.dustTiny, 1) },
-                Particle.ALPHA.ordinal(),
-                1,
-                4270,
-                90,
-                999,
-                480);
+            new ItemStack[] { Materials.Uranium.getDustTiny(1) },
+            new ItemStack[] { WerkstoffMaterialPool.Thorium234.get(OrePrefixes.dustTiny, 1) },
+            Particle.ALPHA.ordinal(),
+            1,
+            4270,
+            90,
+            999,
+            480);
 
         /*
          * TARGET CHAMBER
@@ -102,19 +114,20 @@ public class BeamlineRecipeLoader {
 
                 index++;
 
-                if (!Arrays.asList(mask.getForbiddenWafers()).contains(wafer)) {
+                if (!Arrays.asList(mask.getForbiddenWafers())
+                    .contains(wafer)) {
 
                     BeamlineRecipeAdder2.instance.addTargetChamberRecipe(
-                            wafer.get(1),
-                            GT_Utility.copyAmountUnsafe((int) Math.pow(2, index + 2), mask.getProducedItem()),
-                            new ItemStack(LanthItemList.maskMap.get(mask), 0),
-                            1,
-                            mask.getBaselineAmount() * (int) Math.pow(2, index - 1),
-                            mask.getMinEnergy(),
-                            mask.getMaxEnergy(),
-                            mask.getMinFocus(),
-                            1,
-                            1920);
+                        wafer.get(1),
+                        GT_Utility.copyAmountUnsafe((int) Math.pow(2, index + 2), mask.getProducedItem()),
+                        new ItemStack(LanthItemList.maskMap.get(mask), 0),
+                        1,
+                        mask.getBaselineAmount() * (int) Math.pow(2, index - 1),
+                        mask.getMinEnergy(),
+                        mask.getMaxEnergy(),
+                        mask.getMinFocus(),
+                        1,
+                        1920);
 
                 }
 
@@ -146,28 +159,28 @@ public class BeamlineRecipeLoader {
          */
 
         BeamlineRecipeAdder2.instance.addTargetChamberRecipe(
-                new ItemStack(Items.chicken, 1),
-                new ItemStack(Items.cooked_chicken),
-                null,
-                Particle.PHOTON.ordinal(),
-                400,
-                5,
-                20,
-                80,
-                1,
-                7864320);
+            new ItemStack(Items.chicken, 1),
+            new ItemStack(Items.cooked_chicken),
+            null,
+            Particle.PHOTON.ordinal(),
+            400,
+            5,
+            20,
+            80,
+            1,
+            7864320);
 
         BeamlineRecipeAdder2.instance.addTargetChamberRecipe(
-                new ItemStack(Items.chicken, 1),
-                new ItemStack(Items.egg),
-                null,
-                Particle.PHOTON.ordinal(),
-                400,
-                21,
-                600,
-                80,
-                1,
-                7864320);
+            new ItemStack(Items.chicken, 1),
+            new ItemStack(Items.egg),
+            null,
+            Particle.PHOTON.ordinal(),
+            400,
+            21,
+            600,
+            80,
+            1,
+            7864320);
 
     }
 }

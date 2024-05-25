@@ -20,13 +20,13 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(
-        modid = Tags.MODID,
-        version = Tags.VERSION,
-        name = Tags.MODNAME,
-        dependencies = "required-after:IC2; " + "required-after:gregtech; "
-                + "required-after:bartworks; "
-                + "required-after:GoodGenerator; "
-                + "before:miscutils; ")
+    modid = Tags.MODID,
+    version = Tags.VERSION,
+    name = Tags.MODNAME,
+    dependencies = "required-after:IC2; " + "required-after:gregtech; "
+        + "required-after:bartworks; "
+        + "required-after:GoodGenerator; "
+        + "before:miscutils; ")
 public class GTNHLanthanides {
 
     public static Logger LOG = Logger.getLogger("GTNH:Lanthanides");
@@ -35,8 +35,8 @@ public class GTNHLanthanides {
     public static GTNHLanthanides instance;
 
     @SidedProxy(
-            clientSide = "com.elisis.gtnhlanth.client.ClientProxy",
-            serverSide = "com.elisis.gtnhlanth.common.CommonProxy")
+        clientSide = "com.elisis.gtnhlanth.client.ClientProxy",
+        serverSide = "com.elisis.gtnhlanth.common.CommonProxy")
     public static CommonProxy proxy;
 
     @EventHandler

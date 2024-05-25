@@ -44,7 +44,8 @@ public class TileBusInputFocus extends GT_MetaTileEntity_Hatch_NbtConsumable {
     @Override
     public boolean isItemValidForUsageSlot(ItemStack aStack) {
 
-        if (this.getContentUsageSlots().size() == 0) {
+        if (this.getContentUsageSlots()
+            .size() == 0) {
             return aStack.getItem() instanceof ICanFocus;
         } else {
             return false;
@@ -59,7 +60,8 @@ public class TileBusInputFocus extends GT_MetaTileEntity_Hatch_NbtConsumable {
 
     public void depleteFocusDurability(int damage) {
 
-        ItemStack stack = this.getContentUsageSlots().toArray()[0];
+        ItemStack stack = this.getContentUsageSlots()
+            .toArray()[0];
 
         Util.depleteDurabilityOfStack(stack, damage);
 

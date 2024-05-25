@@ -22,7 +22,7 @@ import gregtech.nei.RecipeDisplayInfo;
 public class TargetChamberFrontend extends RecipeMapFrontend {
 
     public TargetChamberFrontend(BasicUIPropertiesBuilder uiPropertiesBuilder,
-            NEIRecipePropertiesBuilder neiPropertiesBuilder) {
+        NEIRecipePropertiesBuilder neiPropertiesBuilder) {
         super(uiPropertiesBuilder, neiPropertiesBuilder);
     }
 
@@ -44,7 +44,7 @@ public class TargetChamberFrontend extends RecipeMapFrontend {
 
     @Override
     protected List<String> handleNEIItemInputTooltip(List<String> currentTip,
-            GT_NEI_DefaultHandler.FixedPositionedStack pStack) {
+        GT_NEI_DefaultHandler.FixedPositionedStack pStack) {
         if (pStack.isNotConsumed()) { // See above
             currentTip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("gtnhlanth.tt.pc")); // Partially
                                                                                                          // consumed:

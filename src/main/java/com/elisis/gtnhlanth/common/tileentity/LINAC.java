@@ -73,59 +73,68 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
      */
 
     static {
-        STRUCTURE_DEFINITION = StructureDefinition.<LINAC>builder().addShape(
+        STRUCTURE_DEFINITION = StructureDefinition.<LINAC>builder()
+            .addShape(
                 STRUCTURE_PIECE_BASE,
                 new String[][] { { "ggggggg", "gbbbbbg", "gbbbbbg", "gbbibbg", "gbbbbbg", "gbbbbbg", "ggg~ggg" },
-                        { "ggggggg", "gcccccg", "gcccccg", "gcc-ccg", "gcccccg", "gcccccg", "ggggggg" },
-                        { "ccccccc", "cvvvvvc", "kvvvvvk", "kvv-vvk", "kvvvvvk", "cvvvvvc", "jcccccj" },
-                        { "cckkkcc", "cdddddc", "kdyyydk", "kdy-ydk", "kdyyydk", "cdddddc", "jcccccj" },
-                        { "cckkkcc", "cdvvvdc", "kvvvvvk", "kdv-vdk", "kvvvvvk", "cdvvvdc", "jcccccj" },
-                        { "cckkkcc", "cdddddc", "kdyyydk", "kdy-ydk", "kdyyydk", "cdddddc", "jcccccj" },
-                        { "cckkkcc", "cdvvvdc", "kvvvvvk", "kdv-vdk", "kvvvvvk", "cdvvvdc", "jcccccj" },
-                        { "cckhkcc", "cdddddc", "kdyyydk", "kdy-ydk", "kdyyydk", "cdddddc", "jcccccj" }, })
-                .addShape(
-                        STRUCTURE_PIECE_LAYER,
-                        new String[][] {
-                                { "cckkkcc", "cdvvvdc", "kvvvvvk", "kdv-vdk", "kvvvvvk", "cdvvvdc", "ccccccc" },
-                                { "cckkkcc", "cdddddc", "kdyyydk", "kdy-ydk", "kdyyydk", "cdddddc", "ccccccc" } })
-                .addShape(
-                        STRUCTURE_PIECE_END,
-                        new String[][] {
-                                { "cckkkcc", "cdvvvdc", "kvvvvvk", "kdv-vdk", "kvvvvvk", "cdvvvdc", "ccccccc" },
-                                { "cckhkcc", "cdddddc", "kdyyydk", "kdy-ydk", "kdyyydk", "cdddddc", "ccccccc" },
-                                { "cckkkcc", "cdvvvdc", "kvvvvvk", "kdv-vdk", "kvvvvvk", "cdvvvdc", "ccccccc" },
-                                { "cckkkcc", "cdddddc", "kdyyydk", "kdy-ydk", "kdyyydk", "cdddddc", "ccccccc" },
-                                { "cckkkcc", "cdvvvdc", "kvvvvvk", "kdv-vdk", "kvvvvvk", "cdvvvdc", "ccccccc" },
-                                { "cckkkcc", "cdddddc", "kdyyydk", "kdy-ydk", "kdyyydk", "cdddddc", "ccccccc" },
-                                { "ccccccc", "cvvvvvc", "kvvvvvk", "kvv-vvk", "kvvvvvk", "cvvvvvc", "ccccccc" },
-                                { "ccccccc", "ccccccc", "ccccccc", "ccc-ccc", "ccccccc", "ccccccc", "ccccccc" },
-                                { "ccccccc", "cbbbbbc", "cbbbbbc", "cbbobbc", "cbbbbbc", "cbbbbbc", "ccccccc" } })
-                .addElement('c', ofBlock(LanthItemList.SHIELDED_ACCELERATOR_CASING, 0))
-                .addElement('g', ofBlock(GregTech_API.sBlockCasings3, 10)) // Grate Machine Casing
-                .addElement('b', ofBlockAdder(LINAC::addGlass, ItemRegistry.bw_glasses[0], 1))
-                .addElement(
-                        'i',
-                        buildHatchAdder(LINAC.class).hatchClass(TileHatchInputBeamline.class).casingIndex(CASING_INDEX)
-                                .dot(3).adder(LINAC::addBeamLineInputHatch).build())
-                .addElement(
-                        'o',
-                        buildHatchAdder(LINAC.class).hatchClass(TileHatchOutputBeamline.class).casingIndex(CASING_INDEX)
-                                .dot(4).adder(LINAC::addBeamLineOutputHatch).build())
-                .addElement('v', ofBlock(LanthItemList.ELECTRODE_CASING, 0))
-                .addElement('k', ofBlock(LanthItemList.SHIELDED_ACCELERATOR_GLASS, 0))
-                .addElement('d', ofBlock(LanthItemList.COOLANT_DELIVERY_CASING, 0))
-                .addElement('y', ofBlock(GregTech_API.sBlockCasings1, 15)) // Superconducting coil
-                .addElement(
-                        'h',
-                        buildHatchAdder(LINAC.class).atLeast(InputHatch, OutputHatch).casingIndex(CASING_INDEX).dot(2)
-                                .build())
+                    { "ggggggg", "gcccccg", "gcccccg", "gcc-ccg", "gcccccg", "gcccccg", "ggggggg" },
+                    { "ccccccc", "cvvvvvc", "kvvvvvk", "kvv-vvk", "kvvvvvk", "cvvvvvc", "jcccccj" },
+                    { "cckkkcc", "cdddddc", "kdyyydk", "kdy-ydk", "kdyyydk", "cdddddc", "jcccccj" },
+                    { "cckkkcc", "cdvvvdc", "kvvvvvk", "kdv-vdk", "kvvvvvk", "cdvvvdc", "jcccccj" },
+                    { "cckkkcc", "cdddddc", "kdyyydk", "kdy-ydk", "kdyyydk", "cdddddc", "jcccccj" },
+                    { "cckkkcc", "cdvvvdc", "kvvvvvk", "kdv-vdk", "kvvvvvk", "cdvvvdc", "jcccccj" },
+                    { "cckhkcc", "cdddddc", "kdyyydk", "kdy-ydk", "kdyyydk", "cdddddc", "jcccccj" }, })
+            .addShape(
+                STRUCTURE_PIECE_LAYER,
+                new String[][] { { "cckkkcc", "cdvvvdc", "kvvvvvk", "kdv-vdk", "kvvvvvk", "cdvvvdc", "ccccccc" },
+                    { "cckkkcc", "cdddddc", "kdyyydk", "kdy-ydk", "kdyyydk", "cdddddc", "ccccccc" } })
+            .addShape(
+                STRUCTURE_PIECE_END,
+                new String[][] { { "cckkkcc", "cdvvvdc", "kvvvvvk", "kdv-vdk", "kvvvvvk", "cdvvvdc", "ccccccc" },
+                    { "cckhkcc", "cdddddc", "kdyyydk", "kdy-ydk", "kdyyydk", "cdddddc", "ccccccc" },
+                    { "cckkkcc", "cdvvvdc", "kvvvvvk", "kdv-vdk", "kvvvvvk", "cdvvvdc", "ccccccc" },
+                    { "cckkkcc", "cdddddc", "kdyyydk", "kdy-ydk", "kdyyydk", "cdddddc", "ccccccc" },
+                    { "cckkkcc", "cdvvvdc", "kvvvvvk", "kdv-vdk", "kvvvvvk", "cdvvvdc", "ccccccc" },
+                    { "cckkkcc", "cdddddc", "kdyyydk", "kdy-ydk", "kdyyydk", "cdddddc", "ccccccc" },
+                    { "ccccccc", "cvvvvvc", "kvvvvvk", "kvv-vvk", "kvvvvvk", "cvvvvvc", "ccccccc" },
+                    { "ccccccc", "ccccccc", "ccccccc", "ccc-ccc", "ccccccc", "ccccccc", "ccccccc" },
+                    { "ccccccc", "cbbbbbc", "cbbbbbc", "cbbobbc", "cbbbbbc", "cbbbbbc", "ccccccc" } })
+            .addElement('c', ofBlock(LanthItemList.SHIELDED_ACCELERATOR_CASING, 0))
+            .addElement('g', ofBlock(GregTech_API.sBlockCasings3, 10)) // Grate Machine Casing
+            .addElement('b', ofBlockAdder(LINAC::addGlass, ItemRegistry.bw_glasses[0], 1))
+            .addElement(
+                'i',
+                buildHatchAdder(LINAC.class).hatchClass(TileHatchInputBeamline.class)
+                    .casingIndex(CASING_INDEX)
+                    .dot(3)
+                    .adder(LINAC::addBeamLineInputHatch)
+                    .build())
+            .addElement(
+                'o',
+                buildHatchAdder(LINAC.class).hatchClass(TileHatchOutputBeamline.class)
+                    .casingIndex(CASING_INDEX)
+                    .dot(4)
+                    .adder(LINAC::addBeamLineOutputHatch)
+                    .build())
+            .addElement('v', ofBlock(LanthItemList.ELECTRODE_CASING, 0))
+            .addElement('k', ofBlock(LanthItemList.SHIELDED_ACCELERATOR_GLASS, 0))
+            .addElement('d', ofBlock(LanthItemList.COOLANT_DELIVERY_CASING, 0))
+            .addElement('y', ofBlock(GregTech_API.sBlockCasings1, 15)) // Superconducting coil
+            .addElement(
+                'h',
+                buildHatchAdder(LINAC.class).atLeast(InputHatch, OutputHatch)
+                    .casingIndex(CASING_INDEX)
+                    .dot(2)
+                    .build())
 
-                .addElement(
-                        'j',
-                        buildHatchAdder(LINAC.class).atLeast(Maintenance, Energy).casingIndex(CASING_INDEX).dot(1)
-                                .buildAndChain(ofBlock(LanthItemList.SHIELDED_ACCELERATOR_CASING, 0)))
+            .addElement(
+                'j',
+                buildHatchAdder(LINAC.class).atLeast(Maintenance, Energy)
+                    .casingIndex(CASING_INDEX)
+                    .dot(1)
+                    .buildAndChain(ofBlock(LanthItemList.SHIELDED_ACCELERATOR_CASING, 0)))
 
-                .build();
+            .build();
     }
 
     private float outputEnergy;
@@ -151,10 +160,12 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-        tt.addMachineType("Particle Accelerator").addInfo("Controller block for the LINAC")
-                // .addInfo("Extendable, with a minimum length of 18 blocks")
-                .addInfo(DescTextLocalization.BLUEPRINT_INFO).addInfo(DescTextLocalization.BEAMLINE_SCANNER_INFO)
-                .addInfo("Valid Coolants:");
+        tt.addMachineType("Particle Accelerator")
+            .addInfo("Controller block for the LINAC")
+            // .addInfo("Extendable, with a minimum length of 18 blocks")
+            .addInfo(DescTextLocalization.BLUEPRINT_INFO)
+            .addInfo(DescTextLocalization.BEAMLINE_SCANNER_INFO)
+            .addInfo("Valid Coolants:");
 
         // Valid coolant list
         for (Fluid fluid : BeamlineRecipeLoader.coolantMap.keySet()) {
@@ -163,20 +174,25 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 
         }
 
-        tt.addInfo("Requires (length + 1)kL/s of coolant").addSeparator()
-                .beginVariableStructureBlock(7, 7, 7, 7, 19, 83, false).addController("Front bottom")
-                .addCasingInfoRange(LanthItemList.SHIELDED_ACCELERATOR_CASING.getLocalizedName(), 325, 1285, false)
-                .addCasingInfoRange(LanthItemList.COOLANT_DELIVERY_CASING.getLocalizedName(), 148, 852, false)
-                .addCasingInfoRange(LanthItemList.SHIELDED_ACCELERATOR_GLASS.getLocalizedName(), 127, 703, false)
-                .addCasingInfoRange("Superconducting Coil Block", 56, 312, false)
-                .addCasingInfoRange(LanthItemList.ELECTRODE_CASING.getLocalizedName(), 156, 732, false)
-                .addCasingInfoExactly("Grate Machine Casing", 47, false)
-                .addCasingInfoExactly("Borosilicate Glass", 48, true).addEnergyHatch(addDotText(1))
-                .addMaintenanceHatch(addDotText(1)).addInputHatch(addDotText(2)).addOutputHatch(addDotText(2))
-                .addOtherStructurePart("Beamline Input Hatch", addDotText(3))
-                .addOtherStructurePart("Beamline Output Hatch", addDotText(4))
+        tt.addInfo("Requires (length + 1)kL/s of coolant")
+            .addSeparator()
+            .beginVariableStructureBlock(7, 7, 7, 7, 19, 83, false)
+            .addController("Front bottom")
+            .addCasingInfoRange(LanthItemList.SHIELDED_ACCELERATOR_CASING.getLocalizedName(), 325, 1285, false)
+            .addCasingInfoRange(LanthItemList.COOLANT_DELIVERY_CASING.getLocalizedName(), 148, 852, false)
+            .addCasingInfoRange(LanthItemList.SHIELDED_ACCELERATOR_GLASS.getLocalizedName(), 127, 703, false)
+            .addCasingInfoRange("Superconducting Coil Block", 56, 312, false)
+            .addCasingInfoRange(LanthItemList.ELECTRODE_CASING.getLocalizedName(), 156, 732, false)
+            .addCasingInfoExactly("Grate Machine Casing", 47, false)
+            .addCasingInfoExactly("Borosilicate Glass", 48, true)
+            .addEnergyHatch(addDotText(1))
+            .addMaintenanceHatch(addDotText(1))
+            .addInputHatch(addDotText(2))
+            .addOutputHatch(addDotText(2))
+            .addOtherStructurePart("Beamline Input Hatch", addDotText(3))
+            .addOtherStructurePart("Beamline Output Hatch", addDotText(4))
 
-                .toolTipFinisher("GTNH: Lanthanides");;
+            .toolTipFinisher("GTNH: Lanthanides");;
         return tt;
     }
 
@@ -268,11 +284,13 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
             return false;
         }
 
-        if (this.getInputInformation().getEnergy() == 0) {
+        if (this.getInputInformation()
+            .getEnergy() == 0) {
             return false;
         }
 
-        particleId = this.getInputInformation().getParticleId();
+        particleId = this.getInputInformation()
+            .getParticleId();
         Particle inputParticle = Particle.getParticleFromId(particleId);
 
         if (!inputParticle.canAccelerate()) {
@@ -292,8 +310,11 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
             tempFactor = calculateTemperatureFactor(60); // Default temp of 300 is unreasonable
             machineTemp = 60; // Solely for tricorder use
         } else {
-            tempFactor = calculateTemperatureFactor(primFluid.getFluid().getTemperature());
-            machineTemp = primFluid.getFluid().getTemperature(); // Solely for tricorder use
+            tempFactor = calculateTemperatureFactor(
+                primFluid.getFluid()
+                    .getTemperature());
+            machineTemp = primFluid.getFluid()
+                .getTemperature(); // Solely for tricorder use
         }
 
         machineFocus = Math.max(((-0.9f) * this.length * tempFactor) + 110, 5); // Min of 5
@@ -303,28 +324,33 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 
         // GT_Log.out.print("machine focus " + machineFocus);
 
-        inputFocus = this.getInputInformation().getFocus();
+        inputFocus = this.getInputInformation()
+            .getFocus();
 
         outputFocus = (inputFocus > machineFocus) ? ((inputFocus + machineFocus) / 2)
-                : inputFocus * (machineFocus / 100); // If input focus > machine focus, take the average of both, else
-                                                     // weigh the former by the latter
+            : inputFocus * (machineFocus / 100); // If input focus > machine focus, take the average of both, else
+                                                 // weigh the former by the latter
 
         long voltage = this.getMaxInputVoltage();
         voltageFactor = calculateVoltageFactor(voltage);
 
         machineEnergy = Math.max(-((60) / this.length) * voltageFactor + 60_000, 2000); // Minimum of 2000keV
 
-        inputEnergy = this.getInputInformation().getEnergy();
+        inputEnergy = this.getInputInformation()
+            .getEnergy();
         outputEnergy = Math.min(
-                (1 + inputEnergy / Particle.getParticleFromId(outputParticle).maxSourceEnergy()) * machineEnergy,
-                100_000); // TODO more complex calculation than just
+            (1 + inputEnergy / Particle.getParticleFromId(outputParticle)
+                .maxSourceEnergy()) * machineEnergy,
+            100_000); // TODO more complex calculation than just
         // addition
 
-        inputRate = this.getInputInformation().getRate();
+        inputRate = this.getInputInformation()
+            .getRate();
         outputRate = inputRate; // Cannot increase rate with this multiblock
 
-        if (primFluid.amount < fluidConsumed || (!primFluid.isFluidEqual(FluidRegistry.getFluidStack("ic2coolant", 1))
-                && primFluid.getFluid().getTemperature() > 200)) {
+        if (primFluid.amount < fluidConsumed
+            || (!primFluid.isFluidEqual(FluidRegistry.getFluidStack("ic2coolant", 1)) && primFluid.getFluid()
+                .getTemperature() > 200)) {
 
             this.stopMachine(SimpleShutDownReason.ofCritical("gtnhlanth.inscoolant"));
             return false;
@@ -372,7 +398,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         if (!mOutputBeamline.isEmpty()) {
 
             BeamLinePacket packet = new BeamLinePacket(
-                    new BeamInformation(outputEnergy, outputRate, outputParticle, outputFocus));
+                new BeamInformation(outputEnergy, outputRate, outputParticle, outputFocus));
 
             for (TileHatchOutputBeamline o : mOutputBeamline) {
 
@@ -425,124 +451,125 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         long maxEnergy = 0;
         for (GT_MetaTileEntity_Hatch_Energy tHatch : mEnergyHatches) {
             if (tHatch.isValid()) {
-                storedEnergy += tHatch.getBaseMetaTileEntity().getStoredEU();
-                maxEnergy += tHatch.getBaseMetaTileEntity().getEUCapacity();
+                storedEnergy += tHatch.getBaseMetaTileEntity()
+                    .getStoredEU();
+                maxEnergy += tHatch.getBaseMetaTileEntity()
+                    .getEUCapacity();
             }
         }
 
         BeamInformation information = this.getInputInformation();
 
         return new String[] {
-                /* 1 */ StatCollector.translateToLocal("GT5U.multiblock.Progress") + ": "
-                        + EnumChatFormatting.GREEN
-                        + GT_Utility.formatNumbers(mProgresstime / 20)
-                        + EnumChatFormatting.RESET
-                        + " s / "
-                        + EnumChatFormatting.YELLOW
-                        + GT_Utility.formatNumbers(mMaxProgresstime / 20)
-                        + EnumChatFormatting.RESET
-                        + " s",
-                /* 2 */ StatCollector.translateToLocal("GT5U.multiblock.energy") + ": "
-                        + EnumChatFormatting.GREEN
-                        + GT_Utility.formatNumbers(storedEnergy)
-                        + EnumChatFormatting.RESET
-                        + " EU / "
-                        + EnumChatFormatting.YELLOW
-                        + GT_Utility.formatNumbers(maxEnergy)
-                        + EnumChatFormatting.RESET
-                        + " EU",
-                /* 3 */ StatCollector.translateToLocal("GT5U.multiblock.usage") + ": "
-                        + EnumChatFormatting.RED
-                        + GT_Utility.formatNumbers(getActualEnergyUsage())
-                        + EnumChatFormatting.RESET
-                        + " EU/t",
-                /* 4 */ StatCollector.translateToLocal("GT5U.multiblock.mei") + ": "
-                        + EnumChatFormatting.YELLOW
-                        + GT_Utility.formatNumbers(getMaxInputVoltage())
-                        + EnumChatFormatting.RESET
-                        + " EU/t(*2A) "
-                        + StatCollector.translateToLocal("GT5U.machines.tier")
-                        + ": "
-                        + EnumChatFormatting.YELLOW
-                        + VN[GT_Utility.getTier(getMaxInputVoltage())]
-                        + EnumChatFormatting.RESET,
-                /* 5 */ StatCollector.translateToLocal("GT5U.multiblock.problems") + ": "
-                        + EnumChatFormatting.RED
-                        + (getIdealStatus() - getRepairStatus())
-                        + EnumChatFormatting.RESET
-                        + " "
-                        + StatCollector.translateToLocal("GT5U.multiblock.efficiency")
-                        + ": "
-                        + EnumChatFormatting.YELLOW
-                        + Float.toString(mEfficiency / 100.0F)
-                        + EnumChatFormatting.RESET
-                        + " %",
-                /* 6 */ StatCollector.translateToLocal("GT5U.multiblock.pollution") + ": "
-                        + EnumChatFormatting.GREEN
-                        + mPollutionReduction
-                        + EnumChatFormatting.RESET
-                        + " %",
+            /* 1 */ StatCollector.translateToLocal("GT5U.multiblock.Progress") + ": "
+                + EnumChatFormatting.GREEN
+                + GT_Utility.formatNumbers(mProgresstime / 20)
+                + EnumChatFormatting.RESET
+                + " s / "
+                + EnumChatFormatting.YELLOW
+                + GT_Utility.formatNumbers(mMaxProgresstime / 20)
+                + EnumChatFormatting.RESET
+                + " s",
+            /* 2 */ StatCollector.translateToLocal("GT5U.multiblock.energy") + ": "
+                + EnumChatFormatting.GREEN
+                + GT_Utility.formatNumbers(storedEnergy)
+                + EnumChatFormatting.RESET
+                + " EU / "
+                + EnumChatFormatting.YELLOW
+                + GT_Utility.formatNumbers(maxEnergy)
+                + EnumChatFormatting.RESET
+                + " EU",
+            /* 3 */ StatCollector.translateToLocal("GT5U.multiblock.usage") + ": "
+                + EnumChatFormatting.RED
+                + GT_Utility.formatNumbers(getActualEnergyUsage())
+                + EnumChatFormatting.RESET
+                + " EU/t",
+            /* 4 */ StatCollector.translateToLocal("GT5U.multiblock.mei") + ": "
+                + EnumChatFormatting.YELLOW
+                + GT_Utility.formatNumbers(getMaxInputVoltage())
+                + EnumChatFormatting.RESET
+                + " EU/t(*2A) "
+                + StatCollector.translateToLocal("GT5U.machines.tier")
+                + ": "
+                + EnumChatFormatting.YELLOW
+                + VN[GT_Utility.getTier(getMaxInputVoltage())]
+                + EnumChatFormatting.RESET,
+            /* 5 */ StatCollector.translateToLocal("GT5U.multiblock.problems") + ": "
+                + EnumChatFormatting.RED
+                + (getIdealStatus() - getRepairStatus())
+                + EnumChatFormatting.RESET
+                + " "
+                + StatCollector.translateToLocal("GT5U.multiblock.efficiency")
+                + ": "
+                + EnumChatFormatting.YELLOW
+                + Float.toString(mEfficiency / 100.0F)
+                + EnumChatFormatting.RESET
+                + " %",
+            /* 6 */ StatCollector.translateToLocal("GT5U.multiblock.pollution") + ": "
+                + EnumChatFormatting.GREEN
+                + mPollutionReduction
+                + EnumChatFormatting.RESET
+                + " %",
 
-                /* 7 */ EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.info")
-                        + ": "
-                        + EnumChatFormatting.RESET,
+            /* 7 */ EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.info")
+                + ": "
+                + EnumChatFormatting.RESET,
 
-                StatCollector.translateToLocal("beamline.temperature") + ": " // Temperature:
-                        + EnumChatFormatting.DARK_RED
-                        + machineTemp
-                        + EnumChatFormatting.RESET
-                        + " K", // e.g. "137 K"
+            StatCollector.translateToLocal("beamline.temperature") + ": " // Temperature:
+                + EnumChatFormatting.DARK_RED
+                + machineTemp
+                + EnumChatFormatting.RESET
+                + " K", // e.g. "137 K"
 
-                StatCollector.translateToLocal("beamline.coolusage") + ": " // Coolant usage:
-                        + EnumChatFormatting.AQUA
-                        + length
-                        + EnumChatFormatting.RESET
-                        + " kL/s", // e.g. "24 kL/s
+            StatCollector.translateToLocal("beamline.coolusage") + ": " // Coolant usage:
+                + EnumChatFormatting.AQUA
+                + length
+                + EnumChatFormatting.RESET
+                + " kL/s", // e.g. "24 kL/s
 
-                /* 8 */ EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.in_pre")
-                        + ": "
-                        + EnumChatFormatting.RESET,
-                StatCollector.translateToLocal("beamline.particle") + ": " // "Multiblock Beamline Input:"
-                        + EnumChatFormatting.GOLD
-                        + Particle.getParticleFromId(information.getParticleId()).getLocalisedName() // e.g. "Electron
-                                                                                                     // (e-)"
-                        + " "
-                        + EnumChatFormatting.RESET,
-                StatCollector.translateToLocal("beamline.energy") + ": " // "Energy:"
-                        + EnumChatFormatting.DARK_RED
-                        + information.getEnergy()
-                        + EnumChatFormatting.RESET
-                        + " keV", // e.g. "10240 keV"
-                StatCollector.translateToLocal("beamline.focus") + ": " // "Focus:"
-                        + EnumChatFormatting.BLUE
-                        + information.getFocus()
-                        + " "
-                        + EnumChatFormatting.RESET,
-                StatCollector.translateToLocal("beamline.amount") + ": " // "Amount:"
-                        + EnumChatFormatting.LIGHT_PURPLE
-                        + information.getRate(),
-                EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.out_pre") // "Multiblock Beamline
-                                                                                             // Output:"
-                        + ": "
-                        + EnumChatFormatting.RESET,
-                StatCollector.translateToLocal("beamline.particle") + ": "
-                        + EnumChatFormatting.GOLD
-                        + Particle.getParticleFromId(this.outputParticle).getLocalisedName()
-                        + " "
-                        + EnumChatFormatting.RESET,
-                StatCollector.translateToLocal("beamline.energy") + ": "
-                        + EnumChatFormatting.DARK_RED
-                        + this.outputEnergy
-                        + EnumChatFormatting.RESET
-                        + " keV",
-                StatCollector.translateToLocal("beamline.focus") + ": "
-                        + EnumChatFormatting.BLUE
-                        + this.outputFocus
-                        + " "
-                        + EnumChatFormatting.RESET,
-                StatCollector.translateToLocal("beamline.amount") + ": "
-                        + EnumChatFormatting.LIGHT_PURPLE
-                        + this.outputRate, };
+            /* 8 */ EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.in_pre")
+                + ": "
+                + EnumChatFormatting.RESET,
+            StatCollector.translateToLocal("beamline.particle") + ": " // "Multiblock Beamline Input:"
+                + EnumChatFormatting.GOLD
+                + Particle.getParticleFromId(information.getParticleId())
+                    .getLocalisedName() // e.g. "Electron
+                                        // (e-)"
+                + " "
+                + EnumChatFormatting.RESET,
+            StatCollector.translateToLocal("beamline.energy") + ": " // "Energy:"
+                + EnumChatFormatting.DARK_RED
+                + information.getEnergy()
+                + EnumChatFormatting.RESET
+                + " keV", // e.g. "10240 keV"
+            StatCollector.translateToLocal("beamline.focus") + ": " // "Focus:"
+                + EnumChatFormatting.BLUE
+                + information.getFocus()
+                + " "
+                + EnumChatFormatting.RESET,
+            StatCollector.translateToLocal("beamline.amount") + ": " // "Amount:"
+                + EnumChatFormatting.LIGHT_PURPLE
+                + information.getRate(),
+            EnumChatFormatting.BOLD + StatCollector.translateToLocal("beamline.out_pre") // "Multiblock Beamline
+                                                                                         // Output:"
+                + ": "
+                + EnumChatFormatting.RESET,
+            StatCollector.translateToLocal("beamline.particle") + ": "
+                + EnumChatFormatting.GOLD
+                + Particle.getParticleFromId(this.outputParticle)
+                    .getLocalisedName()
+                + " "
+                + EnumChatFormatting.RESET,
+            StatCollector.translateToLocal("beamline.energy") + ": "
+                + EnumChatFormatting.DARK_RED
+                + this.outputEnergy
+                + EnumChatFormatting.RESET
+                + " keV",
+            StatCollector.translateToLocal(
+                "beamline.focus") + ": " + EnumChatFormatting.BLUE + this.outputFocus + " " + EnumChatFormatting.RESET,
+            StatCollector.translateToLocal("beamline.amount") + ": "
+                + EnumChatFormatting.LIGHT_PURPLE
+                + this.outputRate, };
     }
 
     private BeamInformation getInputInformation() {
@@ -609,8 +636,8 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         length += 8;
 
         return this.mInputBeamline.size() == 1 && this.mOutputBeamline.size() == 1
-                && this.mMaintenanceHatches.size() == 1
-                && this.mEnergyHatches.size() <= 2;
+            && this.mMaintenanceHatches.size() == 1
+            && this.mEnergyHatches.size() <= 2;
     }
 
     @Override
@@ -663,15 +690,15 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
         }
 
         int finalOutput = survivialBuildPiece(
-                STRUCTURE_PIECE_END,
-                stackSize,
-                3,
-                6,
-                -(lLength + 2),
-                elementBudget,
-                env,
-                false,
-                true);
+            STRUCTURE_PIECE_END,
+            stackSize,
+            3,
+            6,
+            -(lLength + 2),
+            elementBudget,
+            env,
+            false,
+            true);
 
         // if (finalOutput >= 0) // Prevent repeating messages
         // StructureLib.addClientSideChatMessages("Length " + (11 + lLength) + " blocks.");
@@ -681,7 +708,7 @@ public class LINAC extends GT_MetaTileEntity_EnhancedMultiBlockBase<LINAC> imple
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection aSide, ForgeDirection aFacing,
-            int aColorIndex, boolean aActive, boolean aRedstone) {
+        int aColorIndex, boolean aActive, boolean aRedstone) {
         // TODO Auto-generated method stub
         return null;
     }

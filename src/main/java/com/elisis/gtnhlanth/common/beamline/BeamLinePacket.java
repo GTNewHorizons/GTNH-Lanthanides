@@ -20,10 +20,10 @@ public class BeamLinePacket extends DataPacket<BeamInformation> {
          * NBTTagCompound compound = nbt.getCompoundTag("beamline");
          */
         return new BeamInformation(
-                nbt.getFloat("energy"),
-                nbt.getInteger("rate"),
-                nbt.getInteger("particleId"),
-                nbt.getInteger("focus"));
+            nbt.getFloat("energy"),
+            nbt.getInteger("rate"),
+            nbt.getInteger("particleId"),
+            nbt.getInteger("focus"));
     }
 
     @Override

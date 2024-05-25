@@ -24,7 +24,7 @@ public enum Particle {
     private String chargeSpecial;
 
     private Particle(boolean canAcc, int id, float restMass, float maxSourceEnergy, String name, String shortName,
-            float charge, String chargeSpecial) { // ID
+        float charge, String chargeSpecial) { // ID
         // is
         // symbolic
         // only

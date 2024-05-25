@@ -41,19 +41,19 @@ public class TileHatchInputBeamline extends TileHatchBeamlineConnector<BeamLineP
     @Override
     public ITexture[] getTexturesActive(ITexture aBaseTexture) {
         return new ITexture[] { aBaseTexture,
-                new GT_RenderedTexture(
-                        activeIcon,
-                        Dyes.getModulation(getBaseMetaTileEntity().getColorization(), MACHINE_METAL.getRGBA())),
-                new GT_RenderedTexture(connIcon) };
+            new GT_RenderedTexture(
+                activeIcon,
+                Dyes.getModulation(getBaseMetaTileEntity().getColorization(), MACHINE_METAL.getRGBA())),
+            new GT_RenderedTexture(connIcon) };
     }
 
     @Override
     public ITexture[] getTexturesInactive(ITexture aBaseTexture) {
         return new ITexture[] { aBaseTexture,
-                new GT_RenderedTexture(
-                        sideIcon,
-                        Dyes.getModulation(getBaseMetaTileEntity().getColorization(), MACHINE_METAL.getRGBA())),
-                new GT_RenderedTexture(connIcon) };
+            new GT_RenderedTexture(
+                sideIcon,
+                Dyes.getModulation(getBaseMetaTileEntity().getColorization(), MACHINE_METAL.getRGBA())),
+            new GT_RenderedTexture(connIcon) };
     }
 
     @Override
@@ -110,7 +110,8 @@ public class TileHatchInputBeamline extends TileHatchBeamlineConnector<BeamLineP
         if (in == null) {
             this.q = null;
         } else {
-            if (in.getContent().getRate() > 0) {
+            if (in.getContent()
+                .getRate() > 0) {
                 this.q = in;
                 delay = true;
             } else {

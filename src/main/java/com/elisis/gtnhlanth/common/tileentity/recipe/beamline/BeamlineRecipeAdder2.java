@@ -18,70 +18,78 @@ public class BeamlineRecipeAdder2 {
     public static final BeamlineRecipeAdder2 instance = new BeamlineRecipeAdder2();
 
     public final RecipeMap<RecipeMapBackend> SourceChamberRecipes = RecipeMapBuilder.of("gtnhlanth.recipe.sc")
-            .minInputs(0, 0).maxIO(1, 2, 0, 0).amperage(1).frontend(SourceChamberFrontend::new)
-            .progressBar(GT_UITextures.PROGRESSBAR_ASSEMBLY_LINE_1).neiSpecialInfoFormatter((recipeInfo) -> {
+        .minInputs(0, 0)
+        .maxIO(1, 2, 0, 0)
+        .amperage(1)
+        .frontend(SourceChamberFrontend::new)
+        .progressBar(GT_UITextures.PROGRESSBAR_ASSEMBLY_LINE_1)
+        .neiSpecialInfoFormatter((recipeInfo) -> {
 
-                RecipeSC recipe = (RecipeSC) recipeInfo.recipe;
+            RecipeSC recipe = (RecipeSC) recipeInfo.recipe;
 
-                float focus = recipe.focus;
-                float maxEnergy = recipe.maxEnergy;
+            float focus = recipe.focus;
+            float maxEnergy = recipe.maxEnergy;
 
-                int amount = recipe.rate;
+            int amount = recipe.rate;
 
-                Particle particle = Particle.getParticleFromId(recipe.particleId);
+            Particle particle = Particle.getParticleFromId(recipe.particleId);
 
-                return Arrays.asList(
+            return Arrays.asList(
 
-                        // StatCollector.translateToLocal("beamline.particle") + ": " + particle.getLocalisedName(),
+                // StatCollector.translateToLocal("beamline.particle") + ": " + particle.getLocalisedName(),
 
-                        StatCollector.translateToLocal("beamline.energy") + ": <="
-                                + GT_Utility.formatNumbers(Math.min(maxEnergy, particle.maxSourceEnergy()))
-                                + " keV",
+                StatCollector.translateToLocal("beamline.energy") + ": <="
+                    + GT_Utility.formatNumbers(Math.min(maxEnergy, particle.maxSourceEnergy()))
+                    + " keV",
 
-                        StatCollector.translateToLocal("beamline.focus") + ": " + GT_Utility.formatNumbers(focus),
+                StatCollector.translateToLocal("beamline.focus") + ": " + GT_Utility.formatNumbers(focus),
 
-                        StatCollector.translateToLocal("beamline.rate") + ": " + GT_Utility.formatNumbers(amount)
+                StatCollector.translateToLocal("beamline.rate") + ": " + GT_Utility.formatNumbers(amount)
 
-            );
-            })
-            // .slotOverlays(null)
+        );
+        })
+        // .slotOverlays(null)
 
-            .build();
+        .build();
 
     public final RecipeMap<RecipeMapBackend> TargetChamberRecipes = RecipeMapBuilder.of("gtnhlanth.recipe.tc")
-            .minInputs(0, 0).maxIO(3, 4, 0, 0).frontend(TargetChamberFrontend::new)
-            .neiSpecialInfoFormatter(((recipeInfo) -> {
+        .minInputs(0, 0)
+        .maxIO(3, 4, 0, 0)
+        .frontend(TargetChamberFrontend::new)
+        .neiSpecialInfoFormatter(((recipeInfo) -> {
 
-                RecipeTC recipe = (RecipeTC) recipeInfo.recipe;
+            RecipeTC recipe = (RecipeTC) recipeInfo.recipe;
 
-                float minEnergy = recipe.minEnergy;
-                float maxEnergy = recipe.maxEnergy;
+            float minEnergy = recipe.minEnergy;
+            float maxEnergy = recipe.maxEnergy;
 
-                float minFocus = recipe.minFocus;
+            float minFocus = recipe.minFocus;
 
-                float amount = recipe.amount;
+            float amount = recipe.amount;
 
-                Particle particle = Particle.getParticleFromId(recipe.particleId);
+            Particle particle = Particle.getParticleFromId(recipe.particleId);
 
-                return Arrays.asList(
+            return Arrays.asList(
 
-                        // StatCollector.translateToLocal("beamline.particle") + ": " + particle.getLocalisedName(),
+                // StatCollector.translateToLocal("beamline.particle") + ": " + particle.getLocalisedName(),
 
-                        StatCollector.translateToLocal("beamline.energy") + ": "
-                                + GT_Utility.formatNumbers(minEnergy * 1000)
-                                + "-"
-                                + GT_Utility.formatNumbers(maxEnergy * 1000)
-                                + " eV", // Note the eV unit
+                StatCollector.translateToLocal("beamline.energy") + ": "
+                    + GT_Utility.formatNumbers(minEnergy * 1000)
+                    + "-"
+                    + GT_Utility.formatNumbers(maxEnergy * 1000)
+                    + " eV", // Note the eV unit
 
-                        StatCollector.translateToLocal("beamline.focus") + ": >=" + GT_Utility.formatNumbers(minFocus),
+                StatCollector.translateToLocal("beamline.focus") + ": >=" + GT_Utility.formatNumbers(minFocus),
 
-                        StatCollector.translateToLocal("beamline.amount") + ": " + GT_Utility.formatNumbers(amount)
+                StatCollector.translateToLocal("beamline.amount") + ": " + GT_Utility.formatNumbers(amount)
 
-            );
-            }))
-            // .slotOverlays(null)
-            .progressBar(GT_UITextures.PROGRESSBAR_ASSEMBLY_LINE_1).progressBarPos(108, 22)
-            .neiTransferRect(100, 22, 28, 18).build();
+        );
+        }))
+        // .slotOverlays(null)
+        .progressBar(GT_UITextures.PROGRESSBAR_ASSEMBLY_LINE_1)
+        .progressBarPos(108, 22)
+        .neiTransferRect(100, 22, 28, 18)
+        .build();
 
     /***
      *
@@ -97,25 +105,25 @@ public class BeamlineRecipeAdder2 {
      * @param minEUt      - Minimum EUt required for the recipe. ! May not output if input energy is equal to minimum !
      */
     public boolean addSourceChamberRecipe(ItemStack[] itemInputs, ItemStack[] itemOutputs, int particleId, int rate,
-            float maxEnergy, float focus, float energyRatio, int minEUt) {
+        float maxEnergy, float focus, float energyRatio, int minEUt) {
 
         return (SourceChamberRecipes.addRecipe(
-                new RecipeSC(
-                        false,
-                        itemInputs,
-                        itemOutputs,
-                        null,
-                        new int[] {},
-                        null,
-                        null,
-                        20,
-                        minEUt,
-                        particleId,
-                        rate,
-                        maxEnergy,
-                        focus,
-                        energyRatio))
-                != null);
+            new RecipeSC(
+                false,
+                itemInputs,
+                itemOutputs,
+                null,
+                new int[] {},
+                null,
+                null,
+                20,
+                minEUt,
+                particleId,
+                rate,
+                maxEnergy,
+                focus,
+                energyRatio))
+            != null);
     }
 
     /***
@@ -134,25 +142,24 @@ public class BeamlineRecipeAdder2 {
      */
 
     public boolean addTargetChamberRecipe(ItemStack itemInput, ItemStack itemOutput, ItemStack itemFocus,
-            int particleId, int amount, float minEnergy, float maxEnergy, float minFocus, float energyRatio,
-            int minEUt) {
+        int particleId, int amount, float minEnergy, float maxEnergy, float minFocus, float energyRatio, int minEUt) {
 
         return (TargetChamberRecipes.addRecipe(
-                new RecipeTC(
-                        false,
-                        itemInput,
-                        itemOutput,
-                        itemFocus,
-                        particleId,
-                        amount,
-                        minEnergy,
-                        maxEnergy,
-                        minFocus,
-                        energyRatio,
-                        minEUt),
+            new RecipeTC(
                 false,
-                false,
-                false) != null);
+                itemInput,
+                itemOutput,
+                itemFocus,
+                particleId,
+                amount,
+                minEnergy,
+                maxEnergy,
+                minFocus,
+                energyRatio,
+                minEUt),
+            false,
+            false,
+            false) != null);
 
     }
 

@@ -21,8 +21,8 @@ public class RecipeSC extends GT_Recipe {
     public float energyRatio;
 
     public RecipeSC(boolean aOptimize, ItemStack[] aInputs, ItemStack[] aOutputs, Object aSpecialItems, int[] aChances,
-            FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, int aDuration, int aEUt, int particleId, int rate,
-            float maxEnergy, float focus, float energyRatio) {
+        FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, int aDuration, int aEUt, int particleId, int rate,
+        float maxEnergy, float focus, float energyRatio) {
 
         super(aOptimize, aInputs, aOutputs, null, aChances, null, null, aDuration, aEUt, 0);
 
